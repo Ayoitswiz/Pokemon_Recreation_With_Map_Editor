@@ -41,7 +41,7 @@ public class MainMenuGUI extends JPanel{
         JScrollPane spaneDisplayAllPokemon = new JScrollPane(lstDisplayAllPokemon);
         Font f = new Font("Times New Roman", Font.PLAIN, 32);
         Color cPnlNorth = new Color(160, 44, 44, 255);
-        Color background = new Color(30, 30, 30);
+        //Color background = new Color(30, 30, 30);
         Color MenuBg = new Color(181, 181, 181, 150);
         Dimension[] dd = {new Dimension(getWidth(), 50)};
         GridBagConstraints c = new GridBagConstraints();
