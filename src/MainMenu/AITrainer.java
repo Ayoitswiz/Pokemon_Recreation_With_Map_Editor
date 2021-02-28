@@ -1,10 +1,10 @@
 package MainMenu;
 
-import java.util.HashMap;
 import java.util.Random;
 public class AITrainer extends Trainer {
-    private Move move = new Move();
-    protected HashMap<String, Move> moves = move.createMove();
+    protected Moves<String, Move> moves = new Moves<>();
+    public static boolean canMove = true;
+
     public AITrainer() {
 
     }
@@ -13,29 +13,28 @@ public class AITrainer extends Trainer {
     protected void swap() {
         super.swap();
         for (Pokemon p: getPokeSlots()) {
-            if(p.hp>0) {
-                currentPokemon = p;
-                currentPokemon.fullHealth = currentPokemon.hp;
+            if(p.hp > 0) {
+                setCurrentPokemon(p);
+                //I don't know why I'm doing this but I'm to lazy to test rn.
+                getCurrentPokemon().fullHealth = getCurrentPokemon().hp;
                 break;
             }
         }
-        if(currentPokemon.hp<=0) {
-            setDefeated(true);
-        }
+        setDefeated(getCurrentPokemon().hp <= 0);
     }
 
     @Override
     public void makeDecision() {
-        Random rand = new Random();
         // Obtain a number between [0 - 4].
-        int n = rand.nextInt(4);
-        if (currentPokemon.hp < 80 && n >=0 ) {
-            useItem(currentPokemon, new Item().createItem().get("Max Potion"));
+        // TODO: 8/1/2020 decrease chance of using item or take out when shipped
+        int n = new Random().nextInt(4);
+        if (getCurrentPokemon().hp < 80 && n >=0 ) {
+            useItem(getCurrentPokemon(), new Item().createItem().get("Max Potion"));
             setIsUsingItem(true);
             setChosenMove(null);
         }
         else {
-            setChosenMove(currentPokemon.moves[n]);
+            setChosenMove(getCurrentPokemon().moves[n]);
         }
     }
 }

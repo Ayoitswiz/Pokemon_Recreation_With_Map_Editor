@@ -117,7 +117,7 @@ public class Backpack extends JPanel {
 
         btnUse.addActionListener(e -> {
             if(selectedItem != null)
-                if(humanTrainer.items.get(selectedItem.name) != null) {
+                if(humanTrainer.getItems().get(selectedItem.name) != null) {
                     gui.setUi("PokemonInPartyPanel");
                     gui.setBackgroundImage("PokemonInPartyPanel");
                     humanTrainer.setUseItem(selectedItem);
@@ -144,7 +144,7 @@ public class Backpack extends JPanel {
         c.gridy = 0;
         yourItemsPanel.add(yourItemslbl);
         int i = 1;
-        for (Item item: ht.items.values()) {
+        for (Item item: ht.getItems().values()) {
             JButton row = new JButton();
             row.setLayout(new GridBagLayout());
             //row.setOpaque(false);
@@ -154,7 +154,7 @@ public class Backpack extends JPanel {
             i = ItemShop.getI(c, yourItemsPanel, ItemArrayList, i, item, row);
         }
         for (Item item: ItemArrayList) {
-            ht.items.remove(item.name);
+            ht.getItems().remove(item.name);
         }
         pnl4.setVisible(false);
         pnl4.setVisible(true);

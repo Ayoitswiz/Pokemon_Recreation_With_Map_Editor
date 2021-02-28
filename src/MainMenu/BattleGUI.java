@@ -33,6 +33,7 @@ public class BattleGUI extends JPanel {
 
 
     public BattleGUI(HumanTrainer pHumanTrainer, GUIManager gui) {
+        AITrainer.canMove = false;
         gui.addNewBackgroundImage(getClass().getSimpleName(), background);
         gui.addNewUi(this);
 
@@ -40,7 +41,7 @@ public class BattleGUI extends JPanel {
         humanTrainer.setDefeated(false);
         for (Pokemon p : humanTrainer.getPokeSlots()) {
             if (p.hp > 0) {
-                humanTrainer.currentPokemon = p;
+                humanTrainer.setCurrentPokemon(p);
                 break;
             }
         }
@@ -73,7 +74,7 @@ public class BattleGUI extends JPanel {
             battleManager = new BattleManager(humanTrainer, ai, btnContinue, txtLeftDefaultText, btnCollapseDialogPanel, gui);
         }
     }
-    //This button as many implementations that each do different things. However the only way I've found to make this
+    //This button has many implementations that each do different things. However the only way I've found to make this
     //work properly is to remove all action listeners from the button after each click. The reason super is called twice
     //is so I can run the following action performed method every time this button is pressed. Without it and the extra
     //call to super. I would have to repeat the following foreach everywhere I want to use the button.
@@ -84,7 +85,6 @@ public class BattleGUI extends JPanel {
             private ActionListener al = e -> {
                 for (ActionListener al : getActionListeners()) {
                     removeActionListener(al);
-                    System.out.println("hey");
                 }
             };
             @Override
@@ -98,7 +98,7 @@ public class BattleGUI extends JPanel {
     }
     private void createGui(GUIManager gui) {
 
-        Pokemon currentPokemon = humanTrainer.currentPokemon;
+        Pokemon currentPokemon = humanTrainer.getCurrentPokemon();
         borderSouth = new JPanel(new GridBagLayout());
         pnlBottomRight = new JPanel(new GridBagLayout());
         pnlBottomLeft = new JPanel(new BorderLayout());
@@ -107,6 +107,7 @@ public class BattleGUI extends JPanel {
         JPanel pnlMiddleRightHp = new JPanel(new GridBagLayout());
         pnlBottomLeftMoves = new JPanel(new GridBagLayout());
         c = new GridBagConstraints();
+
         JButton btnFight = new SetBtnProperties("Fight");
         JButton btnItems = new SetBtnProperties("Items");
         JButton btnSwap = new SetBtnProperties("Swap");
@@ -310,14 +311,14 @@ public class BattleGUI extends JPanel {
     }
 
     void displayHtPokemonInfo() {
-        JLabel j = new gifLbl("H/" + humanTrainer.currentPokemon.name);
+        JLabel j = new gifLbl("H/" + humanTrainer.getCurrentPokemon().name);
         pokemonGif.setIcon(j.getIcon());
-        lblMiddlePokemonName.setText(humanTrainer.currentPokemon.name);
-        lblMiddlePokemonLvl.setText("Lvl: " + humanTrainer.currentPokemon.lvl);
-        hp.setMaximum(humanTrainer.currentPokemon.fullHealth);
-        hp.setValue(humanTrainer.currentPokemon.hp);
-        ExpBar.setMaximum((int) Math.pow(humanTrainer.currentPokemon.lvl + 1, 3) - (int) Math.pow(humanTrainer.currentPokemon.lvl, 3));
-        ExpBar.setValue(humanTrainer.currentPokemon.Exp - (int) Math.pow(humanTrainer.currentPokemon.lvl, 3));
+        lblMiddlePokemonName.setText(humanTrainer.getCurrentPokemon().name);
+        lblMiddlePokemonLvl.setText("Lvl: " + humanTrainer.getCurrentPokemon().lvl);
+        hp.setMaximum(humanTrainer.getCurrentPokemon().fullHealth);
+        hp.setValue(humanTrainer.getCurrentPokemon().hp);
+        ExpBar.setMaximum((int) Math.pow(humanTrainer.getCurrentPokemon().lvl + 1, 3) - (int) Math.pow(humanTrainer.getCurrentPokemon().lvl, 3));
+        ExpBar.setValue(humanTrainer.getCurrentPokemon().Exp - (int) Math.pow(humanTrainer.getCurrentPokemon().lvl, 3));
         moveButtons();
     }
 
@@ -328,9 +329,9 @@ public class BattleGUI extends JPanel {
         c.weighty = 0.5;
         c.weightx = 0.5;
         int i = 0;
-        for (Move move : humanTrainer.currentPokemon.moves) {
+        for (Move move : humanTrainer.getCurrentPokemon().moves) {
             c.gridy = (i >= 2) ? 1 : 0;
-            pnlBottomLeftMoves.add(btn(new JButton("<html> " + move.name + " <br> " + move.pp + "/" + move.maxpp + " " + move.moveType + " </html>"), move), c);
+            pnlBottomLeftMoves.add(btn(new JButton("<html> " + move.getName() + " <br> " + move.getPp() + "/" + move.getMaxpp() + " " + move.getMoveType() + " </html>"), move), c);
             i++;
         }
     }
@@ -340,7 +341,7 @@ public class BattleGUI extends JPanel {
             Jb.removeActionListener(al);
             System.out.println("There's an action listen" + getClass() + " " + getClass().getEnclosingMethod().getName());
         }
-        if (move.pp > 0)
+        if (move.getPp() > 0)
             Jb.addActionListener(e -> {
                 expandDialogPanel();
                 humanTrainer.setChosenMove(move);
@@ -376,19 +377,20 @@ public class BattleGUI extends JPanel {
         borderSouth.add(pnlBottomRight, c);
         pnlBottomLeft.setVisible(false);
         pnlBottomLeft.setVisible(true);
-        txtLeftDefaultText.setText("What will " + humanTrainer.currentPokemon.name + " do next?");
+        txtLeftDefaultText.setText("What will " + humanTrainer.getCurrentPokemon().name + " do next?");
         btnContinue.setVisible(false);
     }
 
     private void createOpponent() {
         ai = new DefaultNPC();
+        ai.setName("Lebron James");
         humanTrainer.setOpponent((NPC) ai);
     }
     private void createBattleGuiNorth() {
 
         if (humanTrainer.getNpcOpponent() != null && humanTrainer.getNpcOpponent().getPokeSlots().size() > 0) {
             ai = humanTrainer.getNpcOpponent();
-                ai.currentPokemon = ai.getPokeSlots().get(0);
+                ai.setCurrentPokemon(ai.getPokeSlots().get(0));
                 currentPokemon = ai.getPokeSlots().get(0);
         } else {
             currentPokemon = humanTrainer.getPokemonOpponent();
@@ -471,7 +473,7 @@ public class BattleGUI extends JPanel {
 
     public void displayAIPokemonInfo() {
         if (ai != null) {
-            currentPokemon = ai.currentPokemon;
+            currentPokemon = ai.getCurrentPokemon();
         }
         JLabel j = new gifLbl("Ai/" + currentPokemon.name);
         opponentpokemonGif.setIcon(j.getIcon());

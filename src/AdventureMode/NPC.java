@@ -17,7 +17,6 @@ public abstract class NPC extends AITrainer implements Collisions
     private Map<RocketGruntMaleDirection, java.util.List<BufferedImage>> movingImgMap = new EnumMap<>(RocketGruntMaleDirection.class);
     private double distanceFromUser = 0;
     protected int cellCountToMoveThrough;
-    protected int distanceCanMove = 0;
     protected RocketGruntMaleDirection directionRG; //Direction Rocket Grunt-Male is facing
     private RocketGruntMaleDirection startingDirection;
     private boolean isMovementThreadOn = false;
@@ -46,7 +45,7 @@ public abstract class NPC extends AITrainer implements Collisions
         this.setDeltaX(delta);
         this.setDeltaY(delta);
         this.preBattleDialog = preBattleDialog;
-        this.startingCell = startingCell;
+        this.setStartingCell(startingCell);
 
         this.cellCountToMoveThrough = cellCountToMoveThrough;
         this.battleGlareRange = battleGlareRangeInCells;
@@ -58,44 +57,54 @@ public abstract class NPC extends AITrainer implements Collisions
 
     public void draw(Graphics g) {
         Image img = null;
-        if (!moving) {
-            img = standingImgMap.get(getDirection());
-        }
-        else {
-            img = movingImgMap.get(getDirection()).get(movingIndex);
-        }
-        g.drawImage(img, x, y, getWidth(), getHeight(), null);
-        g.drawRect(x, y, getWidth(), getHeight());
+
+        img = !isMoving() ? standingImgMap.get(getDirection()) : movingImgMap.get(getDirection()).get(getMovingIndex());
+        g.drawImage(img, getX(), getY(), getWidth(), getHeight(), null);
+        g.drawRect(getX(), getY(), getWidth(), getHeight());
         g.setColor(new Color(255, 255, 0, 100));
         g.fillRect(npcHitbox.x, npcHitbox.y, npcHitbox.width, npcHitbox.height);
     }
 
     //Returns the size and position of the AdventureMode.NPC
     public Rectangle getBounds(){
-        return new Rectangle(x, y, getWidth(), getHeight());
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
 
     //The distance an AdventureMode.NPC can see the player from
-    public Rectangle getBattleGlareBounds(int distance){
-        int d = 1;//decrease space on battleglare bounds
-        int d2 = 2;
-        int x = getHitbox().x + d;
-        int y = getHitbox().y + d;
-        int width = getHitbox().width - d2;
-        int height = getHitbox().height - d2;
-        switch (directionRG) {
-            case RIGHT:
-                return new Rectangle(getHitboxMaxX(), y, distance, height);
-            case LEFT:
-                return new Rectangle(getHitbox().x - distance, y, distance, height);
-            case FORWARD:
-                return new Rectangle(x, getHitboxMaxY(), width, distance);
-            case AWAY:
-                return new Rectangle(x, getHitbox().y - distance, width, distance);
-            default:
-                return new Rectangle();
-        }
+    public Rectangle getBattleGlareBounds(){
+
+        int d = 1, //decrease space on battleglare bounds
+        d2 = 2,
+        x2 = getHitbox().x + d,
+        y2 = getHitbox().y + d,
+        width2 = getHitbox().width - d2,
+        height2 = getHitbox().height - d2,
+        distanceX = battleGlareRange * (width2 / 2),
+        distanceY = battleGlareRange * (height2 / 2);
+
+/*        return new Rectangle() {{ *//*return?*//* switch (directionRG) {
+            case RIGHT -> setBounds(getHitboxMaxX(), y, distanceX, height);
+            case LEFT ->  setBounds(getHitbox().x - distanceX, y, distanceX, height);
+            case FORWARD -> setBounds(x, getHitboxMaxY(), width, distanceY);
+            case AWAY -> setBounds(x, getHitbox().y - distanceY, width, distanceY);
+        }}};*/
+
+
+        //Rectangle a = new Rectangle(npcHitbox);
+        return new Rectangle(npcHitbox) {{ switch (directionRG) {
+            case RIGHT: width += distanceX; break;
+            case LEFT: x -= distanceX; width += distanceX; break;
+            case FORWARD: height += distanceY; break;
+            case AWAY: y -= distanceY; height += distanceY; break;
+/*
+            case AWAY, FORWARD -> {
+                x = x2;
+                width = width2;
+                height = distanceY;
+            }*/
+        }}};
+        //return a;
     }
 
     void createSprites(String spriteSheetPath) throws IOException {
@@ -125,33 +134,33 @@ public abstract class NPC extends AITrainer implements Collisions
     }
 
     public void tick() {
-        if (moving) {
+        if ((canMove || this.caughtPlayerInBattleGlare) && isMoving()) {
             switch (directionRG) {
                 case RIGHT:
-                    x += getDeltaX();
+                    setX((int) (getX() + getDeltaX()));
                     updateTicksFromCellZeroX(1);
                     break;
                 case LEFT:
-                    x -= getDeltaX();
+                    setX((int) (getX() - getDeltaX()));
                     updateTicksFromCellZeroX(-1);
                     break;
                 case FORWARD:
-                    y += getDeltaY();
+                    setY((int) (getY() + getDeltaY()));
                     updateTicksFromCellZeroY(1);
                     break;
                 case AWAY:
-                    y -= getDeltaY();
+                    setY((int) (getY() - getDeltaY()));
                     updateTicksFromCellZeroY(-1);
             }
-            movingIndex++;
-            movingIndex %= maxMovingIndex;
+            setMovingIndex(getMovingIndex() + 1);
+            setMovingIndex(getMovingIndex() % getMaxMovingIndex());
         }
     }
     protected void updateHitbox() {
         //Stop the user being able to jump right in front of the npc while the npc is moving, and then the npc movement
         //thread moves the npc into the user.
         npcHitbox.setBounds(getX() + (getWidth()/4), getY() + (getHeight()/2), getWidth()/2, getHeight() - (getHeight()/2));
-        if (moving)
+        if ((canMove || this.caughtPlayerInBattleGlare) && isMoving())
             switch (directionRG) {
                 case LEFT:
                     npcHitbox.x = getX();
@@ -232,12 +241,19 @@ public abstract class NPC extends AITrainer implements Collisions
     public boolean isMovementThreadOn() {
         return isMovementThreadOn;
     }
+
     public void setMovementThreadOn(boolean movementThreadOn) {
         isMovementThreadOn = movementThreadOn;
     }
+
     public RocketGruntMaleDirection getStartingDirection() {
         return startingDirection;
     }
 
-
+    public int getDistanceCanMove() {
+        return switch (startingDirection) {
+            case LEFT, RIGHT -> cellCountToMoveThrough * getWidth() / 2;
+            default -> cellCountToMoveThrough * getHeight() / 2;
+        };
+    }
 }

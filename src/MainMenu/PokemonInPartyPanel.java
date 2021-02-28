@@ -66,18 +66,19 @@ public class PokemonInPartyPanel {
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                if (humanTrainer.currentPokemon.hp <= 0) {
+                if (humanTrainer.getCurrentPokemon().hp <= 0) {
                     close.setEnabled(false);
                 }
 
                 updateHealthBar();
                 int i = 0;
                 for (JPanel jp : gifPnlList) {
-                    if ((humanTrainer.currentPokemon == humanTrainer.getPokeSlots().get(i) || humanTrainer.getPokeSlots().get(i).isFainted()) && humanTrainer.getSelectedItem() == null) {
+                    jp.getParent().setEnabled(!((humanTrainer.getCurrentPokemon() == humanTrainer.getPokeSlots().get(i) || humanTrainer.getPokeSlots().get(i).isFainted()) && humanTrainer.getSelectedItem() == null));
+/*                    if ((humanTrainer.currentPokemon == humanTrainer.getPokeSlots().get(i) || humanTrainer.getPokeSlots().get(i).isFainted()) && humanTrainer.getSelectedItem() == null) {
                         jp.getParent().setEnabled(false);
                     } else {
                         jp.getParent().setEnabled(true);
-                    }
+                    }*/
                     i++;
                 }
             }
@@ -100,18 +101,18 @@ public class PokemonInPartyPanel {
         confirm.addActionListener(e -> {
             //if the trainers pokemon faints they get to swap out their pokemon without losing a turn.
             //If the trainer swaps when his current pokemon's hp > 0 he loses a turn.
-            if (!humanTrainer.currentPokemon.isFainted()) {
+            if (!humanTrainer.getCurrentPokemon().isFainted()) {
                 humanTrainer.setLosesTurn(true);
             }
             if (humanTrainer.getSelectedItem() == null) {
                 updateCurrentPokemon();
                 boolean isUserSwappingOutANonFaintedPokemon = false;
-                if (!humanTrainer.currentPokemon.isFainted())
+                if (!humanTrainer.getCurrentPokemon().isFainted())
                     isUserSwappingOutANonFaintedPokemon = true;
-                humanTrainer.currentPokemon = selectedPokemon;
+                humanTrainer.setCurrentPokemon(selectedPokemon);
                 if (isUserSwappingOutANonFaintedPokemon)
-                    humanTrainer.currentPokemon.setHasUsedTurn(true);
-                gameDialog.setText("Go " + humanTrainer.currentPokemon.name + "!");
+                    humanTrainer.getCurrentPokemon().setHasUsedTurn(true);
+                gameDialog.setText("Go " + humanTrainer.getCurrentPokemon().name + "!");
             } else {
                 resetSelectedPokemonOnClose();
                 gameDialog.setText(humanTrainer.getName() + " used a " + humanTrainer.getSelectedItem().name);
@@ -186,7 +187,7 @@ public class PokemonInPartyPanel {
                         }
 
                         public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
-                            if (selectedPokemon != humanTrainer.getPokeSlots().get(finalI) && humanTrainer.currentPokemon != humanTrainer.getPokeSlots().get(finalI)) {
+                            if (selectedPokemon != humanTrainer.getPokeSlots().get(finalI) && humanTrainer.getCurrentPokemon() != humanTrainer.getPokeSlots().get(finalI)) {
                                 c.ipadx = 0;
                                 add(gifPnlList.get(finalI), c);
                                 try {
@@ -248,7 +249,7 @@ public class PokemonInPartyPanel {
     private void updateCurrentPokemon() {
         int j = 0;
         for(JPanel jp: gifPnlList) {
-            if (humanTrainer.currentPokemon == humanTrainer.getPokeSlots().get(j)) {
+            if (humanTrainer.getCurrentPokemon() == humanTrainer.getPokeSlots().get(j)) {
                 changeToNonSelectedPokemon(j);
             }
             j++;
@@ -274,7 +275,7 @@ public class PokemonInPartyPanel {
     }
 
 
-    class gifBtn extends JButton {
+    private class gifBtn extends JButton {
         private Image background;
         private int i;
 
@@ -286,7 +287,7 @@ public class PokemonInPartyPanel {
                 public void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     //Adds a red box to the gifBtn to indicate this pokemon is the pokemon we currently have out in battle
-                    if(humanTrainer.currentPokemon == humanTrainer.getPokeSlots().get(i) && !humanTrainer.currentPokemon.isFainted()) {
+                    if(humanTrainer.getCurrentPokemon() == humanTrainer.getPokeSlots().get(i) && !humanTrainer.getCurrentPokemon().isFainted()) {
                         g.setColor(Color.RED);
                         g.fillRect(0, 0, getWidth(), getHeight());
                         getParent().setBackground(Color.RED);
@@ -317,7 +318,7 @@ public class PokemonInPartyPanel {
             c.weighty = 1;
             c.gridheight = 1;
             c.gridwidth = 1;
-            if(humanTrainer.currentPokemon == humanTrainer.getPokeSlots().get(i) && !humanTrainer.currentPokemon.isFainted()) {
+            if(humanTrainer.getCurrentPokemon() == humanTrainer.getPokeSlots().get(i) && !humanTrainer.getCurrentPokemon().isFainted()) {
                 c.ipadx = 50;
                 c.insets = new Insets(0, 0, 0, 0);
             }

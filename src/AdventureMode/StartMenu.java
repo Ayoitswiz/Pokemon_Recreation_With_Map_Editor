@@ -22,6 +22,7 @@ public class StartMenu extends JPanel {
     private Backpack backpack;
     private PokemonInPartyPanel pokemonInPartyPanel;
     private ArrayList<NPC> npcsInArea;
+
     StartMenu(MySprite mySprite, GUIManager gui, ArrayList<NPC> npcsInArea) {
         sprite = mySprite;
         this.gui = gui;
@@ -89,6 +90,17 @@ public class StartMenu extends JPanel {
         add(dialogBoxTextArea, c);
         setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         setVisible(false);
+    }
+
+    public void setBounds(Dimension dimension) {
+        int width, height;
+        width = dimension.width;
+        height = dimension.height;
+        setBounds(
+                width - (width / 4),
+                height / 16,
+                width / 4,
+                height - (height / 8));
     }
 
     @Override

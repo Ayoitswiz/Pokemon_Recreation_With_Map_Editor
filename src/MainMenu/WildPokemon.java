@@ -13,10 +13,8 @@ public class WildPokemon extends Pokemon {
     }
 
     protected Move chooseMove() {
-        Random rand = new Random();
         // Obtain a number between [0 - 4].
-        int n = rand.nextInt(4);
-        return moves[n];
+        return moves[new Random().nextInt(4)];
     }
 
     public boolean hasUsedTurn() {

@@ -21,15 +21,12 @@ public class Grass extends Collision {
     }
 
     public void determineIfPokemonIsThere(MySprite user) {
-        Random r = new Random();
-        if (r.nextInt(10) == 5) {
+        if (new Random().nextInt(15) == 5) {
             encounterPokemon(user);
         }
     }
     private void encounterPokemon(MySprite user) {
-        Random r = new Random();
-        int i = r.nextInt(pokemonInArea.size());
-        user.setPokemonOpponent(pokemonInArea.get(i));
+        user.setPokemonOpponent(pokemonInArea.get(new Random().nextInt(pokemonInArea.size())));
         user.setMoving(false);
         BattleGUI battleGUI = new BattleGUI(user, gui);
         gui.addNewUi(battleGUI);
@@ -43,17 +40,13 @@ public class Grass extends Collision {
     }
 
     @Override
-    boolean moveInto() {
+    boolean isAccessible() {
         return true;
     }
 
     private void setPokemonInArea(String...pokemon) {
         PokemonList pl = new PokemonList();
         pokemonInArea = pl.create(pokemon);
-
-        System.out.println(Arrays.toString(pokemon));
         //Pokemon p = new Pokemon();
-
-
     }
 }

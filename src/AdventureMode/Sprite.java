@@ -4,216 +4,202 @@ import java.awt.*;
 
 import static AdventureMode.AdventureModeUiPanel.COLS;
 import static AdventureMode.AdventureModeUiPanel.ROWS;
-
+import static AdventureMode.AdventureModeUiPanel.cellZero;
 
 abstract public class Sprite {
 
-    protected int maxMovingIndex; //how many subimages there are for its directions
+    private int maxMovingIndex; //how many subimages there are for its directions
     private double deltaX; //How many pixels the sprite will move on screen horizontally
     private double deltaY; //How many pixels the sprite will move on screen vertically
-    protected SpriteDirection direction; //Direction the user's sprite is facing
-    protected int x;
-    protected int y;
+    private int x;
+    private int y;
     private int height;
     private int width;
-    protected boolean moving = false;
-    protected int movingIndex;
-    protected int startingCell;
-    private int startingCellsX = -1000;
-    private int startingCellsY = -1000;
+    private boolean moving = false;
+    private int movingIndex;
+    private int startingCell;
+    private int startingCellsX = -1;
+    private int startingCellsY = -1;
     private boolean isDefeated = false;
-    private double componentsAwayFromcellX = -1000;
-    private double componentsAwayFromcellY = -1000;
+    private double componentsAwayFromcellX = -1;
+    private double componentsAwayFromcellY = -1;
     private int speedWeight = 200;
-    private double ticksFromCellZeroX = 0;
-    private double ticksFromCellZeroY = 0;
-
-    public void setLocationRelativeTo(Component locationRelativeTo) {
-        this.locationRelativeTo = locationRelativeTo;
-    }
-
-    private Component locationRelativeTo;
-
+    private double stepsFromCellZeroX = 0;
+    private double stepsFromCellZeroY = 0;
     public Sprite(){
 
     }
 
-    public void setSpriteSize(Dimension dimension) {
-        setWidth(dimension.width * 2);
-        setHeight(dimension.height * 2);
+    protected void setSpriteSize() {
+        setWidth(cellZero.getWidth() * 2);
+        setHeight(cellZero.getHeight() * 2);
     }
 
     /**
-     * Takes the dimensions of any cell on ui and multiples it by
+     * Takes the dimensions of any cell on ui and multiplies it by
      * how many columns/rows the ui is made up of. This method changes the
      * horizontal and vertical movement speeds of sprites based on the size
      * of the playable area and the sprites speedWeights. This method is meant for
      * resizability.
      */
-    public void setDeltas() {
-        setDeltaX((double) (locationRelativeTo.getWidth() * COLS) / getSpeedWeight());
-        setDeltaY((double) (locationRelativeTo.getHeight() * ROWS) / getSpeedWeight());
+    protected void setDeltas() {
+        setDeltaX((double) (cellZero.getWidth() * COLS) / getSpeedWeight());
+        setDeltaY((double) (cellZero.getHeight() * ROWS) / getSpeedWeight());
     }
 
-    public void setTicksFromCellZeroBasedOnOtherSprite(Point spritesNewLocation) {
-        ticksFromCellZeroX = (spritesNewLocation.getX() - locationRelativeTo.getX()) / getDeltaX();
-        ticksFromCellZeroY = (spritesNewLocation.getY() - locationRelativeTo.getY()) / getDeltaY();
+    protected void setTicksFromCellZeroBasedOnOtherSprite(Point spritesNewLocation) {
+        setStepsFromCellZeroX((spritesNewLocation.x - cellZero.getX()) / getDeltaX());
+        setStepsFromCellZeroY((spritesNewLocation.y - cellZero.getY()) / getDeltaY());
     }
 
-    public void setTicksFromCellZeroBasedOnComponent(Point spritesNewLocation) {
-        ticksFromCellZeroX = ((spritesNewLocation.getX() - locationRelativeTo.getX()) - (double) getWidth() / 4) / getDeltaX();
-        ticksFromCellZeroY = ((spritesNewLocation.getY() - locationRelativeTo.getY()) - (double) getHeight() / 2) / getDeltaY();
+    protected void setStepsFromCellZeroBasedOnComponent(Point spritesNewLocation) {
+        setStepsFromCellZeroX(((spritesNewLocation.getX() - cellZero.getX()) - (double) getWidth() / 4) / getDeltaX());
+        setStepsFromCellZeroY(((spritesNewLocation.getY() - cellZero.getY()) - (double) getHeight() / 2) / getDeltaY());
     }
 
-    public void updateComponentsFromContainerStart() {
-        setComponentsAwayFromcellX((getTicksFromCellZeroX() * getDeltaX()) / locationRelativeTo.getWidth());
-        setComponentsAwayFromcellY((getTicksFromCellZeroY() * getDeltaY()) / locationRelativeTo.getHeight());
+    protected void updateComponentsFromContainerStart() {
+        setComponentsAwayFromcellX((getStepsFromCellZeroX() * getDeltaX()) / cellZero.getWidth());
+        setComponentsAwayFromcellY((getStepsFromCellZeroY() * getDeltaY()) / cellZero.getHeight());
     }
 
-    public void setLocation() {
-
-        setX((int) ((getComponentsAwayFromcellX() * locationRelativeTo.getWidth()) + locationRelativeTo.getX()));
-        setY((int) ((getComponentsAwayFromcellY() * locationRelativeTo.getHeight()) + locationRelativeTo.getY()));
+    protected void setLocation() {
+        setX((int) ((getComponentsAwayFromcellX() * cellZero.getWidth()) + cellZero.getX()));
+        setY((int) ((getComponentsAwayFromcellY() * cellZero.getHeight()) + cellZero.getY()));
     }
 
-    public void setLocation(int x, int y){
-        this.x = x;
-        this.y = y;
+    void setLocation(int x, int y){
+        this.setX(x);
+        this.setY(y);
     }
-    public void setLocation(Point p){
-        this.x = p.x;
-        this.y = p.y;
-    }
-
-    protected Rectangle getBounds(){
-        return new Rectangle(x, y, width, height);
+    void setLocation(Point p){
+        setLocation(p.x, p.y);
     }
 
-    public Point getLocation() {
-        return new Point(x, y);
+    Rectangle getBounds(){
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+
+    protected Point getLocation() {
+        return new Point(getX(), getY());
     }
 
 
-    public int getX() {
+    protected int getX() {
         return x;
     }
 
-    public void setX(int x) {
+    protected void setX(int x) {
         this.x = x;
     }
 
-    public int getY() {
+    protected int getY() {
         return y;
     }
 
-    public void setY(int y) {
+    protected void setY(int y) {
         this.y = y;
     }
 
-    public int getHeight() {
+    protected int getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    void setHeight(int height) {
         this.height = height;
     }
 
-    public int getWidth() {
+    protected int getWidth() {
         return width;
     }
 
-    public int getMaxX() {
+    protected int getMaxX() {
         return getX() + getWidth();
     }
-    public int getMaxY() {
+
+    protected int getMaxY() {
         return getY() + getHeight();
     }
 
-    public void setWidth(int width) {
+    void setWidth(int width) {
         this.width = width;
     }
 
-    public boolean isMoving() {
+    protected boolean isMoving() {
         return moving;
     }
 
-
-
-    public void setMoving(boolean moving) {
+    protected void setMoving(boolean moving) {
         this.moving = moving;
         if (!moving) {
-            movingIndex = 0;
+            setMovingIndex(0);
         }
     }
 
-
-
-
-    public int getMovingIndex() {
+    protected int getMovingIndex() {
         return movingIndex;
     }
 
-    public void setMovingIndex(int movingIndex) {
+    protected void setMovingIndex(int movingIndex) {
         this.movingIndex = movingIndex;
     }
 
-    public void setMaxMovingIndex(int maxMovingIndex) {
+    protected void setMaxMovingIndex(int maxMovingIndex) {
         this.maxMovingIndex = maxMovingIndex;
     }
 
-    public void setDeltaX(double delta) {
+    protected void setDeltaX(double delta) {
         this.deltaX = delta;
     }
 
-    public void setDeltaY(double delta) {
+    protected void setDeltaY(double delta) {
         this.deltaY = delta;
     }
 
-    public double getComponentsAwayFromcellX() {
+    double getComponentsAwayFromcellX() {
         return componentsAwayFromcellX;
     }
 
-    public void setComponentsAwayFromcellX(double componentsAwayFromcellX) {
+    void setComponentsAwayFromcellX(double componentsAwayFromcellX) {
         this.componentsAwayFromcellX = componentsAwayFromcellX;
     }
 
-    public double getComponentsAwayFromcellY() {
+    double getComponentsAwayFromcellY() {
         return componentsAwayFromcellY;
     }
 
-    public void setComponentsAwayFromcellY(double componentsAwayFromcellY) {
+    void setComponentsAwayFromcellY(double componentsAwayFromcellY) {
         this.componentsAwayFromcellY = componentsAwayFromcellY;
     }
 
-    public double getDeltaX() {
+    protected double getDeltaX() {
         return deltaX;
     }
 
-    public int getStartingCellsY() {
+    protected int getStartingCellsY() {
         return startingCellsY;
     }
 
-    public void setStartingCellsY(int startingCellsY) {
+    protected void setStartingCellsY(int startingCellsY) {
         this.startingCellsY = startingCellsY;
     }
 
-    public int getStartingCellsX() {
+    protected int getStartingCellsX() {
         return startingCellsX;
     }
 
-    public void setStartingCellsX(int startingCellsX) {
+    protected void setStartingCellsX(int startingCellsX) {
         this.startingCellsX = startingCellsX;
     }
 
-    public double getDeltaY() {
+    protected double getDeltaY() {
         return deltaY;
     }
 
-    public int getSpeedWeight() {
+    protected int getSpeedWeight() {
         return speedWeight;
     }
 
-    public void setSpeedWeight(int speedWeight) {
+    protected void setSpeedWeight(int speedWeight) {
         this.speedWeight = speedWeight;
     }
 
@@ -225,21 +211,39 @@ abstract public class Sprite {
         isDefeated = defeated;
     }
 
-
-    public double getTicksFromCellZeroX() {
-        return ticksFromCellZeroX;
+    double getStepsFromCellZeroX() {
+        return stepsFromCellZeroX;
     }
 
-    public void updateTicksFromCellZeroX(double tick) {
-        this.ticksFromCellZeroX += tick;
+    protected void updateTicksFromCellZeroX(double tick) {
+        this.setStepsFromCellZeroX(this.getStepsFromCellZeroX() + tick);
     }
 
-    public double getTicksFromCellZeroY() {
-        return ticksFromCellZeroY;
+    double getStepsFromCellZeroY() {
+        return stepsFromCellZeroY;
     }
 
-    public void updateTicksFromCellZeroY(double tick) {
-        this.ticksFromCellZeroY += tick;
+    protected void updateTicksFromCellZeroY(double tick) {
+        this.setStepsFromCellZeroY(this.getStepsFromCellZeroY() + tick);
     }
 
+    protected int getMaxMovingIndex() {
+        return maxMovingIndex;
+    }
+
+    protected int getStartingCell() {
+        return startingCell;
+    }
+
+    protected void setStartingCell(int startingCell) {
+        this.startingCell = startingCell;
+    }
+
+    void setStepsFromCellZeroX(double stepsFromCellZeroX) {
+        this.stepsFromCellZeroX = stepsFromCellZeroX;
+    }
+
+    void setStepsFromCellZeroY(double stepsFromCellZeroY) {
+        this.stepsFromCellZeroY = stepsFromCellZeroY;
+    }
 }

@@ -22,21 +22,21 @@ abstract public class Pokemon implements Cloneable {
     protected String attack(Pokemon opponent, Move move){
         int power;
         //power = ((2 * lvl)/5 + 2) * move.power * attack/opponent.defense;
-        power = move.power;
-        power = opponent.type.get(0).Multiplier(opponent.type, move.moveType, power);
+        power = move.getPower();
+        power = opponent.type.get(0).Multiplier(opponent.type, move.getMoveType(), power);
 
         //Decrease the opponents hp
         decreaseHealth(opponent, power);
-        move.pp -= 1;
-        if(power == move.power * 2 || power == move.power * 4)
-            return name +  " used "  + move.name  + " It was super effective";
-        return name +  " used "  + move.name;
+        move.setPp(move.getPp() - 1);
+        if(power == move.getPower() * 2 || power == move.getPower() * 4)
+            return name +  " used "  + move.getName()  + " It was super effective";
+        return name +  " used "  + move.getName();
     }
 
     protected void fullyHeal() {
         hp = fullHealth;
         for (Move m : moves) {
-            m.pp = m.maxpp;
+            m.setPp(m.getMaxpp());
         }
         fainted = false;
     }
@@ -86,10 +86,7 @@ abstract public class Pokemon implements Cloneable {
     //if the pokemon is wild they need to be able to choose a move because there is no trainer to
     //decide for them.
     protected Move chooseMove() {
-        Random rand = new Random();
-        // Obtain a number between [0 - 4].
-        int n = rand.nextInt(4);
-        return moves[n];
+        return moves[new Random().nextInt(4)];
     }
     //if the pokemon is wild they need to be able to use a turn because there is no trainer to
     //use it for them.

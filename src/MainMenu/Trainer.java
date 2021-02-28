@@ -8,7 +8,15 @@ import java.util.HashMap;
 
 abstract public class Trainer extends Sprite implements ItemInterface {
 
-    protected String name;
+    private String name;
+    private Pokemon currentPokemon;
+    private final HashMap<String, Item> items = new HashMap<>();
+    private BigDecimal money;
+    private Move chosenMove;
+    private boolean losesTurn;
+    private boolean isUsingItem;
+    private boolean isUsingMove;
+    private boolean hasUsedTurn;
     private ArrayList<Pokemon> pokeSlots = new ArrayList<>() {
         @Override
         public boolean add(Pokemon e) {
@@ -16,19 +24,11 @@ abstract public class Trainer extends Sprite implements ItemInterface {
             return super.add(e);
         }
     };
-    protected Pokemon currentPokemon;
-    protected HashMap<String, Item> items;
-    protected BigDecimal money;
-    private Move chosenMove;
-    private boolean losesTurn;
-    private boolean isUsingItem;
-    private boolean isUsingMove;
-    private boolean hasUsedTurn;
 
-    protected void swap() {
-        currentPokemon.setHasUsedTurn(true);
+    void swap() {
+        getCurrentPokemon().setHasUsedTurn(true);
     }
-    protected abstract void makeDecision();
+    abstract public void makeDecision();
 
     public boolean isOutOfUsablePokemon() {
         for (Pokemon p : getPokeSlots()) {
@@ -36,6 +36,7 @@ abstract public class Trainer extends Sprite implements ItemInterface {
                 return false;
             }
         }
+        setDefeated(true);
         return true;
     }
 
@@ -44,12 +45,7 @@ abstract public class Trainer extends Sprite implements ItemInterface {
         //Heal the pokemon if the item type is of healing and the pokemon is not fainted and if
          //the pokemon is not at fullHealth already cause why heal a pokemon who's health can't go any higher.
         if(item.type.equals("Healing") && !p.isFainted() && p.fullHealth != p.hp) {
-            int maxHealthGain = p.fullHealth - p.hp;
-            if (p.hp + item.healthEffect > p.fullHealth) {
-                p.hp += maxHealthGain;
-            } else {
-                p.hp += item.healthEffect;
-            }
+            p.hp = Math.min(p.hp + item.healthEffect, p.fullHealth);
             item.quantity--;
             isUsingItem = true;
         } else {
@@ -133,5 +129,25 @@ abstract public class Trainer extends Sprite implements ItemInterface {
             p.setWild(false);
         }
         this.pokeSlots = pokeSlots;
+    }
+
+    Pokemon getCurrentPokemon() {
+        return currentPokemon;
+    }
+
+    protected void setCurrentPokemon(Pokemon currentPokemon) {
+        this.currentPokemon = currentPokemon;
+    }
+
+    HashMap<String, Item> getItems() {
+        return items;
+    }
+
+    BigDecimal getMoney() {
+        return money;
+    }
+
+    protected void setMoney(BigDecimal money) {
+        this.money = money;
     }
 }

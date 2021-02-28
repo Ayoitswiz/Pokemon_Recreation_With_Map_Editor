@@ -6,25 +6,27 @@ import org.jetbrains.annotations.NotNull;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import static AdventureMode.AdventureModeUiPanel.*;
 
 @SuppressWarnings("serial")
 public class UserSpriteManager extends JPanel {
 
-    private SpriteDirection spriteDirection = SpriteDirection.RIGHT; //Enum to control player direction
     public static final int TIMER_DELAY = 50; //Delay on timer for sprite movement
     private MySprite sprite = null; //The users sprite
     private AdventureModeUiPanel ui;//Manages all of the Ui, collisions, and area switching
     private int compNum = /*1295*/ 1844;//The component number we spawn on top of, and is referenced for collision detection and resizing
-    private Timer timer = null; //Timer for
-    private boolean stopPlayerMovement = false; //A control to stop the players movement when he gets stopped by an AiTrainer
     private DialogBox dialogBox; //Dialog box for NPC communication
     private ArrayList<NPC> npcsInArea = new ArrayList<>();  //Holds the NPC/ai Trainers in any given area
     private Collision compWeAreIn;
@@ -33,15 +35,15 @@ public class UserSpriteManager extends JPanel {
     private boolean setPositionOnProgramStart = true;
     private ArrayList<Collision> colls = new ArrayList<>();
 
+
     public UserSpriteManager(AdventureModeUiPanel ui, MySprite sprite, GUIManager gui) {
         //sprite passed in from MainMenuGui just so I can get the pokemon in the scroolpane at the main menu
         this.sprite = sprite;
         this.sprite.setInAdventureMode(true);
         this.ui = ui;
-        sprite.setDirection(spriteDirection);
+        sprite.setDirection(SpriteDirection.FORWARD);
         this.gui = gui;
         compWeAreIn = getCell(compNum);
-        sprite.setLocationRelativeTo(getCell(0));
         startMenu = new StartMenu(this.sprite, this.gui, npcsInArea);
         setBackground(Color.GREEN);
         setDoubleBuffered(true);
@@ -56,24 +58,39 @@ public class UserSpriteManager extends JPanel {
         setKeyBindings(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK);
         setKeyBindings(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK);
         //Start timer to help control user movement
-        timer = new Timer(TIMER_DELAY, new TimerListener());
+        Timer timer = new Timer(TIMER_DELAY, new TimerListener());
         timer.start();
     }
 
+    private void setKeyBindings(SpriteDirection dir, int keyCode) {
+        setKeyBindings(keyCode,  0, new MoveAction(dir, false), new MoveAction(dir, true));
+    }
+
     private void setKeyBindings(int keyCode, int modifier) {
+        setKeyBindings(keyCode,  modifier, new ControlAction(keyCode));
+    }
+
+    private void setKeyBindings(int keyCode, int modifier, AbstractAction... action) {
         InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
-
         KeyStroke keyPressed = KeyStroke.getKeyStroke(keyCode, modifier, false);
-
         inputMap.put(keyPressed, keyPressed.toString());
-        actionMap.put(keyPressed.toString(), new ControlAction(keyCode));
+        actionMap.put(keyPressed.toString(), action[0]);
+        if (action.length > 1) {
+            KeyStroke keyReleased = KeyStroke.getKeyStroke(keyCode, 0, true);
+            inputMap.put(keyReleased, keyReleased.toString());
+            actionMap.put(keyReleased.toString(), action[1]);
+        }
     }
+
     private class ControlAction extends AbstractAction {
-        private int keyCode;
-        public ControlAction(int keyCode) {
+
+        private final int keyCode;
+
+        ControlAction(int keyCode) {
             this.keyCode = keyCode;
         }
+
         @Override
         public void actionPerformed(ActionEvent e) {
             switch (keyCode) {
@@ -83,18 +100,17 @@ public class UserSpriteManager extends JPanel {
                     break;
                 case KeyEvent.VK_D:
                     if (sprite.getSpeedWeight() > 10)
-                    sprite.setSpeedWeight(sprite.getSpeedWeight() - 10);
+                        sprite.setSpeedWeight(sprite.getSpeedWeight() - 10);
                     System.out.println("SpeedWeight:" + sprite.getSpeedWeight());
                     break;
                 case KeyEvent.VK_M:
                     sprite.setMoving(false);
                     if (startMenu.isVisible()) {
                         remove(startMenu);
-                        startMenu.setVisible(false);
                     } else {
                         add(startMenu, 0);
-                        startMenu.setVisible(true);
                     }
+                    startMenu.setVisible(!startMenu.isVisible());
                     break;
                 case KeyEvent.VK_E:
                     EDIT_MODE = !EDIT_MODE;
@@ -105,18 +121,7 @@ public class UserSpriteManager extends JPanel {
             sprite.updateComponentsFromContainerStart();
         }
     }
-    private void setKeyBindings(SpriteDirection dir, int keyCode) {
-        InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = getActionMap();
 
-        KeyStroke keyPressed = KeyStroke.getKeyStroke(keyCode, 0, false);
-        KeyStroke keyReleased = KeyStroke.getKeyStroke(keyCode, 0, true);
-
-        inputMap.put(keyPressed, keyPressed.toString());
-        inputMap.put(keyReleased, keyReleased.toString());
-        actionMap.put(keyPressed.toString(), new MoveAction(dir, false));
-        actionMap.put(keyReleased.toString(), new MoveAction(dir, true));
-    }
     //Pulled from class in AdventureModeUiPanel
     public void createNPCs(ArrayList<NPC> npcsInArea) {
         this.npcsInArea.clear();
@@ -126,40 +131,37 @@ public class UserSpriteManager extends JPanel {
     private class TimerListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            sprite.setSpriteSize(getCell(0).getSize());
+            sprite.setSpriteSize();
             if (sprite.isMoving()) {
+                //Checking more cells than necessary so I can move at very high speeds without breaking the program while testing
+                //Cells need to be added in this order. From farthest away from the user to closest.
+                /*
+                 * Switches the players default cell based on direction of movement. There is extra protection here than needed.
+                 * The extra protection is only so I can move at very high speeds like 35px/50ms and still have it work.
+                 * It gets the bounds of the cells around the player and if the center point of the user enters one of those cells
+                 * It sets the users cell number to it
+                 */
                 switch (sprite.getDirection()) {
-                    /*NEED TO SWITCH TO USING X, Y TO GET CELLS. IF YOU JUST WARPED AND THERE IS A WARP ON THE OTHER SIDE OF SCREEN YOU CAN HIT THAT WARP!*/
-                    //Checking more cells than necessary so I can move at very high speeds without breaking the program while testing
-                    //Cells need to be added in this order. From farthest away to closest.
-                    case RIGHT:
-                        colls.addAll(getCell(
-                                4, -49, 57,
-                                         3, -50, 56,
-                                         2, -51, 55,
-                                         1, -52, 54));
-                        break;
-                    case LEFT:
-                        colls.addAll(getCell(
-                                -4, 49, -57,
-                                         -3, 50, -56,
-                                         -2, 51, -55,
-                                         -1, 52, -54));
-                        break;
-                    case FORWARD:
-                        colls.addAll(getCell(
-                                211, 212, 213,
-                                         158, 159, 160,
-                                         105, 106, 107,
-                                         52, 53, 54));
-                        break;
-                    case AWAY:
-                        colls.addAll(getCell(
-                                -211, -212, -213,
-                                         -158, -159, -160,
-                                         -105, -106, -107,
-                                         -52, -53, -54));
-                        break;
+                    case RIGHT -> colls.addAll(getCell(
+                            4, -49, 57,
+                            3, -50, 56,
+                            2, -51, 55,
+                            1, -52, 54));
+                    case LEFT -> colls.addAll(getCell(
+                            -4, 49, -57,
+                            -3, 50, -56,
+                            -2, 51, -55,
+                            -1, 52, -54));
+                    case FORWARD -> colls.addAll(getCell(
+                            211, 212, 213,
+                            158, 159, 160,
+                            105, 106, 107,
+                            52, 53, 54));
+                    case AWAY -> colls.addAll(getCell(
+                            -211, -212, -213,
+                            -158, -159, -160,
+                            -105, -106, -107,
+                            -52, -53, -54));
                 }
                 colls.add(compWeAreIn);
                 sprite.tick(colls, compWeAreIn, npcsInArea, ui);
@@ -181,22 +183,48 @@ public class UserSpriteManager extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        //ImageIcon img = new ImageIcon(ImageIO.read(new File(ui.getPathName())));
+        BufferedImage inputFile = null;
         try {
-                ImageIcon img = new ImageIcon(ImageIO.read(new File(ui.getPathName())));
-                g.drawImage(img.getImage(), getCell(0).getX(), getCell(0).getY(), getCell(0).getWidth() * COLS, getCell(0).getHeight() * ROWS, this);
-            } catch (IOException e) {
-                e.printStackTrace();
+            inputFile = ImageIO.read(new File(ui.getPathName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+/*        for (int x = 0; x < inputFile.getWidth(); x++) {
+            for (int y = 0; y < inputFile.getHeight(); y++) {
+                int rgba = inputFile.getRGB(x, y);
+                Color col = new Color(rgba, true);
+                col = new Color(255 - col.getRed(),
+                        Math.max(col.getGreen() - 40, 0),
+                        255 - col.getBlue());
+                inputFile.setRGB(x, y, col.getRGB());
             }
+        }*/
+        g.drawImage(new ImageIcon(inputFile).getImage(),
+                cellZero.getX(),
+                cellZero.getY(),
+                cellZero.getWidth() * COLS,
+                cellZero.getHeight() * ROWS,
+                this);
+
         g.setColor(new Color(255, 0, 0, 100));
         colls.forEach(c -> g.fillRect(c.getX(), c.getY(), c.getWidth(), c.getHeight()));
         colls.clear();
+
         if (dialogBox != null) {
-            dialogBox.setBounds(0, getHeight() - (getHeight() / 4), getWidth(), getHeight() / 4);
+            dialogBox.setBounds(
+                    0,
+                    getHeight() - (getHeight() / 4),
+                    getWidth(),
+                    getHeight() / 4);
             if (!dialogBox.isVisible()) {
                 dialogBox.setVisible(true);
             }
         }
-        startMenu.setBounds(getWidth() - (getWidth() / 4), getHeight() / 16, getWidth() / 4, getHeight() - (getHeight() / 8));
+
+        startMenu.setBounds(this.getSize());
+
         g.setColor(new Color(0, 0, 255));
         g.fillRect(compWeAreIn.getX(), compWeAreIn.getY(), compWeAreIn.getWidth(), compWeAreIn.getHeight());
         //This should never occur unless walking off the map. If the user does walk off however this will pull them back in no matter how far into
@@ -204,8 +232,7 @@ public class UserSpriteManager extends JPanel {
         /*        if (!sprite.getUserHitBox().intersects(compWeAreIn.getBounds()) && !sprite.hasOpponent()) {
             setSpriteLocation();
         }*/
-        sprite.setLocationRelativeTo(getCell(0));
-        sprite.setSpriteSize(getCell(0).getSize());
+        sprite.setSpriteSize();
         if (setPositionOnProgramStart) {
             setSpriteLocation();
             if (sprite.getX() != 0) {
@@ -222,46 +249,37 @@ public class UserSpriteManager extends JPanel {
     }
 
     private void playerIsInBattle() {
-        if (sprite.hasOpponent()) {
-            if (sprite.getNpcOpponent() != null) {
-                if (sprite.getNpcOpponent().isDefeated()) {
-                    ui.setVisible(true);
-                    sprite.setOpponent(null);
-                    dialogBox = null;
-                    ui.getCurrentArea().startNpcMovementThreads();
-                }
-            } else {
-                if (sprite.getPokemonOpponent().isFainted()) {
-                    ui.setVisible(true);
-                    sprite.setOpponent(null);
-                    dialogBox = null;
-                }
+        if (!sprite.hasOpponent()) return;
+
+        if (sprite.getNpcOpponent() != null) {
+            if (sprite.getNpcOpponent().isDefeated()) {
+                ui.setVisible(true);
+                sprite.setOpponent(null);
+                dialogBox = null;
+                ui.getCurrentArea().startNpcMovementThreads();
             }
+        } else if (sprite.getPokemonOpponent().isFainted()) {
+                ui.setVisible(true);
+                sprite.setOpponent(null);
+                dialogBox = null;
         }
     }
 
     //If an argument is out of the range of possible components in jp return cell 0.
     @NotNull
     private Collision getCell(Point p) {
-        if (p.y <= ROWS * getCell(0).getHeight() &&
-            p.y >= getCell(0).getY() &&
-            p.x >= getCell(0).getX() &&
-            p.x <= COLS * getCell(0).getWidth())
-            return (Collision) ui.getWallAndWarpLayer().getComponentAt(p.x, p.y);
-        else return getCell(0);
-
+        return getCell(p.x, p.y);
     }
 
     //If an argument is out of the range of possible components in jp return cell 0.
     @NotNull
     private Collision getCell(int x, int y) {
-        if (y <= ROWS * getCell(0).getHeight() &&
-            y >= getCell(0).getY() &&
-            x >= getCell(0).getX() &&
-            x <= COLS * getCell(0).getWidth())
+        if (y <= ROWS * cellZero.getHeight() &&
+                y >= cellZero.getY() &&
+                x >= cellZero.getX() &&
+                x <= COLS * cellZero.getWidth())
             return (Collision) ui.getWallAndWarpLayer().getComponentAt(x, y);
-        else return getCell(0);
-
+        else return (Collision) cellZero;
     }
 
     //If an argument is out of the range of possible components in jp return cell 0.
@@ -269,8 +287,7 @@ public class UserSpriteManager extends JPanel {
     private Collision getCell(int cellNum) {
         if (cellNum < ui.getWallAndWarpLayer().getComponentCount() && cellNum >= 0)
             return (Collision) ui.getWallAndWarpLayer().getComponent(cellNum);
-        else return getCell(0);
-
+        else return (Collision) cellZero;
     }
 
     //If an argument is out of the range of possible components in jp return cell 0.
@@ -284,101 +301,84 @@ public class UserSpriteManager extends JPanel {
         return collisions;
     }
 
+    // TODO: 7/31/2020 Move to a NpcHandler class.
     private void NpcHandler(Graphics g) {
-        if (npcsInArea != null) {
-            for (NPC npc : npcsInArea) {
-                npc.setSpriteSize(getCell(0).getSize());
-                npc.setLocationRelativeTo(getCell(0));
+        if (npcsInArea != null)
+        {
+            for (var npc : npcsInArea) {
+                npc.setSpriteSize();
                 npc.setDeltas();
                 npc.updateComponentsFromContainerStart();
-                npc.setStartingCellsX(getCell(npc.startingCell).getX());
-                npc.setStartingCellsY(getCell(npc.startingCell).getY());
+                npc.setStartingCellsX(getCell(npc.getStartingCell()).getX());
+                npc.setStartingCellsY(getCell(npc.getStartingCell()).getY());
                 npc.setLocation();
                 npc.updateHitbox();
                 //The npc movement thread operates independently of the thread the following code executes on,
                 //so the npc's variables need to either be passed in or synchronized so they remain constant
                 //throughout the methods execution.
                 //NPC MOVING RIGHT
-                DetectIfUserIsInNpcPath(npc, RocketGruntMaleDirection.RIGHT, compWeAreIn.getWidth(), sprite.getX(), npc.getMaxX(), npc.getHitboxMaxX(), SpriteDirection.LEFT, g);
+                DetectIfUserIsInNpcPath(npc, RocketGruntMaleDirection.RIGHT, sprite.getX(), npc.getMaxX(), npc.getHitboxMaxX(), SpriteDirection.LEFT, g);
                 //NPC MOVING LEFT
-                DetectIfUserIsInNpcPath(npc, RocketGruntMaleDirection.LEFT, compWeAreIn.getWidth(), npc.getX(), sprite.getMaxX(), npc.getHitbox().x, SpriteDirection.RIGHT, g);
+                DetectIfUserIsInNpcPath(npc, RocketGruntMaleDirection.LEFT, npc.getX(), sprite.getMaxX(), npc.getHitbox().x, SpriteDirection.RIGHT, g);
                 //NPC MOVING DOWNWARD ON SCREEN
-                DetectIfUserIsInNpcPath(npc, RocketGruntMaleDirection.FORWARD, compWeAreIn.getHeight(), sprite.getY(), npc.getMaxY(), npc.getHitboxMaxY(), SpriteDirection.AWAY, g);
+                DetectIfUserIsInNpcPath(npc, RocketGruntMaleDirection.FORWARD, sprite.getY(), npc.getMaxY(), npc.getHitboxMaxY(), SpriteDirection.AWAY, g);
                 //NPC MOVING UPWARD ON SCREEN
-                DetectIfUserIsInNpcPath(npc, RocketGruntMaleDirection.AWAY, compWeAreIn.getHeight(), npc.getY(), sprite.getMaxY(), npc.getHitbox().y, SpriteDirection.FORWARD, g);
+                DetectIfUserIsInNpcPath(npc, RocketGruntMaleDirection.AWAY, npc.getY(), sprite.getMaxY(), npc.getHitbox().y, SpriteDirection.FORWARD, g);
                 npc.draw(g);
             }
         }
     }
 
-    //should be broken into multiple methods
-    private void DetectIfUserIsInNpcPath(NPC npc, RocketGruntMaleDirection npcDir, int cellDimension, int x, int x2, int hbPos, SpriteDirection spriteDir, Graphics g) {
-        if (npc.getDirection() == npcDir) {
-            npc.distanceCanMove = npc.cellCountToMoveThrough * cellDimension;
 
+    // TODO: 7/31/2020 Move to a NpcHandler class.
+    //should be broken into multiple methods
+    private void DetectIfUserIsInNpcPath(NPC npc, RocketGruntMaleDirection npcDir, int x, int x2, int hbPos, SpriteDirection spriteDir, Graphics g) {
+        if (npc.getDirection() == npcDir) {
             //If the user is within the range to be challenged by an npc looking the users way and if the user does not already have an opponent
-            if (npc.getBattleGlareBounds(npc.battleGlareRange * cellDimension).intersects(sprite.getUserHitBox().getBounds()) && !sprite.hasOpponent() && !npc.isDefeated()) {
-                //Detects if there is a wall in between the npc and the user. If a wall is an instance of CantEnter than the npc cannot lock on to the user.
+            if (npc.getBattleGlareBounds().intersects(sprite.getUserHitBox().getBounds()) && !sprite.hasOpponent() && !npc.isDefeated()) {
+
                 int i = 0;
                 Collision cell = null;
-                //find way to combine them into a method or shrink code down cause it looks nasty
-                //make sure the compNum update works properly when detected
-                boolean isInRange = false;
-                while (i <= npc.battleGlareRange) {
-                    int dist = i * cellDimension;
-                    switch (npcDir) {
-                        case RIGHT:
-                            cell = getCell(hbPos + dist, (int) getCell(npc.startingCell).getBounds().getCenterY());
-                            if (sprite.getUserHitBox().getMaxX() - 2 < cell.getMaxX()) {
-                                isInRange = true;
-                            }
-                            break;
-                        case LEFT:
-                            cell = getCell(hbPos - dist, (int) getCell(npc.startingCell).getBounds().getCenterY());
-                            if (sprite.getUserHitBox().getX() + 2 > cell.getBounds().getMaxX()) {
-                                isInRange = true;
-                            }
-                            break;
-                        case FORWARD:
-                            cell = getCell(npc.getStartingCellsX(), hbPos + dist);
-                            if (sprite.getUserHitBox().getMaxY() - 2 < cell.getY()) {
-                                isInRange = true;
-                            }
-                            break;
-                        case AWAY:
-                            cell = getCell(npc.getStartingCellsX(), hbPos - dist);
-                            if (sprite.getUserHitBox().getY() + 2 > cell.getY()) {
-                                isInRange = true;
-                            }
-                    }
+                boolean isInRange = false, stop = false;
+
+                //Detects if there is a wall in between the npc and the user. If a wall is an instance of CantEnter than the npc cannot lock on to the user.
+                while (i <= npc.battleGlareRange && !npc.caughtPlayerInBattleGlare) {
+                    int dist = switch (npcDir) {
+                        case LEFT, AWAY -> -i;
+                        default -> i;
+                    };
+
+                    cell = switch (npcDir) {
+                        case RIGHT, LEFT -> getCell(dist * npc.getWidth() / 2 + hbPos, npc.getStartingCellsY());
+                        case FORWARD, AWAY -> getCell(npc.getStartingCellsX(), dist * npc.getHeight() / 2 + hbPos);
+                    };
+
+                    isInRange = switch (npcDir) {
+                        case RIGHT -> sprite.getHitboxMaxX() - 2 < cell.getMaxX();
+                        case LEFT -> sprite.getUserHitBox().getX() + 2 > cell.getMaxX();
+                        case FORWARD -> sprite.getHitboxMaxY() - 2 < cell.getY();
+                        case AWAY -> sprite.getUserHitBox().getY() + 2 > cell.getY();
+                    };
                     g.setColor(Color.RED);
                     g.fillRect(cell.getX(), cell.getY(), cell.getWidth(), cell.getHeight());
-
-                    if (!cell.moveInto() && !isInRange) {
-                        break;
-                    } else if (isInRange) {
-                        npc.caughtPlayerInBattleGlare = true;
-                        break;
-                    }
+                    if (!cell.isAccessible() && !isInRange) break;
+                    npc.caughtPlayerInBattleGlare = isInRange;
+                    //npc.caughtPlayerInBattleGlare = !stop && isInRange;
                     i++;
                 }
                 //Should test what happens when running away from npc when detected
                 if (npc.caughtPlayerInBattleGlare) {
-                    for (NPC npcs : npcsInArea) {
-                        if (npcs != npc)
-                        npcs.setMovementThreadOn(false);
-                    }
+
                     AiDetectedUser(npc);
                     switch (npc.directionRG) {
-                        case LEFT:
-                        case RIGHT:
+                        case LEFT, RIGHT -> {
                             sprite.setY(npc.getY());
                             sprite.setTicksFromCellZeroBasedOnOtherSprite(sprite.getLocation());
-                            break;
-                        case FORWARD:
-                        case AWAY:
+                        }
+                        case FORWARD, AWAY -> {
                             sprite.setX(npc.getX());
                             sprite.setTicksFromCellZeroBasedOnOtherSprite(sprite.getLocation());
+                        }
                     }
                     sprite.updateComponentsFromContainerStart();
                     sprite.setMoving(false);
@@ -396,7 +396,6 @@ public class UserSpriteManager extends JPanel {
     }
 
     private void AiDetectedUser(NPC npc) {
-        stopPlayerMovement = true;
         sprite.setOpponent(npc);
         openDialogBox();
     }
@@ -406,18 +405,13 @@ public class UserSpriteManager extends JPanel {
         add(dialogBox);
     }
 
-    /**
-     * Switches the players default cell based on direction of movement. There is extra protection here than needed.
-     * The extra protection is only so I can move at very high speeds like 35px/50ms and still have it work.
-     * It gets the bounds of the cells around the player and if the center point of the user enters one of those cells
-     * It sets the users cell number to it
-     */
+
 
     //INNER CLASS for controlling when user can & cannot move.
     private class MoveAction extends AbstractAction {
-        private SpriteDirection dir;
-        private boolean released;
-
+        private final SpriteDirection dir;
+        private final boolean released;
+        private boolean pressed = false;
         public MoveAction(SpriteDirection dir, boolean released) {
             this.dir = dir;
             this.released = released;
@@ -426,23 +420,61 @@ public class UserSpriteManager extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            if (!sprite.hasOpponent()) {
-                stopPlayerMovement = false;
-            }
+            if (!released)
+                pressed = true;
 
-            if (released || stopPlayerMovement || startMenu.isVisible() || sprite.hasOpponent()) {
-                sprite.setMoving(false);
-            } else {
+            boolean keepgoing = !released;
+            if (released) {
+                for (KeyStroke ks : getInputMap(WHEN_IN_FOCUSED_WINDOW).keys()) {
+                    //Eliminate the key bindings with the modifiers: ctrl, alt, shift.
+                    if (ks.getModifiers() == 0) {
+                        //Looking only for the keycodes that control the users movement
+                        switch (ks.getKeyCode()) {
+                            case KeyEvent.VK_W:
+                            case KeyEvent.VK_A:
+                            case KeyEvent.VK_S:
+                            case KeyEvent.VK_D:
+                                //if doesn't work can do getActionForKeyStroke.dir == dir && !ks.isOnKeyRelease
+                                //When a key is released set that key's <class> MoveAction </class> <attribute> pressed </attribute> to false because it is no longer being pressed.
+                                if (!ks.isOnKeyRelease()) {
+                                    if (/*getActionForKeyStroke(ks) == this*/ ((MoveAction) getActionForKeyStroke(ks)).dir == dir) {
+                                        ((MoveAction) getActionForKeyStroke(ks)).pressed = false;
+                                        System.out.println(ks + ": no longer pressed");
+                                    }
+
+                                    if (((MoveAction) getActionForKeyStroke(ks)).pressed && ((MoveAction) getActionForKeyStroke(ks)).dir != dir) {
+                                        sprite.setMoving(true);
+                                        sprite.setDirection(((MoveAction) getActionForKeyStroke(ks)).dir);
+                                        System.out.println(ks + ": is still pressed! Setting direction to " + ((MoveAction) getActionForKeyStroke(ks)).dir);
+                                        keepgoing = true;
+                                    }
+                                }
+
+                        }
+                    }
+                }
+            }
+            System.out.println("released == " + released);
+            if (!released) {
                 sprite.setMoving(true);
                 sprite.setDirection(dir);
             }
+            else if (!sprite.isMoving() && released) {
+
+            } else {
+                sprite.setMoving(keepgoing);
+            }
+
+            sprite.setMoving(!(released || startMenu.isVisible() || sprite.hasOpponent()));
+            if (sprite.isMoving() && !released)
+                sprite.setDirection(dir);
         }
     }
 
     private void setSpriteLocation() {
         sprite.setDeltas();
         sprite.updateHitBox();
-        sprite.setTicksFromCellZeroBasedOnComponent(compWeAreIn.getLocation());
+        sprite.setStepsFromCellZeroBasedOnComponent(compWeAreIn.getLocation());
         sprite.updateComponentsFromContainerStart();
         sprite.setLocation();
         sprite.getHitboxCenterPoint().setLocation(compWeAreIn.getBounds().getCenterX(), compWeAreIn.getBounds().getCenterY());
@@ -457,7 +489,7 @@ public class UserSpriteManager extends JPanel {
         compWeAreIn = getCell(cellNum);
         setSpriteLocation();
         //when spam resizing, when warping, if user was moving during that, the user will continue to move even though
-        //the movement key is no longer being pressed
+        //the movement key is no longer being pressed so set moving to false when warping
         sprite.setMoving(false);
     }
 }

@@ -29,7 +29,7 @@ abstract class Warp extends Collision implements Collisions {
     }
 
     @Override
-    public boolean moveInto() {
+    public boolean isAccessible() {
         return false;
     }
 

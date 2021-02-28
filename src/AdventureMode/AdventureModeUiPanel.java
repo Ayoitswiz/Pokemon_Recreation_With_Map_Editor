@@ -12,9 +12,8 @@ public class AdventureModeUiPanel extends JPanel {
     private GridBagConstraints c = new GridBagConstraints();
     //need getter for jp at some point
     JLayeredPane jp;
-
-    public static boolean EDIT_MODE = true; //When set to true, cells are turned to buttons and cells of different types are painted with a unique color
-
+    public static Component cellZero;
+    public static boolean EDIT_MODE = false; //When set to true, cells are turned to buttons and cells of different types are painted with a unique color
     /**
      * When EDIT_MODE is set to true, and so is OPEN_OUTPUT_STREAMS, any cells clicked will be saved to a txt file
      * When the output streams are open the output file will be overwritten.
@@ -43,7 +42,9 @@ public class AdventureModeUiPanel extends JPanel {
     }
 
     private Warp currentArea;
+
     private JPanel wallAndWarpLayer = new JPanel(new GridBagLayout());
+
     private GUIManager gui;
     AdventureModeUiPanel(MySprite humantrainer, GUIManager gui) {
         this.gui = gui;
@@ -81,8 +82,8 @@ public class AdventureModeUiPanel extends JPanel {
     private void createAreaPart2() {
         c.gridx = 0;
         c.gridy = 0;
-        c.gridwidth = 53;
-        c.gridheight = 55;
+        c.gridwidth = COLS;
+        c.gridheight = ROWS;
 
         jp.add(userSpriteManager, c);
         if (EDIT_MODE)
@@ -98,8 +99,6 @@ public class AdventureModeUiPanel extends JPanel {
 
         this.add(jp, c);
 
-
-
         currentArea.createNPCs();
         currentArea.startNpcMovementThreads();
 
@@ -109,13 +108,12 @@ public class AdventureModeUiPanel extends JPanel {
         validate();
         for(NPC npc: npcs) {
             //Only ever needs to be set when the npc's first spawn in. Is set in <code> UserSpriteManager.NPCHandler() <code> every time after.
-            npc.setSpriteSize(wallAndWarpLayer.getComponent(0).getSize());
+            npc.setSpriteSize();
             npc.setDirection(npc.getStartingDirection());
-            npc.setLocationRelativeTo(wallAndWarpLayer.getComponent(0));
             npc.setDeltas();
-            npc.setTicksFromCellZeroBasedOnComponent(wallAndWarpLayer.getComponent(
-                    npc.startingCell).getLocation());
-            npc.updateStartingCellPosition(wallAndWarpLayer.getComponent(npc.startingCell).getLocation());
+            npc.setStepsFromCellZeroBasedOnComponent(wallAndWarpLayer.getComponent(
+                    npc.getStartingCell()).getLocation());
+            npc.updateStartingCellPosition(wallAndWarpLayer.getComponent(npc.getStartingCell()).getLocation());
             npc.updateComponentsFromContainerStart();
             npc.setLocation();
         }
@@ -127,7 +125,6 @@ public class AdventureModeUiPanel extends JPanel {
         //Stop movement threads when leaving an area
         //doesn't cover additional entrances
         if (currentArea != entranceToArea) {
-            System.out.println("hey");
             if (npcs != null)
                 for (NPC npc : npcs) {
                     npc.setMovementThreadOn(false);
@@ -150,6 +147,7 @@ public class AdventureModeUiPanel extends JPanel {
             c.gridx = 0;
             for (int j = 0; j < COLS; j++) {
                 c.gridx = j;
+
                 Collision cell;
                 if (name.getEntrances().containsKey(count)) {
                     cell = name.getEntrances().get(count);
@@ -160,11 +158,15 @@ public class AdventureModeUiPanel extends JPanel {
                 } else {
                     cell = new CanEnter(count);
                 }
+
                 if (EDIT_MODE && OPEN_OUTPUT_STREAMS) {
                     cell.setOut(out);
                     cell.openOutputStream(count, CELLS_THAT_CANNOT_BE_ENTERED, currentArea.getCollisionsToLoad());
                 }
                 wallAndWarpLayer.add(cell, c);
+                if (count == 0) {
+                    cellZero = cell;
+                }
                 count++;
             }
         }
@@ -221,7 +223,7 @@ public class AdventureModeUiPanel extends JPanel {
         }
 
         @Override
-        boolean moveInto() {
+        boolean isAccessible() {
             return true;
         }
     }
@@ -233,7 +235,7 @@ public class AdventureModeUiPanel extends JPanel {
         }
 
         @Override
-        boolean moveInto() {
+        boolean isAccessible() {
             return false;
         }
     }
@@ -339,7 +341,7 @@ public class AdventureModeUiPanel extends JPanel {
             if (getNpcs().size() == 0) {
                 getNpcs().add(new RocketGruntMale(RocketGruntMaleDirection.RIGHT, 484, 7));
                 getNpcs().add(new RocketGruntMale2(RocketGruntMaleDirection.FORWARD, 998, 14));
-                getNpcs().add(new RocketGruntMale2(RocketGruntMaleDirection.FORWARD, 560, 3));
+                getNpcs().add(new RocketGruntMale2(RocketGruntMaleDirection.FORWARD, 613, 2));
                 getNpcs().add(new RocketGruntMale3(RocketGruntMaleDirection.LEFT, 994, 14));
                 getNpcs().add(new RocketGruntMale3(RocketGruntMaleDirection.LEFT, 863, 7));
                 getNpcs().add(new RocketGruntMale4(RocketGruntMaleDirection.AWAY, 1783, 8));

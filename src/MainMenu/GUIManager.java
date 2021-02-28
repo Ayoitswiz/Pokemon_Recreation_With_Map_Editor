@@ -64,6 +64,62 @@ public class GUIManager {
     }
 }
     public void setBackgroundImage(String key) {
+        if(backgroundMap.containsKey(key)){
+            this.background = backgroundMap.get(key);
+        }
+        sout(!backgroundMap.containsKey(key) ? "No key of " + key + " exists with that name!" : "Background set: " + key);
+    }
+
+    public void addNewBackgroundImage(String key, Image background) {
+        if (!backgroundMap.containsKey(key)) {
+            backgroundMap.put(key, background);
+        }
+        sout(!backgroundMap.containsKey(key) ? "Backgound: " + key + " added" : "Key: " + key + " already added Exception.");
+    }
+
+    public void setUi(String key){
+        if (uiMap.containsKey(key)) {
+            ui.removeAll();
+            ui.repaint();
+            ui.add(uiMap.get(key), c);
+            uiMap.get(key).setVisible(true);
+        }
+        sout(ui.getComponents().length > 0 ? "Ui set: " + key : "No key of " + key + " exists with that name!");
+        ui.validate();
+    }
+
+    public void addNewUi(JPanel ui) {
+        String key = ui.getClass().getSimpleName();
+        addToUiList(key, ui);
+    }
+
+    public void addNewUi(String key, JPanel ui) {
+        addToUiList(key, ui);
+    }
+
+    private void addToUiList(String key, JPanel ui) {
+        if(uiMap.containsKey(key)) {
+            uiMap.replace(key, ui);
+            sout("Key: " + key + " already added Exception. Key replaced");
+        } else {
+            uiMap.put(key, ui);
+            sout("Ui: " + key + " added");
+        }
+    }
+
+    private void sout(String out) {
+        if (helper) {
+            System.out.println(out);
+        }
+    }
+
+    public void shutoffTimer() {
+        timer.stop();
+    }
+}
+
+/*
+    public void setBackgroundImage(String key) {
         if(!backgroundMap.containsKey(key)){
             if (helper)System.err.println("No key of " + key + " exists with that name!");
         } else {
@@ -85,7 +141,7 @@ public class GUIManager {
             if (helper)System.err.println("No key of " + key + " exists with that name!");
         } else {
             if(ui.getComponentCount() > 0)
-            ui.getComponent(0).setVisible(false);
+                ui.getComponent(0).setVisible(false);
             ui.removeAll();
             uiMap.get(key).setVisible(true);
             ui.add(uiMap.get(key), c);
@@ -115,4 +171,4 @@ public class GUIManager {
     public void shutoffTimer() {
         timer.stop();
     }
-}
+}*/

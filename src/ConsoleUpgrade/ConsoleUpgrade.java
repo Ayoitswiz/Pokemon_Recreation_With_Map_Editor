@@ -1,7 +1,5 @@
 package ConsoleUpgrade;
 
-import java.awt.*;
-
 public class ConsoleUpgrade {
 
   public  ConsoleUpgrade(){

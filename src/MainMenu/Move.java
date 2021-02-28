@@ -1,22 +1,15 @@
 package MainMenu;
 
-import java.util.HashMap;
-import java.util.Map;
+public class Move implements Cloneable {
 
-public class Move implements Cloneable{
-    protected String name;
-    protected int pp;
-    protected int maxpp;
-    protected double accuracy;
-    protected int power;
-    protected String moveType;
+    private String name;
+    private int pp;
+    private int maxpp;
+    private double accuracy;
+    private int power;
+    private String moveType;
 
-
-    public Move(){
-
-    }
-    Move(String name, int pp, double accuracy, int power, String moveType)
-    {
+    Move(String name, int pp, double accuracy, int power, String moveType) {
         this.name = name;
         this.pp = pp;
         this.accuracy = accuracy;
@@ -25,55 +18,56 @@ public class Move implements Cloneable{
         this.moveType = moveType;
     }
 
-    public HashMap<String, Move> createMove()
-    {
-        Map<String, String> type = new MoveType().AllMoveTypes();
 
-        //Fire
-        Move FireBlast = new Move("Fire Blast", 5, 100, 120, type.get("Fire"));
-
-        //Ice
-        Move IceBeam = new Move("Ice Beam", 10, .95, 100, type.get("Ice"));
-        Move Blizzard = new Move("Blizzard", 5, .70, 120, type.get("Ice"));
-
-        //Flying
-        Move AerialAce = new Move("Aerial Ace", 10, 100, 90, type.get("Flying"));
-
-        //Normal
-        Move HyperBeam = new Move("Hyper Beam", 5, 1, 150, type.get("Normal"));
-        Move Tackle = new Move("Tackle", 40, 100, 40, type.get("Normal"));
-        Move WeakMove = new Move("Weak Move", 40, 100, 10, type.get("Normal"));
-
-        //Bug
-
-        //Ghost
-        Move ShadowBall = new Move("Shadow Ball", 10, 1, 80, type.get("Ghost"));
-
-        //Rock
-        Move DiamondStorm = new Move("Diamond Storm", 5, 95, 100, type.get("Rock"));
-
-
-        HashMap<String, Move> hm = new HashMap<>();
-
-        // Adding object in HashMap
-        //could replace the keys with
-        //move.name to prevent misspelling/bugs.
-        hm.put("Ice Beam", IceBeam);
-        hm.put("Blizzard", Blizzard);
-        hm.put("Aerial Ace", AerialAce);
-        hm.put("Hyper Beam", HyperBeam);
-        hm.put("Tackle", Tackle);
-        hm.put("Weak Move", WeakMove);
-        hm.put("Fire Blast", FireBlast);
-        hm.put("Shadow Ball", ShadowBall);
-        hm.put("Diamond Storm", DiamondStorm);
-        return hm;
-        // Invoking HashMap object
-        // It might or might not display elements
-        // in the insertion order
+    public String getName() {
+        return name;
     }
+
+    public int getPp() {
+        return pp;
+    }
+
+    public int getMaxpp() {
+        return maxpp;
+    }
+
+    public double getAccuracy() {
+        return accuracy;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public String getMoveType() {
+        return moveType;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPp(int pp) {
+        this.pp = pp;
+    }
+
+    public void setMaxpp(int maxpp) {
+        this.maxpp = maxpp;
+    }
+
+    public void setAccuracy(double accuracy) {
+        this.accuracy = accuracy;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    public void setMoveType(String moveType) {
+        this.moveType = moveType;
+    }
+
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

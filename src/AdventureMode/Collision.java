@@ -1,5 +1,7 @@
 package AdventureMode;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.FileOutputStream;
@@ -8,8 +10,10 @@ import java.util.ArrayList;
 import static AdventureMode.AdventureModeUiPanel.EDIT_MODE;
 import static AdventureMode.AdventureModeUiPanel.OPEN_OUTPUT_STREAMS;
 
-abstract class Collision extends JComponent implements Collisions {
+abstract class Collision extends JComponent implements Collisions, Comparable<Collision> {
     protected int i;
+    private static int instantiatedCount = 0;
+    private final int cellNum;
     protected Color color;
     protected int moveUserToCell;
     private FileOutputStream out;
@@ -20,6 +24,8 @@ abstract class Collision extends JComponent implements Collisions {
 
     Collision() {
         setPreferredSize(new Dimension(16,16));
+        cellNum = instantiatedCount++;
+        System.out.println(cellNum);
     }
 
 
@@ -78,6 +84,12 @@ abstract class Collision extends JComponent implements Collisions {
         return false;
     }
 
+        @Override
+        public int compareTo(@NotNull Collision o) {
+            System.out.println("hey");
+            return String.valueOf(this.cellNum).compareToIgnoreCase(String.valueOf(o.cellNum));
+            //return this.paramString().compareToIgnoreCase(o.para
+        }
 
 
 
@@ -86,6 +98,5 @@ abstract class Collision extends JComponent implements Collisions {
 
 
 
-
-    abstract boolean moveInto();
+    abstract boolean isAccessible();
 }

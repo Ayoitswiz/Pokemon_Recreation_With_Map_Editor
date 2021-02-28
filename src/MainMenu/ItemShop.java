@@ -3,9 +3,7 @@ package MainMenu;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.beans.BeanProperty;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -28,7 +26,7 @@ public class ItemShop extends JPanel {
         pnl4 = new JPanel(new GridBagLayout());
         JPanel coverPnl4 = new JPanel(new GridBagLayout());
         JPanel moneyPanel = new JPanel(new GridBagLayout());
-        JLabel moneyLabel = new LblProperties("Your Money: $" + ht.money);
+        JLabel moneyLabel = new LblProperties("Your Money: $" + ht.getMoney());
         Font f = new Font("Times New Roman", Font.PLAIN, 32);
         Font f2 = new Font("Times New Roman", Font.PLAIN, 18);
 
@@ -157,7 +155,7 @@ public class ItemShop extends JPanel {
 
         btnUpdateItems.addActionListener(e -> {
             displayHtItems(ht, pnl4, c, moneyPanel, moneyLabel);
-            moneyLabel.setText("Your Money: $" + ht.money);
+            moneyLabel.setText("Your Money: $" + ht.getMoney());
     });
         displayHtItems(ht, pnl4, c, moneyPanel, moneyLabel);
 
@@ -167,12 +165,12 @@ public class ItemShop extends JPanel {
                 String itemName = tableModel.getValueAt(jTable.getSelectedRow(), 0).toString();
                 int cost = Integer.parseInt(a);
 
-                if (ht.money.compareTo(new BigDecimal(cost)) >= 0) {
-                    ht.money = ht.money.subtract(new BigDecimal(cost));
-                    moneyLabel.setText("Your Money: $" + ht.money);
-                    if (ht.items.get(itemName) == null)
-                        ht.items.put(items.get(itemName).name, items.get(itemName));
-                    ht.items.get(itemName).quantity++;
+                if (ht.getMoney().compareTo(new BigDecimal(cost)) >= 0) {
+                    ht.setMoney(ht.getMoney().subtract(new BigDecimal(cost)));
+                    moneyLabel.setText("Your Money: $" + ht.getMoney());
+                    if (ht.getItems().get(itemName) == null)
+                        ht.getItems().put(items.get(itemName).name, items.get(itemName));
+                    ht.getItems().get(itemName).quantity++;
                     displayHtItems(ht, pnl4, c, moneyPanel, moneyLabel);
                 }
             }
@@ -180,10 +178,10 @@ public class ItemShop extends JPanel {
 
         btnSell.addActionListener(e -> {
             if(resellItem != null)
-            if(ht.items.get(resellItem.name) != null) {
-                ht.money = ht.money.add(new BigDecimal(ht.items.get(resellItem.name).resellPrice));
-                ht.items.get(resellItem.name).quantity -= 1;
-                moneyLabel.setText("Your Money: $" + ht.money);
+            if(ht.getItems().get(resellItem.name) != null) {
+                ht.setMoney(ht.getMoney().add(new BigDecimal(ht.getItems().get(resellItem.name).resellPrice)));
+                ht.getItems().get(resellItem.name).quantity -= 1;
+                moneyLabel.setText("Your Money: $" + ht.getMoney());
                 displayHtItems(ht, pnl4, c, moneyPanel, moneyLabel);
             }
 
@@ -204,7 +202,7 @@ public class ItemShop extends JPanel {
         c.gridy = 0;
         moneyPanel.add(moneyLabel);
         int i = 1;
-        for (Item item: ht.items.values()) {
+        for (Item item: ht.getItems().values()) {
             JButton row = new JButton();
             row.setLayout(new GridBagLayout());
             row.setBackground(Color.WHITE);
@@ -214,7 +212,7 @@ public class ItemShop extends JPanel {
 
         }
         for (Item item: ItemArrayList) {
-            ht.items.remove(item.name);
+            ht.getItems().remove(item.name);
         }
         pnl4.setVisible(false);
         pnl4.setVisible(true);

@@ -2,7 +2,6 @@ package MainMenu;
 
 
 import AdventureMode.NPC;
-
 import java.math.BigDecimal;
 
 public class HumanTrainer extends Trainer {
@@ -20,8 +19,8 @@ public class HumanTrainer extends Trainer {
         setDefeated(isOutOfUsablePokemon());
     }
 
-    void updatePlayerMoney(BigDecimal pMoney){
-        money = money.add(pMoney);
+    void updatePlayerMoney(BigDecimal pMoney) {
+        setMoney(getMoney().add(pMoney));
     }
 
     @Override
@@ -31,7 +30,7 @@ public class HumanTrainer extends Trainer {
     }
 
     @Override
-    protected void makeDecision() {
+    public void makeDecision() {
     }
 
     protected void setUseItem(Item item) {
@@ -70,6 +69,7 @@ public class HumanTrainer extends Trainer {
     public void setPokemonOpponent(Pokemon pokemonOpponent) {
         this.pokemonOpponent = pokemonOpponent;
         hasOpponent = pokemonOpponent != null;
+        AITrainer.canMove = false;
     }
 
 }

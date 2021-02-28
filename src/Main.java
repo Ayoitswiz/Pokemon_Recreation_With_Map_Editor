@@ -1,7 +1,4 @@
-import MainMenu.GUIManager;
 import MainMenu.MainMenuGUI;
-
-import java.awt.*;
 import java.io.IOException;
 
 public class Main {
@@ -9,9 +6,17 @@ public class Main {
     Main(){
 
     }
-        public static void main(String[] args) throws IOException {
+        public static void main(String... args) throws IOException {
             MainMenuGUI manager = new MainMenuGUI();
-            Toolkit.getDefaultToolkit().setDynamicLayout(false);
+            //Toolkit.getDefaultToolkit().setDynamicLayout(false);
         }
 }
 
+
+
+
+/*
+* TODO: When Windows 10 zoom setting decreases/increases the default size of the application is scaled with it, so as of
+*  right now, I'm at 125% zoom and was at 100% zoom before and now the app is to big for screen at program start.
+*
+* */

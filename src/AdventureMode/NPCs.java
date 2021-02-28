@@ -3,7 +3,6 @@ package AdventureMode;
 import MainMenu.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 class RocketGruntMale extends NPC {
         private static final String SPRITE_SHEET_PATH = "src/AdventureMode/imagesUi/TeamRocketMaleGrunt.png";
@@ -22,10 +21,10 @@ class RocketGruntMale extends NPC {
                     13,
                     direction);
 
-            getPokeSlots().add(new Rayquaza(9, new Move[]{moves.get("Fire Blast"), moves.get("Aerial Ace"), moves.get("Tackle"), moves.get("Hyper Beam")}));
-            getPokeSlots().add(new Articuno(12, new Move[]{moves.get("Blizzard"), moves.get("Aerial Ace"), moves.get("Tackle"), moves.get("Ice Beam")}));
-            this.currentPokemon = getPokeSlots().get(0);
-            maxMovingIndex = 3;
+            getPokeSlots().add(new Rayquaza(9, moves.get("Fire Blast", "Aerial Ace", "Tackle", "Hyper Beam")));
+            getPokeSlots().add(new Articuno(12, moves.get("Blizzard", "Aerial Ace", "Tackle", "Ice Beam")));
+            setCurrentPokemon(getPokeSlots().get(0));
+            setMaxMovingIndex(3);
             directionRG = direction;
 
             try {
@@ -58,10 +57,10 @@ class RocketGruntMale3 extends NPC {
                 14,
                 direction);
 
-        getPokeSlots().add(new Articuno(9, new Move[]{moves.get("Fire Blast"), moves.get("Aerial Ace"), moves.get("Tackle"), moves.get("Hyper Beam")}));
-        getPokeSlots().add(new Articuno(12, new Move[]{moves.get("Blizzard"), moves.get("Aerial Ace"), moves.get("Tackle"), moves.get("Ice Beam")}));
-        this.currentPokemon = getPokeSlots().get(0);
-        maxMovingIndex = 3;
+        getPokeSlots().add(new Rayquaza(9, moves.get("Fire Blast", "Aerial Ace", "Tackle", "Hyper Beam")));
+        getPokeSlots().add(new Articuno(12, moves.get("Blizzard", "Aerial Ace", "Tackle", "Ice Beam")));
+        setCurrentPokemon(getPokeSlots().get(0));
+        setMaxMovingIndex(3);
         directionRG = direction;
 
         try {
@@ -96,10 +95,10 @@ class RocketGruntMale3 extends NPC {
 
             //Need attribute to seperate Npc's from non trainer Npc's.
             //
-            getPokeSlots().add(new MegaGengar(8, new Move[]{moves.get("Shadow Ball"), moves.get("Diamond Storm"), moves.get("Ice Beam"), moves.get("Hyper Beam")}));
-            getPokeSlots().add(new Articuno(12, new Move[]{moves.get("Blizzard"), moves.get("Aerial Ace"), moves.get("Tackle"), moves.get("Ice Beam")}));
-            this.currentPokemon = getPokeSlots().get(0);
-            maxMovingIndex = 3;
+            getPokeSlots().add(new Rayquaza(9, moves.get("Fire Blast", "Aerial Ace", "Tackle", "Hyper Beam")));
+            getPokeSlots().add(new Articuno(12, moves.get("Blizzard", "Aerial Ace", "Tackle", "Ice Beam")));;
+            setCurrentPokemon(getPokeSlots().get(0));
+            setMaxMovingIndex(3);
             directionRG = direction;
 
 
@@ -108,6 +107,7 @@ class RocketGruntMale3 extends NPC {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+
             if (!isDefeated()) {
                 NPCMovementThread npcMovementThread = new NPCMovementThread(this);
             }
@@ -135,10 +135,10 @@ class RocketGruntMale4 extends NPC {
         //Need attribute to seperate Npc's from non trainer Npc's.
         //
 
-        getPokeSlots().add(new MegaGengar(8, new Move[]{moves.get("Shadow Ball"), moves.get("Diamond Storm"), moves.get("Ice Beam"), moves.get("Hyper Beam")}));
-        getPokeSlots().add(new MegaGengar(12, new Move[]{moves.get("Blizzard"), moves.get("Aerial Ace"), moves.get("Tackle"), moves.get("Ice Beam")}));
-        this.currentPokemon = getPokeSlots().get(0);
-        maxMovingIndex = 3;
+        getPokeSlots().add(new Rayquaza(9, moves.get("Fire Blast", "Aerial Ace", "Tackle", "Hyper Beam")));
+        getPokeSlots().add(new Articuno(12, moves.get("Blizzard", "Aerial Ace", "Tackle", "Ice Beam")));
+        setCurrentPokemon(getPokeSlots().get(0));
+        setMaxMovingIndex(3);
         directionRG = direction;
 
 
@@ -173,10 +173,10 @@ class RocketGruntMale5 extends NPC {
         //Need class to seperate Npc's from non trainer Npc's.
         //
 
-        getPokeSlots().add(new MegaGengar(8, new Move[]{moves.get("Shadow Ball"), moves.get("Diamond Storm"), moves.get("Ice Beam"), moves.get("Hyper Beam")}));
-        getPokeSlots().add(new MegaGengar(12, new Move[]{moves.get("Blizzard"), moves.get("Aerial Ace"), moves.get("Tackle"), moves.get("Ice Beam")}));
-        this.currentPokemon = getPokeSlots().get(0);
-        maxMovingIndex = 3;
+        getPokeSlots().add(new Rayquaza(9, moves.get("Fire Blast", "Aerial Ace", "Tackle", "Hyper Beam")));
+        getPokeSlots().add(new Articuno(12, moves.get("Blizzard", "Aerial Ace", "Tackle", "Ice Beam")));
+        setCurrentPokemon(getPokeSlots().get(0));
+        setMaxMovingIndex(3);
         directionRG = direction;
 
         try {

@@ -1,5 +1,7 @@
 package AdventureMode;
 
+import MainMenu.AITrainer;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -36,16 +38,14 @@ class NPCMovementThread {
             } else {
                 npc.tick();
                 npc.updateHitbox();
-                if (npc.moving)
-                //If the NPC caught the the user in it's battle glare, set NPC to walk towards user until they are right next to each other
+                if (npc.isMoving())
+                //If the NPC caught the the user in it's battle glare, set NPC to walk towards user until they
+                    // are right next to each other
                 if (npc.caughtPlayerInBattleGlare) {
-                    if (npc.getDistanceFromUser() > 0 && npc.moving) {
+                    if (npc.getDistanceFromUser() > 0 && npc.isMoving()) {
                         switch (npc.getDirection()) {
-                            case LEFT: case RIGHT:
-                                npc.setDistanceFromUser((npc.getDistanceFromUser() - npc.getDeltaX()));
-                                break;
-                            case FORWARD: case AWAY:
-                                npc.setDistanceFromUser((npc.getDistanceFromUser() - npc.getDeltaY()));
+                            case LEFT, RIGHT -> npc.setDistanceFromUser((npc.getDistanceFromUser() - npc.getDeltaX()));
+                            case FORWARD, AWAY -> npc.setDistanceFromUser((npc.getDistanceFromUser() - npc.getDeltaY()));
                         }
                     } else {
                         npc.setMoving(false);
@@ -54,19 +54,19 @@ class NPCMovementThread {
                     switch (npc.getStartingDirection()) {
                         case RIGHT:
                             changeDirection(npc.getStartingCellsX(), npc.getX(), RIGHT);
-                            changeDirection(npc.getX(), npc.getStartingCellsX() + npc.distanceCanMove, LEFT);
+                            changeDirection(npc.getX(), npc.getStartingCellsX() + npc.getDistanceCanMove(), LEFT);
                             break;
                         case FORWARD:
                             changeDirection(npc.getStartingCellsY(), npc.getY(), FORWARD);
-                            changeDirection(npc.getY(), npc.getStartingCellsY() + npc.distanceCanMove, AWAY);
+                            changeDirection(npc.getY(), npc.getStartingCellsY() + npc.getDistanceCanMove(), AWAY);
                             break;
                         case LEFT:
                             changeDirection(npc.getX(), npc.getStartingCellsX(), LEFT);
-                            changeDirection(npc.getStartingCellsX() - npc.distanceCanMove, npc.getX(), RIGHT);
+                            changeDirection(npc.getStartingCellsX() - npc.getDistanceCanMove(), npc.getX(), RIGHT);
                             break;
                         case AWAY:
                             changeDirection(npc.getY(), npc.getStartingCellsY(), AWAY);
-                            changeDirection(npc.getStartingCellsY() - npc.distanceCanMove, npc.getY(), FORWARD);
+                            changeDirection(npc.getStartingCellsY() - npc.getDistanceCanMove(), npc.getY(), FORWARD);
                     }
                 }
             }

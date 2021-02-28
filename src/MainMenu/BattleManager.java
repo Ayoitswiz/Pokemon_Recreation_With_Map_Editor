@@ -3,6 +3,7 @@ package MainMenu;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
+import java.util.function.Predicate;
 
 /*
  * Brandon Wisniewski
@@ -34,15 +35,12 @@ public class BattleManager {
     private JButton driver, collapseDialogPanel;
     private JTextArea gameDialog;
     private GUIManager gui;
+    private Predicate<Trainer> isUser = isUser -> isUser == user;
 
     //START FROM BATTLEGUI
     public BattleManager(HumanTrainer user, AITrainer ai, JButton btnContinue, JTextArea txtLeftDefaultText, JButton btnCollapseDialogPanel, GUIManager gui) {
-        this.user = user;
-        driver = btnContinue;
-        gameDialog = txtLeftDefaultText;
-        collapseDialogPanel = btnCollapseDialogPanel;
+        this(user, btnContinue, txtLeftDefaultText, btnCollapseDialogPanel, gui);
         this.ai = ai;
-        this.gui = gui;
     }
 
     public BattleManager(HumanTrainer user, JButton btnContinue, JTextArea txtLeftDefaultText, JButton btnCollapseDialogPanel, GUIManager gui) {
@@ -57,10 +55,11 @@ public class BattleManager {
     public void battleEnd() {
 
         user.updatePlayerMoney(user.isDefeated() ? new BigDecimal(-200) : new BigDecimal(200));
-        String wonOrNot = "200 pokedollars. You now have " + user.money + " pokedollars.";
-        String goBackToMainMenu = " Click Continue to return to the Main Menu...";
+        String wonOrNot = "200 pokedollars. You now have " + user.getMoney() + " pokedollars.";
         String losesMoney = "You lose " + wonOrNot;
-        //I know this looks kinda stupid but I just figured out how to use ternary so I couldn't help myself.
+        String goBackToMainMenu = " Click Continue to return to the Main Menu...";
+        //I know this looks kinda stupid but I had just figured out how to use ternary so I couldn't help myself.
+        // now im to lazy to fix
         setGameDialog(
                 user.isDefeated() ?
                     user.isOutOfUsablePokemon() ?
@@ -71,21 +70,22 @@ public class BattleManager {
         );
 
         driver.addActionListener(this::actionPerformed);
-        //need to add to this method: if(ht has no pokemon with hp && getInAdventureMode == true) send to pokemon center
+        // TODO: 8/7/2020
+        //  need to add method: if(user has no pokemon with hp && getInAdventureMode == true) send to pokemon center
     }
 
     public void turnManager() {
         //if ai does not use an item
-        Pokemon pOne = user.currentPokemon;
+        Pokemon pOne = user.getCurrentPokemon();
         if (user.getNpcOpponent() != null) {
             ai.makeDecision();
             if (ai.isUsingMove()) {
-                determineWhoHasHigherSpeed(pOne, ai.currentPokemon);
+                determineWhoHasHigherSpeed(pOne, ai.getCurrentPokemon());
             } else {
                 //if ai and ht use an item
                 setGameDialog(ai.getName() + " used a Max Potion!");
                 //Ai has used its turn to use an item, so
-                startSecondTrainersTurn(ai.currentPokemon, pOne);
+                startSecondTrainersTurn(ai.getCurrentPokemon(), pOne);
             }
         } else {
             determineWhoHasHigherSpeed(pOne, user.getPokemonOpponent());
@@ -102,7 +102,10 @@ public class BattleManager {
 
     private void attack(Pokemon pOne, Pokemon pTwo) {
         //foe always chooses move even if an the ai is using an item. Still works but..
-        setGameDialog(pOne == user.currentPokemon ? pOne.attack(pTwo, user.getChosenMove()) : "Foe " + pOne.attack(pTwo, pOne.chooseMove()));
+        setGameDialog(
+                pOne == user.getCurrentPokemon()
+                ? pOne.attack(pTwo, user.getChosenMove())
+                : "Foe " + pOne.attack(pTwo, pOne.chooseMove()));
         pOne.setHasUsedTurn(true);
         startSecondTrainersTurn(pOne, pTwo);
     }
@@ -110,7 +113,7 @@ public class BattleManager {
     //see if the pokemon that was attacked fainted. Check if the pokemon that was attacked has used their turn already.
     private void startSecondTrainersTurn(Pokemon pOne, Pokemon pTwo) {
         if (pTwo.isFainted()) {
-            fainted(pOne == user.currentPokemon ? ai : user, pTwo);
+            fainted(pTwo);
         } else if (pTwo.hasUsedTurn()) {
             collapseDialogPanel();
         } else {
@@ -120,27 +123,24 @@ public class BattleManager {
 
     //If either of the pokemon faint
     //Trainer equals whichever trainer's pokemon fainted
-    private void fainted(Trainer trainer, Pokemon poke) {
+    private void fainted(Pokemon poke) {
+        boolean up = poke == user.getCurrentPokemon();
+        Trainer t = up ? user : ai;
+
         driver.addActionListener(e -> {
-            String fainted = poke.name + " fainted!";
-            setGameDialog(poke == user.currentPokemon ? fainted : "Foe " + fainted);
+            setGameDialog((up ? "" : "Foe ") + poke.name + " fainted");
             driver.addActionListener(ee -> {
-                if (user.getNpcOpponent() != null || trainer == user) {
-                    trainer.swap();
-                    if (trainer.isOutOfUsablePokemon()) {
-                        battleEnd();
-                    } else {
-                        if (trainer == ai) {// It might never have to get here
-                            setGameDialog(ai.getName() + " sent out " + ai.currentPokemon.name + "!");
-                        } else {
-                            poke.setHasUsedTurn(false);
-                            gui.setUi("PokemonInPartyPanel");
-                            gui.setBackgroundImage("PokemonInPartyPanel");
-                        }
-                    }
-                } else {
+                //(user.getNpcOpponent() == null && !up) -> essentially means if true, pokemon that fainted is a wild pokemon
+                if ((user.getNpcOpponent() == null && !up) || t.isOutOfUsablePokemon()) {// USER BATTLEING WILD POKEMON THE POKEMON THAT FAINTED IS NOT USERS,
                     battleEnd();
-                }
+                } else if (!up) { // It might never have to get here
+                    t.swap();
+                    setGameDialog(ai.getName() + " sent out " + ai.getCurrentPokemon().name + "!");
+                    } else {
+                        poke.setHasUsedTurn(false);
+                        gui.setUi("PokemonInPartyPanel");
+                        gui.setBackgroundImage("PokemonInPartyPanel");
+                    }
                 collapseDialogPanel(); //could be moved to turn manager along with the other call in startSecondTrainersTurn
             });
         });
@@ -159,13 +159,14 @@ public class BattleManager {
     }
 
     private void turnEnd() {
+
         if (ai != null) {
             ai.resetBoolsForNextTurn();
-            ai.currentPokemon.setHasUsedTurn(false);
+            ai.getCurrentPokemon().setHasUsedTurn(false);
         } else {
             user.getPokemonOpponent().setHasUsedTurn(false);
         }
-        user.currentPokemon.setHasUsedTurn(false);
+        user.getCurrentPokemon().setHasUsedTurn(false);
         user.resetBoolsForNextTurn();
     }
 
@@ -180,6 +181,8 @@ public class BattleManager {
         }
         user.setOpponent(null);
         collapseDialogPanel();
-        setGameDialog("What will " + user.currentPokemon.name + " do?");
+        // Reset battle dialog for next battle
+        AITrainer.canMove = true;
+        setGameDialog("What will " + user.getCurrentPokemon().name + " do?");
     }
 }

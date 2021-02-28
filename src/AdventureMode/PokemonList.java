@@ -12,14 +12,13 @@ public class PokemonList {
 
     protected ArrayList<Pokemon> create(String...pokemon) {
         ArrayList<Pokemon> pl = new ArrayList<>();
-        Move move = new Move();
-        HashMap<String, Move> moves = move.createMove();
+        Moves<String, Move> moves = new Moves<>();
         for(String p: pokemon) {
             switch (p) {
                 case "Articuno":
-                    pl.add(new Articuno(10, new Move[]{moves.get("Blizzard"), moves.get("Aerial Ace"), moves.get("Tackle"), moves.get("Ice Beam")}));
+                    pl.add(new Articuno(10, moves.get("Blizzard", "Aerial Ace", "Tackle", "Ice Beam")));
                 case "Rayquaza":
-                    pl.add(new Rayquaza(12, new Move[]{moves.get("Blizzard"), moves.get("Aerial Ace"), moves.get("Tackle"), moves.get("Ice Beam")}));
+                    pl.add(new Rayquaza(12, moves.get("Blizzard", "Aerial Ace", "Tackle", "Ice Beam")));
             }
         }
         return pl;
