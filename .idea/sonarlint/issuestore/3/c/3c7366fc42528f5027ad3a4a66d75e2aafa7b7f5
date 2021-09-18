@@ -1,0 +1,230 @@
+
+k	java:S116"QRename this field "ExpBar" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(›×¯ ÿÿÿÿÿ
+i	java:S116 "ORename this field "AIhp" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÛíßÑùÿÿÿÿ
+N
+java:S2387&"3"background" is the name of a field in "Component".(ì·—üûÿÿÿÿ
+K
+java:S1659"0Declare "opponentpokemonGif" on a separate line.(¬Ñ·¾ùÿÿÿÿ
+M
+java:S1659"2Declare "lblMiddlePokemonName" on a separate line.(¬Ñ·¾ùÿÿÿÿ
+L
+java:S1659"1Declare "lblMiddlePokemonLvl" on a separate line.(¬Ñ·¾ùÿÿÿÿ
+?
+java:S1659"$Declare "ExpBar" on a separate line.(›×¯ ÿÿÿÿÿ
+G
+java:S1659",Declare "pnlBottomRight" on a separate line.(²¦Ÿøÿÿÿÿ
+D
+java:S1659")Declare "borderSouth" on a separate line.(²¦Ÿøÿÿÿÿ
+K
+java:S1659"0Declare "pnlBottomLeftMoves" on a separate line.(²¦Ÿøÿÿÿÿ
+N
+java:S1659!"3Declare "lblOponnentPokemonLvl" on a separate line.(ß—¸Äüÿÿÿÿ
+K
+java:S1948"5Make "pokemonInPartyPanel" transient or serializable.(ö–µô
+E
+java:S1948""/Make "battleManager" transient or serializable.(ä‚åŠ
+?
+java:S1948#"$Make "ai" transient or serializable.(Ã€‚çüÿÿÿÿ
+F
+java:S1948$"0Make "currentPokemon" transient or serializable.(€¥äâ
+D
+java:S1948%".Make "humanTrainer" transient or serializable.(¦±¬
+G
+java:S1948&",Make "background" transient or serializable.(ì·—üûÿÿÿÿ
+V	java:S125+"<This block of commented-out lines of code should be removed.(ÀéÛ¡ÿÿÿÿÿ
+:
+java:S19483"$Make "al" transient or serializable.(ÀŒ¨¤
+Q
+java:S11174"6Rename "al" which hides the field declared at line 51.(›Ë¾øÿÿÿÿ
+Q	java:S125X"<This block of commented-out lines of code should be removed.(»ˆ½Ú
+N
+java:S1854z"8Remove this useless assignment to local variable "menu".(Ğ¼É×
+]
+java:S1854x"GRemove this useless assignment to local variable "lblMiddlePokemonExp".(Ãşö¼
+a
+java:S1854w"FRemove this useless assignment to local variable "lblMiddlePokemonHP".(«º†›ÿÿÿÿÿ
+]
+java:S1117h"BRename "currentPokemon" which hides the field declared at line 36.(Õ”ÖÒşÿÿÿÿ
+R
+java:S1481w"7Remove this unused "lblMiddlePokemonHP" local variable.(«º†›ÿÿÿÿÿ
+N
+java:S1481x"8Remove this unused "lblMiddlePokemonExp" local variable.(Ãşö¼
+?
+java:S1481z")Remove this unused "menu" local variable.(Ğ¼É×
+R	java:S125À"<This block of commented-out lines of code should be removed.(ŒÀÜ×
+Q
+java:S1117Ô"5Rename "c" which hides the field declared at line 30.(‚èê‰ÿÿÿÿÿ
+T	java:S106ã"9Replace this use of System.out or System.err by a logger.(‘„ù€şÿÿÿÿ
+Q
+java:S1117"5Rename "c" which hides the field declared at line 30.(‚èê‰ÿÿÿÿÿ
+Q
+java:S1117¦"5Rename "f" which hides the field declared at line 31.(Î‚Äúÿÿÿÿ
+H
+java:S3599ü",Use another way to initialize this instance.(âµÊİùÿÿÿÿ
+u
+java:S1171ü"YMove the contents of this initializer to a standard constructor or to field initializers.(âµÊİùÿÿÿÿ
+R
+java:S1117"6Rename "ai" which hides the field declared at line 35.(ÓğĞŒÿÿÿÿÿ
+H
+java:S3599­",Use another way to initialize this instance.(Ş¡¤çüÿÿÿÿ
+u
+java:S1171­"YMove the contents of this initializer to a standard constructor or to field initializers.(Ş¡¤çüÿÿÿÿ
+u
+java:S1171¯"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
+C
+java:S3599°",Use another way to initialize this instance.(ì™´­
+p
+java:S1171°"YMove the contents of this initializer to a standard constructor or to field initializers.(ì™´­
+H
+java:S3599±",Use another way to initialize this instance.(şßµşÿÿÿÿ
+u
+java:S1171±"YMove the contents of this initializer to a standard constructor or to field initializers.(şßµşÿÿÿÿ
+B
+java:S3599²",Use another way to initialize this instance.(ƒ¥Â
+o
+java:S1171²"YMove the contents of this initializer to a standard constructor or to field initializers.(ƒ¥Â
+H
+java:S3599¹",Use another way to initialize this instance.(¶ÜüŸúÿÿÿÿ
+u
+java:S1171¹"YMove the contents of this initializer to a standard constructor or to field initializers.(¶ÜüŸúÿÿÿÿ
+H
+java:S3599É",Use another way to initialize this instance.(ÇÔåóüÿÿÿÿ
+u
+java:S1171É"YMove the contents of this initializer to a standard constructor or to field initializers.(ÇÔåóüÿÿÿÿ
+H
+java:S3599Ê",Use another way to initialize this instance.(›ÿõ¤ÿÿÿÿÿ
+u
+java:S1171Ê"YMove the contents of this initializer to a standard constructor or to field initializers.(›ÿõ¤ÿÿÿÿÿ
+H
+java:S3599Ñ",Use another way to initialize this instance.(ºÃššşÿÿÿÿ
+u
+java:S1171Ñ"YMove the contents of this initializer to a standard constructor or to field initializers.(ºÃššşÿÿÿÿ
+C
+java:S3599ä",Use another way to initialize this instance.(«¡Òˆ
+p
+java:S1171ä"YMove the contents of this initializer to a standard constructor or to field initializers.(«¡Òˆ
+H
+java:S3599å",Use another way to initialize this instance.(õè°¿úÿÿÿÿ
+u
+java:S1171å"YMove the contents of this initializer to a standard constructor or to field initializers.(õè°¿úÿÿÿÿ
+C
+java:S3599ë",Use another way to initialize this instance.(û²òË
+p
+java:S1171ë"YMove the contents of this initializer to a standard constructor or to field initializers.(û²òË
+C
+java:S3599³",Use another way to initialize this instance.(ù©Ê¥
+p
+java:S1171³"YMove the contents of this initializer to a standard constructor or to field initializers.(ù©Ê¥
+u
+java:S1171Ò"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
+H
+java:S3599Ó",Use another way to initialize this instance.(Ôó¾ëúÿÿÿÿ
+u
+java:S1171Ó"YMove the contents of this initializer to a standard constructor or to field initializers.(Ôó¾ëúÿÿÿÿ
+H
+java:S3599Ô",Use another way to initialize this instance.(şßµşÿÿÿÿ
+u
+java:S1171Ô"YMove the contents of this initializer to a standard constructor or to field initializers.(şßµşÿÿÿÿ
+B
+java:S3599Õ",Use another way to initialize this instance.(ƒ¥Â
+o
+java:S1171Õ"YMove the contents of this initializer to a standard constructor or to field initializers.(ƒ¥Â
+H
+java:S3599Ü",Use another way to initialize this instance.(¶ÜüŸúÿÿÿÿ
+u
+java:S1171Ü"YMove the contents of this initializer to a standard constructor or to field initializers.(¶ÜüŸúÿÿÿÿ
+H
+java:S3599ì",Use another way to initialize this instance.(ÇÔåóüÿÿÿÿ
+u
+java:S1171ì"YMove the contents of this initializer to a standard constructor or to field initializers.(ÇÔåóüÿÿÿÿ
+H
+java:S3599í",Use another way to initialize this instance.(›ÿõ¤ÿÿÿÿÿ
+u
+java:S1171í"YMove the contents of this initializer to a standard constructor or to field initializers.(›ÿõ¤ÿÿÿÿÿ
+H
+java:S3599ô",Use another way to initialize this instance.(ºÃššşÿÿÿÿ
+u
+java:S1171ô"YMove the contents of this initializer to a standard constructor or to field initializers.(ºÃššşÿÿÿÿ
+C
+java:S3599‡",Use another way to initialize this instance.(«¡Òˆ
+p
+java:S1171‡"YMove the contents of this initializer to a standard constructor or to field initializers.(«¡Òˆ
+H
+java:S3599ˆ",Use another way to initialize this instance.(õè°¿úÿÿÿÿ
+u
+java:S1171ˆ"YMove the contents of this initializer to a standard constructor or to field initializers.(õè°¿úÿÿÿÿ
+C
+java:S3599",Use another way to initialize this instance.(û²òË
+p
+java:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(û²òË
+H
+java:S3599",Use another way to initialize this instance.(Àğªüÿÿÿÿ
+u
+java:S1171"YMove the contents of this initializer to a standard constructor or to field initializers.(Àğªüÿÿÿÿ
+H
+java:S3599Ø",Use another way to initialize this instance.(úÔš¾úÿÿÿÿ
+u
+java:S1171Ø"YMove the contents of this initializer to a standard constructor or to field initializers.(úÔš¾úÿÿÿÿ
+H
+java:S3599Ù",Use another way to initialize this instance.(¨Ã‚Îşÿÿÿÿ
+u
+java:S1171Ù"YMove the contents of this initializer to a standard constructor or to field initializers.(¨Ã‚Îşÿÿÿÿ
+u
+java:S1171é"YMove the contents of this initializer to a standard constructor or to field initializers.(¨Õ½àüÿÿÿÿ
+C
+java:S3599 ",Use another way to initialize this instance.(†ìÚÏ
+p
+java:S1171 "YMove the contents of this initializer to a standard constructor or to field initializers.(†ìÚÏ
+B
+java:S3599®",Use another way to initialize this instance.(šâÏs
+o
+java:S1171®"YMove the contents of this initializer to a standard constructor or to field initializers.(šâÏs
+I
+java:S1128"3Remove this unused import 'AdventureMode.MySprite'.(ÊôûÉ
+Q
+java:S1128
+"6Remove this unused import 'utilities.LambdaWithParam'.(ÆÅÿ‘ıÿÿÿÿ
+M
+java:S1128"7Remove this unused import 'java.awt.event.ActionEvent'.(Úù“‘
+U
+java:S1128":Remove this unused import 'utilities.ShorterPrintln.sout'.(ŸÊ–İıÿÿÿÿ
+L
+java:S1068"1Remove this unused "pnlBottomLeft" private field.(²¦Ÿøÿÿÿÿ
+M
+java:S1068"7Remove this unused "pokemonInPartyPanel" private field.(ö–µô
+J
+java:S10681"/Remove this unused "btnContinue" private field.(–ÒŠÉûÿÿÿÿ
+D
+java:S1144g".Remove this unused private "createGui" method.(•ø™Ã
+O
+java:S1144Š"3Remove this unused private "createOpponent" method.(ŒÛÓúüÿÿÿÿ
+O
+java:S1144"9Remove this unused private "createBattleGuiNorth" method.(Š£Ã
+a
+java:S1192v"FDefine a constant instead of duplicating this literal "Lvl: " 8 times.(˜ËÏúÿÿÿÿ
+a
+java:S1192Š"KDefine a constant instead of duplicating this literal "What will " 3 times.(´Ìôq
+e
+java:S1192‚"IDefine a constant instead of duplicating this literal "Ice Beam" 6 times.(Ç°Ş„ıÿÿÿÿ
+g
+java:S1192"KDefine a constant instead of duplicating this literal "Max Potion" 6 times.(ô¡Åúúÿÿÿÿ
+`
+java:S1192ª"IDefine a constant instead of duplicating this literal "STATUS: " 4 times.(ûÚû©
+g
+java:S1192‚"KDefine a constant instead of duplicating this literal "Hyper Beam" 4 times.(Ç°Ş„ıÿÿÿÿ
+f
+java:S1192‚"JDefine a constant instead of duplicating this literal "Weak Move" 4 times.(Ç°Ş„ıÿÿÿÿ
+b
+java:S1192ƒ"KDefine a constant instead of duplicating this literal "Fire Blast" 4 times.(§ó¶Ã
+l	java:S117à"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(à¡óóúÿÿÿÿ
+T
+java:S1155‘">Use isEmpty() to check whether the collection is empty or not.(õ‚Ú
+Y
+java:S2184ˆ"BCast one of the operands of this addition operation to a "double".(÷ÒÇ½
+^
+java:S2184Í"BCast one of the operands of this addition operation to a "double".(€¹ƒÎşÿÿÿÿ
+^
+java:S2184Í"BCast one of the operands of this addition operation to a "double".(µàçşÿÿÿÿ
+^
+java:S2184Ç"BCast one of the operands of this addition operation to a "double".(£‰ìŞÿÿÿÿÿ
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Í°Ñ§

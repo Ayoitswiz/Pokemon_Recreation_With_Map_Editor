@@ -1,52 +1,64 @@
 package AdventureMode;
 
-import MainMenu.BattleGUI;
-import MainMenu.GUIManager;
-import MainMenu.Pokemon;
+import gg.Battle.BattleGUI;
+import gg.Battle.Trainers.AITrainer;
+import gg.Pokemon.WildPokemon;
+import gg.Pokemon.ePokemon;
+
 import java.awt.*;
 import java.util.*;
 
 public class Grass extends Collision {
 
-    private ArrayList<Pokemon> pokemonInArea;
-    private GUIManager gui;
-    Grass(GUIManager gui, String... pokemon) {
-        this.gui = gui;
-        setPokemonInArea(pokemon);
-    }
+  private ArrayList<WildPokemon> pokemonInArea;
+  private PokemonList pl = new PokemonList();
 
-    @Override
-    protected boolean isGrassBlock() {
-        return true;
-    }
+  Grass(ePokemon... pokemon) {
 
-    public void determineIfPokemonIsThere(MySprite user) {
-        if (new Random().nextInt(15) == 5) {
-            encounterPokemon(user);
-        }
-    }
-    private void encounterPokemon(MySprite user) {
-        user.setPokemonOpponent(pokemonInArea.get(new Random().nextInt(pokemonInArea.size())));
-        user.setMoving(false);
-        BattleGUI battleGUI = new BattleGUI(user, gui);
-        gui.addNewUi(battleGUI);
-        gui.setUi(battleGUI.getClass().getSimpleName());
-        gui.addNewBackgroundImage(battleGUI.getClass().getSimpleName(), battleGUI.getBackgroundImage());
-        gui.setBackgroundImage(battleGUI.getClass().getSimpleName());
-    }
+    setPokemonInArea(pokemon);
+  }
 
-    public boolean collides(Rectangle r) {
-        return getBounds().intersects(r);
-    }
+  @Override
+  protected boolean isGrassBlock() {
+    return true;
+  }
 
-    @Override
-    boolean isAccessible() {
-        return true;
+  public void determineIfPokemonIsThere(MySprite user, DialogBox dBox) {
+    if (new Random().nextInt(15) == 5) {
+      encounterPokemon(user, dBox);
     }
+  }
 
-    private void setPokemonInArea(String...pokemon) {
-        PokemonList pl = new PokemonList();
-        pokemonInArea = pl.create(pokemon);
-        //Pokemon p = new Pokemon();
-    }
+  private void encounterPokemon(MySprite user, DialogBox dBox) {
+    WildPokemon wildPokemon =
+      pl.get(
+        pokemonInArea.get(new Random().nextInt(pokemonInArea.size()))
+          .getPokemon().getEName()
+      );
+    user.setOpponent(wildPokemon);
+
+    user.setMoving(false);
+
+    dBox
+      .open()
+      .setDialog(wildPokemon.getPreBattleDialog())
+      .onDialogEnd(() -> {
+        dBox.setVisible(false);
+        AITrainer.canMove = false;
+        new BattleGUI(user, wildPokemon)
+          .onBattleGUIClose(() -> {
+            AITrainer.canMove = true;
+          });
+      });
+  }
+
+  public boolean collides(Rectangle r) {
+    return getBounds().intersects(r);
+  }
+
+  private void setPokemonInArea(ePokemon... pokemon) {
+    pl = new PokemonList();
+    pokemonInArea = pl.create(pokemon);
+    //Pokemon p = new Pokemon();
+  }
 }

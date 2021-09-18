@@ -1,6 +1,6 @@
 package AdventureMode;
 
-import MainMenu.HumanTrainer;
+import gg.Battle.Trainers.HumanTrainer;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -21,7 +21,7 @@ public class MySprite extends HumanTrainer {
     private SpriteDirection directionWhenWarping;
 
 
-    public MySprite(BigDecimal money, String name) throws IOException {
+    public MySprite(BigDecimal money, String name) {
         setMoney(money);
         setName(name);
         setMaxMovingIndex(4);
@@ -65,9 +65,13 @@ public class MySprite extends HumanTrainer {
     private class bePrivate implements x32Spritesheet {
 
         @Override
-        public void createSpriteSheetImg() throws IOException {
-            URL spriteSheetUrl = new URL(SPRITE_SHEET_PATH);
-            createSprites(ImageIO.read(spriteSheetUrl));
+        public void createSpriteSheetImg() {
+            try {
+                URL spriteSheetUrl = new URL(SPRITE_SHEET_PATH);
+                createSprites(ImageIO.read(spriteSheetUrl));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
 
         @Override
@@ -98,7 +102,7 @@ public class MySprite extends HumanTrainer {
         }
     }
 
-    void tick(ArrayList<Collision> cols, Collision compWeAreIn, ArrayList<NPC> npcsInArea, AdventureModeUiPanel ui){
+    void tick(ArrayList<Collision> cols, Collision compWeAreIn, ArrayList<NPC> npcsInArea, AdventureModeUiPanel ui, DialogBox dbox){
         Rectangle npc;
         Collision collision;
         double subFromDelta, subFromDelta2;
@@ -107,81 +111,79 @@ public class MySprite extends HumanTrainer {
         however the x position changes if the ticksFromCellZero changes.
         */
         double[] changeInPos;
-        if (isMoving()) {
-            switch (direction) {
-                case RIGHT:
-                    /*
-                    adding an additional one pixel because at very low speeds of less than a pixel a tick, the delta value is so low
-                    the extension onto the hitbox isn't enough to actually make it expend by even a pixel so the user will actually need to collide
-                    with an object in order for a collision to be detected. The goal is to stop the user before he collides with an object
-                    not after.
-                    The + 1 of in the direction of movement stops user from intersecting with npc's, and is then subtracted for
-                    collisions
-                    */
-                    userHitBox.width += (getDeltaX() + 1);
-                    npc = collisionDetectionNpc(npcsInArea);
-                    subFromDelta = npc != null ? (getHitboxMaxX()) - npc.x : 0;
-                    /*
-                    userHitBox.width -= 1;
-                    The change in size to the hitboxes height/y when we are moving horizontally is so that the
-                    The same changes are made to the hitboxes width when moving vertically, only we change the width/x instead
-                    user can more easily maneuver tight spaces
-                    */
-                    userHitBox.y += 1;
-                    userHitBox.height -= 2;
-                    collision = collisionDetection(cols, compWeAreIn, ui);
-                    subFromDelta2 = collision != null ? getHitboxMaxX() - collision.getX() : 0;
-                    changeInPos = subFromDelta(subFromDelta, subFromDelta2, collision, compWeAreIn, getDeltaX());
-                    if (changeInPos[1] > 0)
-                        updateTicksFromCellZeroX(changeInPos[1]);
-                    break;
-                case LEFT:
-                    userHitBox.x -= (getDeltaX() + 1);
-                    userHitBox.width += getDeltaX();
-                    npc = collisionDetectionNpc(npcsInArea);
-                    subFromDelta = npc != null ? npc.getMaxX() - userHitBox.x : 0;
+        switch (direction) {
+            case RIGHT:
+                /*
+                adding an additional one pixel because at very low speeds of less than a pixel a tick, the delta value is so low
+                the extension onto the hitbox isn't enough to actually make it expend by even a pixel so the user will actually need to collide
+                with an object in order for a collision to be detected. The goal is to stop the user before he collides with an object
+                not after.
+                The + 1 of in the direction of movement stops user from intersecting with npc's, and is then subtracted for
+                collisions
+                */
+                userHitBox.width += (getDeltaX() + 1);
+                npc = collisionDetectionNpc(npcsInArea);
+                subFromDelta = npc != null ? (getHitboxMaxX()) - npc.x : 0;
+                /*
+                userHitBox.width -= 1;
+                The change in size to the hitboxes height/y when we are moving horizontally is so that the
+                The same changes are made to the hitboxes width when moving vertically, only we change the width/x instead
+                user can more easily maneuver tight spaces
+                */
+                userHitBox.y += 1;
+                userHitBox.height -= 2;
+                collision = collisionDetection(cols, compWeAreIn, ui, dbox);
+                subFromDelta2 = collision != null ? getHitboxMaxX() - collision.getX() : 0;
+                changeInPos = subFromDelta(subFromDelta, subFromDelta2, collision, compWeAreIn, getDeltaX());
+                if (changeInPos[1] > 0)
+                    updateTicksFromCellZeroX(changeInPos[1]);
+                break;
+            case LEFT:
+                userHitBox.x -= (getDeltaX() + 1);
+                userHitBox.width += getDeltaX();
+                npc = collisionDetectionNpc(npcsInArea);
+                subFromDelta = npc != null ? npc.getMaxX() - userHitBox.x : 0;
 
-                    userHitBox.y += 1;
-                    userHitBox.height -= 2;
-                    collision = collisionDetection(cols, compWeAreIn, ui);
-                    subFromDelta2 = collision != null ? collision.getMaxX() - userHitBox.x : 0;
+                userHitBox.y += 1;
+                userHitBox.height -= 2;
+                collision = collisionDetection(cols, compWeAreIn, ui, dbox);
+                subFromDelta2 = collision != null ? collision.getMaxX() - userHitBox.x : 0;
 
-                    changeInPos = subFromDelta(subFromDelta, subFromDelta2, collision, compWeAreIn, getDeltaX());
-                    if (changeInPos[1] > 0)
-                        updateTicksFromCellZeroX(-changeInPos[1]);
-                    break;
-                case FORWARD:
-                    userHitBox.height += (getDeltaY() + 1);
-                    npc = collisionDetectionNpc(npcsInArea);
-                    subFromDelta = npc != null ? (getHitboxMaxY()) - npc.y : 0;
+                changeInPos = subFromDelta(subFromDelta, subFromDelta2, collision, compWeAreIn, getDeltaX());
+                if (changeInPos[1] > 0)
+                    updateTicksFromCellZeroX(-changeInPos[1]);
+                break;
+            case FORWARD:
+                userHitBox.height += (getDeltaY() + 1);
+                npc = collisionDetectionNpc(npcsInArea);
+                subFromDelta = npc != null ? (getHitboxMaxY()) - npc.y : 0;
 
-                    userHitBox.x += 1;
-                    userHitBox.width -= 2;
-                    collision = collisionDetection(cols, compWeAreIn, ui);
-                    subFromDelta2 = collision != null ? (getHitboxMaxY()) - collision.getY() : 0;
+                userHitBox.x += 1;
+                userHitBox.width -= 2;
+                collision = collisionDetection(cols, compWeAreIn, ui, dbox);
+                subFromDelta2 = collision != null ? (getHitboxMaxY()) - collision.getY() : 0;
 
-                    changeInPos = subFromDelta(subFromDelta, subFromDelta2, collision, compWeAreIn, getDeltaY());
-                    if (changeInPos[1] > 0) {
-                        updateTicksFromCellZeroY(changeInPos[1]);
-                    }
-                    break;
-                case AWAY:
-                    userHitBox.y -= (getDeltaY() + 1);
-                    userHitBox.height += getDeltaY();
-                    npc = collisionDetectionNpc(npcsInArea);
-                    subFromDelta = npc != null ? npc.getMaxY() - userHitBox.y : 0;
+                changeInPos = subFromDelta(subFromDelta, subFromDelta2, collision, compWeAreIn, getDeltaY());
+                if (changeInPos[1] > 0) {
+                    updateTicksFromCellZeroY(changeInPos[1]);
+                }
+                break;
+            case AWAY:
+                userHitBox.y -= (getDeltaY() + 1);
+                userHitBox.height += getDeltaY();
+                npc = collisionDetectionNpc(npcsInArea);
+                subFromDelta = npc != null ? npc.getMaxY() - userHitBox.y : 0;
 
-                    userHitBox.x += 1;
-                    userHitBox.width -= 2;
-                    collision = collisionDetection(cols, compWeAreIn, ui);
-                    subFromDelta2 = collision != null ? collision.getMaxY() - userHitBox.y : 0;
+                userHitBox.x += 1;
+                userHitBox.width -= 2;
+                collision = collisionDetection(cols, compWeAreIn, ui, dbox);
+                subFromDelta2 = collision != null ? collision.getMaxY() - userHitBox.y : 0;
 
-                    changeInPos = subFromDelta(subFromDelta, subFromDelta2, collision, compWeAreIn, getDeltaY());
-                    if (changeInPos[1] > 0)
-                        updateTicksFromCellZeroY(-changeInPos[1]);
-                    break;
-                default: throw new IllegalStateException("Unexpected value: " + direction);
-            }
+                changeInPos = subFromDelta(subFromDelta, subFromDelta2, collision, compWeAreIn, getDeltaY());
+                if (changeInPos[1] > 0)
+                    updateTicksFromCellZeroY(-changeInPos[1]);
+                break;
+            default: throw new IllegalStateException("Unexpected value: " + direction);
         }
         setMovingIndex(getMovingIndex() + 1);
         setMovingIndex(getMovingIndex() % getMaxMovingIndex());
@@ -221,40 +223,39 @@ public class MySprite extends HumanTrainer {
         return null;
     }
 
-    private Collision collisionDetection(ArrayList<Collision> cols, Collision compWeAreIn, AdventureModeUiPanel ui) {
+    private Collision collisionDetection(ArrayList<Collision> cols, Collision compWeAreIn, AdventureModeUiPanel ui, DialogBox dialogBox) {
         //When the user warps, he is placed inside another warp cell. This block allows the user to move
         //in any direction on that warp without activating it. The warp will only be activated when the user moves in the
         //opposite direction of the direction he was moving when he warped.
-        int i = 0; int j = -1; int h = -1;
+
+        int directionNeededToWalkInToWarp = -1;
         if (compWeAreIn.isWarp()) {
             for(SpriteDirection dir: SpriteDirection.values()) {
-                if (directionWhenWarping == dir) {
-                    h = i;
-                }
-                if (h == 0) { j = 2; }
-                else if(h == 1) { j = 3; }
-                else if(h == 2) { j = 0; }
-                else if(h == 3) { j = 1; }
 
-                if (j != -1) {
-                    if (SpriteDirection.values()[j].equals(direction)) {
+                if (directionWhenWarping == dir) {
+                    switch (directionWhenWarping) {
+                        case FORWARD -> directionNeededToWalkInToWarp = 2;
+                        case LEFT -> directionNeededToWalkInToWarp = 3;
+                        case AWAY -> directionNeededToWalkInToWarp = 0;
+                        case RIGHT -> directionNeededToWalkInToWarp = 1;
+                    }
+                    if (SpriteDirection.values()[directionNeededToWalkInToWarp].equals(direction)) {
                         ui.Enter((Warp) compWeAreIn);
                         directionWhenWarping = direction;
                         return compWeAreIn;
                     }
                 }
-                i++;
             }
         }
 
         if (compWeAreIn.isGrassBlock()) {
             Grass g = (Grass) compWeAreIn;
-            g.determineIfPokemonIsThere(this);
+            g.determineIfPokemonIsThere(this, dialogBox);
         }
 
         //Handles whether the component we are intersecting is a cell we can enter, can't enter, or warp.
         //When moving at very high speeds the user can jump over entire component lengths without checking for collisions
-        //to stop that from happening I'm checking two component lengths in front of the user.
+        //to stop that from happening UIs.I'm checking two component lengths in front of the user.
         //The array always gets executed all the way through. The order of the array goes from cells farthest away to
         //closest, ending with compWeAreIn. This is because when the user collides with an non-enterable cell their position
         //gets set right outside the edge of that cell. Because of this if the cell farthest away was returned the
@@ -262,19 +263,17 @@ public class MySprite extends HumanTrainer {
 
 
         Collision colToQuery = null;
-        for(Collision col: cols) {
-            if (!col.isAccessible() && col.collides(userHitBox.getBounds())) {
-                //There is a col is compWeAreIn. compWeAreIn is passed in individually and along with the arrayList
-                if (col.isWarp() && !compWeAreIn.isWarp()) {
-                    directionWhenWarping = direction;
-                    ui.Enter((Warp) col);
-                    return col;
-                }
-                //Collisions with cells the user cannot enter (and are not warps) takes priority over being queried.
-                //Meaning if the user collides with a warp and a wall at the same time, the wall will be the one to be queried.
-                //That is why this if statement is last in the loop.
-                if (!col.isWarp() && !col.isAccessible()) { //if comp is a wall essentially
-                    colToQuery = col;
+        for(Collision cell: cols) {
+            if (cell.collides(userHitBox.getBounds())) {
+
+                if (cell.isWall()) colToQuery = cell;
+
+                if (cell.isWarp()) {
+                    if (!compWeAreIn.isWarp()) {
+                        directionWhenWarping = direction;
+                        ui.Enter((Warp) cell);
+                        return cell;
+                    }
                 }
             }
         }

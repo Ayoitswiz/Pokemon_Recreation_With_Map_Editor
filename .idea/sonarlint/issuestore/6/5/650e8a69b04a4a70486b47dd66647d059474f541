@@ -1,0 +1,40 @@
+
+V
+java:S2387"4"SPRITE_SHEET_PATH" is the name of a field in "NPC".(óôËõÿÿÿÿÿ8ÓËÉ”½/
+S
+java:S1481%"6Remove this unused "npcMovementThread" local variable.(º‘ÓÙ8÷ËÉ”½/
+V
+java:S2387,"4"SPRITE_SHEET_PATH" is the name of a field in "NPC".(óôËõÿÿÿÿÿ8øËÉ”½/
+S
+java:S1481I"6Remove this unused "npcMovementThread" local variable.(º‘ÓÙ8‘ÌÉ”½/
+V
+java:S2387P"4"SPRITE_SHEET_PATH" is the name of a field in "NPC".(óôËõÿÿÿÿÿ8¡ÌÉ”½/
+9
+java:S1116c"Remove this empty statement.(€ÛõÙ8³ÌÉ”½/
+S
+java:S1481p"6Remove this unused "npcMovementThread" local variable.(º‘ÓÙ8½ÌÉ”½/
+V
+java:S2387w"4"SPRITE_SHEET_PATH" is the name of a field in "NPC".(óôËõÿÿÿÿÿ8¾ÌÉ”½/
+T
+java:S1481—"6Remove this unused "npcMovementThread" local variable.(º‘ÓÙ8åÌÉ”½/
+W
+java:S2387"4"SPRITE_SHEET_PATH" is the name of a field in "NPC".(óôËõÿÿÿÿÿ8åÌÉ”½/
+T
+java:S1481¼"6Remove this unused "npcMovementThread" local variable.(º‘ÓÙ8‡ÍÉ”½/
+e
+java:S1192"HDefine a constant instead of duplicating this literal "Tackle" 10 times.(ß·ûÃ8ŠÍÉ”½/
+l
+java:S1192X"ODefine a constant instead of duplicating this literal "Rocket Captain" 3 times.( Şê¹8ŒÍÉ”½/
+h
+java:S1192"KDefine a constant instead of duplicating this literal "Hyper Beam" 5 times.(ß·ûÃ8ÍÉ”½/
+i
+java:S1192"LDefine a constant instead of duplicating this literal "Aerial Ace" 10 times.(ß·ûÃ8ÍÉ”½/
+–
+java:S1192Z"tDefine a constant instead of duplicating this literal "Wait, who are you?! You're not supposed to be here!" 3 times.(Ï×½Õøÿÿÿÿ8’ÍÉ”½/
+f
+java:S1192"IDefine a constant instead of duplicating this literal "Ice Beam" 5 times.(‚öÅ8“ÍÉ”½/
+f
+java:S1192"IDefine a constant instead of duplicating this literal "Blizzard" 5 times.(‚öÅ8•ÍÉ”½/
+h
+java:S1192"KDefine a constant instead of duplicating this literal "Fire Blast" 5 times.(ß·ûÃ8—ÍÉ”½/
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(“îùŒ8ÍÉ”½/

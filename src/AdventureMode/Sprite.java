@@ -20,10 +20,9 @@ abstract public class Sprite {
     private int startingCell;
     private int startingCellsX = -1;
     private int startingCellsY = -1;
-    private boolean isDefeated = false;
     private double componentsAwayFromcellX = -1;
     private double componentsAwayFromcellY = -1;
-    private int speedWeight = 200;
+    private int speedWeight = 100;
     private double stepsFromCellZeroX = 0;
     private double stepsFromCellZeroY = 0;
     public Sprite(){
@@ -48,13 +47,21 @@ abstract public class Sprite {
     }
 
     protected void setTicksFromCellZeroBasedOnOtherSprite(Point spritesNewLocation) {
-        setStepsFromCellZeroX((spritesNewLocation.x - cellZero.getX()) / getDeltaX());
-        setStepsFromCellZeroY((spritesNewLocation.y - cellZero.getY()) / getDeltaY());
+        stepsFromCellZeroX =
+          (spritesNewLocation.x - cellZero.getX())
+            / getDeltaX();
+        stepsFromCellZeroY =
+          (spritesNewLocation.y - cellZero.getY())
+            / getDeltaY();
     }
 
     protected void setStepsFromCellZeroBasedOnComponent(Point spritesNewLocation) {
-        setStepsFromCellZeroX(((spritesNewLocation.getX() - cellZero.getX()) - (double) getWidth() / 4) / getDeltaX());
-        setStepsFromCellZeroY(((spritesNewLocation.getY() - cellZero.getY()) - (double) getHeight() / 2) / getDeltaY());
+        double newX = spritesNewLocation.getX();
+        newX -= cellZero.getX();
+        newX -= (double) getWidth() / 4;
+        newX /= getDeltaX();
+        stepsFromCellZeroX = newX;
+        stepsFromCellZeroY = ((spritesNewLocation.getY() - cellZero.getY()) - (double) getHeight() / 2) / getDeltaY();
     }
 
     protected void updateComponentsFromContainerStart() {
@@ -201,14 +208,6 @@ abstract public class Sprite {
 
     protected void setSpeedWeight(int speedWeight) {
         this.speedWeight = speedWeight;
-    }
-
-    public boolean isDefeated() {
-        return isDefeated;
-    }
-
-    public void setDefeated(boolean defeated) {
-        isDefeated = defeated;
     }
 
     double getStepsFromCellZeroX() {

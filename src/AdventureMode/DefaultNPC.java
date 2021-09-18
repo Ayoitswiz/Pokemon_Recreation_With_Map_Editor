@@ -1,7 +1,15 @@
 package AdventureMode;
 
-import MainMenu.Articuno;
-import MainMenu.Rayquaza;
+import gg.Pokemon.Moves.Moves;
+import gg.Pokemon.CreatePokemon;
+
+import static gg.Pokemon.Moves.eMoves.BLIZZARD;
+import static gg.Pokemon.Moves.eMoves.DIAMOND_STORM;
+import static gg.Pokemon.Moves.eMoves.FIRE_BLAST;
+import static gg.Pokemon.Moves.eMoves.ICE_BEAM;
+import static gg.Pokemon.Moves.eMoves.SHADOW_BALL;
+import static gg.Pokemon.Moves.eMoves.STRONG_MOVE;
+import static gg.Pokemon.Moves.eMoves.WEAK_MOVE;
 
 
 //At the current time this applies only for sprite sheets that have a standing column in the first column.
@@ -9,8 +17,10 @@ import MainMenu.Rayquaza;
 public class DefaultNPC extends NPC {
 
     public DefaultNPC() {
-        getPokeSlots().add(new Rayquaza(9, moves.get("Fire Blast", "Aerial Ace", "Tackle", "Hyper Beam")));
-        getPokeSlots().add(new Articuno(12, moves.get("Blizzard", "Aerial Ace", "Tackle", "Ice Beam")));
-        setCurrentPokemon(getPokeSlots().get(0));
+        getPokeSlots().add(CreatePokemon.Articuno(11, Moves.Move(ICE_BEAM, WEAK_MOVE, STRONG_MOVE, BLIZZARD), this));
+        getPokeSlots().add(CreatePokemon.Rayquaza(10, Moves.Move(DIAMOND_STORM, STRONG_MOVE, FIRE_BLAST, ICE_BEAM), this));
+        getPokeSlots().add(CreatePokemon.MegaGengar(9, Moves.Move(ICE_BEAM, WEAK_MOVE, SHADOW_BALL, STRONG_MOVE), this));
+
+        preBattleDialog = new String[]{"All the pokemon in Mt. Moon are ours!...", "Don't try to stop us..."};
     }
 }

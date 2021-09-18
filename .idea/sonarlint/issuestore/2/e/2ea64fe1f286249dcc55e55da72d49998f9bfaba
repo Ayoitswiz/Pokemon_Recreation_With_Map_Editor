@@ -1,0 +1,6 @@
+
+X	java:S125"<This block of commented-out lines of code should be removed.(´ÈïË8£‡Ê”½/
+B
+java:S1128"%Remove this unused import 'java.awt'.(ï´µ©8£‡Ê”½/
+n	java:S101"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(ÛÓÿ“ùÿÿÿÿ8¤‡Ê”½/
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Í°Ñ§8¥‡Ê”½/

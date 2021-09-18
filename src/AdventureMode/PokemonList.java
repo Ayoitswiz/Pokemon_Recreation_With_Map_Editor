@@ -1,26 +1,42 @@
 package AdventureMode;
 
-import MainMenu.*;
+import gg.Pokemon.Moves.Moves;
+import gg.Pokemon.Pokemon;
+import gg.Pokemon.WildPokemon;
+import gg.Pokemon.ePokemon;
 
+import static gg.Pokemon.Moves.eMoves.*;
+import static gg.Pokemon.CreatePokemon.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PokemonList {
 
     PokemonList() {
     }
 
-    protected ArrayList<Pokemon> create(String...pokemon) {
-        ArrayList<Pokemon> pl = new ArrayList<>();
-        Moves<String, Move> moves = new Moves<>();
-        for(String p: pokemon) {
-            switch (p) {
-                case "Articuno":
-                    pl.add(new Articuno(10, moves.get("Blizzard", "Aerial Ace", "Tackle", "Ice Beam")));
-                case "Rayquaza":
-                    pl.add(new Rayquaza(12, moves.get("Blizzard", "Aerial Ace", "Tackle", "Ice Beam")));
-            }
+    protected ArrayList<WildPokemon> create(ePokemon... pokemon) {
+        ArrayList<WildPokemon> pl = new ArrayList<>();
+
+        for(ePokemon p: pokemon) {
+            WildPokemon w = new WildPokemon();
+            w.setPokemon(switch (p) {
+                case ARTICUNO -> Articuno(10, Moves.Move(BLIZZARD, TACKLE, AERIAL_ACE, ICE_BEAM), w);
+                case RAYQUAZA -> Rayquaza(12, Moves.Move(HYPER_BEAM, DIAMOND_STORM, TACKLE, FIRE_BLAST), w);
+                case MEGA_GENGAR -> MegaGengar(6,Moves.Move(WEAK_MOVE, STRONG_MOVE, SHADOW_BALL, ICE_BEAM), w);
+            });
+            pl.add(w);
         }
         return pl;
+    }
+
+    public WildPokemon get(ePokemon ePoke) {
+        WildPokemon w = new WildPokemon();
+        w.setPokemon(
+        switch (ePoke) {
+            case ARTICUNO -> Articuno(10, Moves.Move(BLIZZARD, TACKLE, AERIAL_ACE, ICE_BEAM), w);
+            case RAYQUAZA -> Rayquaza(12, Moves.Move(HYPER_BEAM, DIAMOND_STORM, TACKLE, FIRE_BLAST), w);
+            case MEGA_GENGAR -> MegaGengar(6,Moves.Move(WEAK_MOVE, STRONG_MOVE, SHADOW_BALL, ICE_BEAM), w);
+        });
+        return w;
     }
 }

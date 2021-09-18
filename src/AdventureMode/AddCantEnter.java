@@ -11,7 +11,7 @@ public class AddCantEnter extends JButton {
     ArrayList<Integer> CELLS_THAT_CANNOT_BE_ENTERED;
     public AddCantEnter(int count, ArrayList<Integer> CELLS_THAT_CANNOT_BE_ENTERED, String areaToLoad) {
         //would need grassCellsToLoad, CELLS_That_Are_Grass in here
-        //Then I would need the same thing for cut cells, surf cells etc. and item cells, berry cells
+        //Then UIs.I would need the same thing for cut cells, surf cells etc. and item cells, berry cells
         //Or reload area and pass in new values
         i = count;
         this.CELLS_THAT_CANNOT_BE_ENTERED = CELLS_THAT_CANNOT_BE_ENTERED;

@@ -1,5 +1,8 @@
 package AdventureMode;
 
+import gg.Battle.Trainers.AITrainer;
+import gg.Pokemon.ePokemon;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +14,7 @@ abstract class Warp extends Collision implements Collisions {
     private String grassAreasToLoad;
     private Map<Integer, Warp> entrances = new HashMap<>();
     private ArrayList<NPC> npcs = new ArrayList<>();
-    private String[] pokemonInArea;
+    private ePokemon[] pokemonInArea;
 
     Warp(){ color = new Color(0, 255, 0);
     }
@@ -21,16 +24,10 @@ abstract class Warp extends Collision implements Collisions {
 
     void startNpcMovementThreads() {
         for (NPC npc : getNpcs()) {
-            if (!npc.isDefeated() && !npc.isMovementThreadOn()) {
-                NPCMovementThread npcMovementThread = new NPCMovementThread(npc);
-                npc.setMovementThreadOn(true);
+            if (!npc.isOutOfUsablePokemon() && AITrainer.canMove) {
+                npc.setNpcMovementThread();
             }
         }
-    }
-
-    @Override
-    public boolean isAccessible() {
-        return false;
     }
 
     @Override
@@ -70,11 +67,11 @@ abstract class Warp extends Collision implements Collisions {
         return npcs;
     }
 
-    public String[] getPokemonInArea() {
+    public ePokemon[] getPokemonInArea() {
         return pokemonInArea;
     }
 
-    public void setPokemonInArea(String[] pokemonInArea) {
+    public void setPokemonInArea(ePokemon... pokemonInArea) {
         this.pokemonInArea = pokemonInArea;
     }
 }

@@ -1,0 +1,45 @@
+
+M
+java:S1659"+Declare "loweredetched" on a separate line.(¦Œßèûÿÿÿÿ8®ÀÉ”½/
+K
+java:S1659")Declare "raisedbevel" on a separate line.(¦Œßèûÿÿÿÿ8¯ÀÉ”½/
+L
+java:S1659"*Declare "loweredbevel" on a separate line.(¦Œßèûÿÿÿÿ8°ÀÉ”½/
+G
+java:S1659"%Declare "redLine" on a separate line.(¦Œßèûÿÿÿÿ8±ÀÉ”½/
+E
+java:S1659"#Declare "thick" on a separate line.(¦Œßèûÿÿÿÿ8²ÀÉ”½/
+F
+java:S1659"$Declare "buffer" on a separate line.(¦Œßèûÿÿÿÿ8²ÀÉ”½/
+P
+java:S1948".Make "raisedetched" transient or serializable.(¦Œßèûÿÿÿÿ8µÀÉ”½/
+Q
+java:S1948"/Make "loweredetched" transient or serializable.(¦Œßèûÿÿÿÿ8¶ÀÉ”½/
+O
+java:S1948"-Make "raisedbevel" transient or serializable.(¦Œßèûÿÿÿÿ8·ÀÉ”½/
+P
+java:S1948".Make "loweredbevel" transient or serializable.(¦Œßèûÿÿÿÿ8·ÀÉ”½/
+K
+java:S1948")Make "redLine" transient or serializable.(¦Œßèûÿÿÿÿ8¸ÀÉ”½/
+I
+java:S1948"'Make "thick" transient or serializable.(¦Œßèûÿÿÿÿ8»ÀÉ”½/
+J
+java:S1948"(Make "buffer" transient or serializable.(¦Œßèûÿÿÿÿ8ÌÀÉ”½/
+L
+java:S1948"*Make "compound" transient or serializable.(¶Èá±üÿÿÿÿ8ÛÀÉ”½/
+J
+java:S1948"(Make "sprite" transient or serializable.(˜ôâşÿÿÿÿ8ëÀÉ”½/
+T
+java:S1481 "7Remove this unused "mainMenuBackground" local variable.(ĞòŒ£8ŒÁÉ”½/
+X	java:S125$"<This block of commented-out lines of code should be removed.(…õ¼Ó8’ÁÉ”½/
+X	java:S125("<This block of commented-out lines of code should be removed.(ŒÀÜ×8§ÁÉ”½/
+V
+java:S1948V"4Make "actionListenerBody" transient or serializable.(°Òš§şÿÿÿÿ8òÁÉ”½/
+U	java:S106]"9Replace this use of System.out or System.err by a logger.(¶ˆİø8†ÂÉ”½/
+X	java:S125j"<This block of commented-out lines of code should be removed.(÷šŠÆ8–ÂÉ”½/
+X	java:S125w"<This block of commented-out lines of code should be removed.(„¶Ù¤8ªÂÉ”½/
+L
+java:S1068"*Remove this unused "sprite" private field.(˜ôâşÿÿÿÿ8ÂÂÉ”½/
+b
+java:S2184="@Cast one of the operands of this integer division to a "double".(ÁÛù¿şÿÿÿÿ8ÓÂÉ”½/
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(“îùŒ8ÚÂÉ”½/

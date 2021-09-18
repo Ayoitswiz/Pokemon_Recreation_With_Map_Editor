@@ -1,6 +1,6 @@
 package AdventureMode;
 
-import MainMenu.AITrainer;
+import gg.Battle.Trainers.AITrainer;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -17,8 +17,8 @@ class NPCMovementThread {
 
     NPCMovementThread(NPC pNpc) {
         this.npc = pNpc;
-        npc.setMovementThreadOn(true);
         npc.setMoving(true);
+        System.out.println("movement threa");
         beep();
     }
 
@@ -31,11 +31,10 @@ class NPCMovementThread {
         final Runnable NpcStartMoving = () -> {
         //If the NPC is defeated in battle stop their thread
         /*//STOP THERE IF THEY CAUGHT PLAYER IN BATTLE GLARE AND THEY ARE RIGHT NEXT TO HIM*/
-            if (npc.isDefeated() || !npc.isMovementThreadOn()) {
+            if (npc.isOutOfUsablePokemon()) {
                 scheduler.shutdown();
                 //Still gets set because if npc is defeated this should be set to false
-                npc.setMovementThreadOn(false);
-            } else {
+            } else if (AITrainer.canMove){
                 npc.tick();
                 npc.updateHitbox();
                 if (npc.isMoving())
@@ -72,5 +71,9 @@ class NPCMovementThread {
             }
         };
         scheduler.scheduleAtFixedRate(NpcStartMoving, 10, TIMER_DELAY, TimeUnit.MILLISECONDS);
+    }
+
+    public boolean isTerminated() {
+        return scheduler.isTerminated();
     }
 }

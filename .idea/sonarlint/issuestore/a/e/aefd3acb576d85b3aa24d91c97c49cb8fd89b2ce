@@ -1,0 +1,15 @@
+
+~
+java:S1845"gRename method "setCurrentPokemon" to prevent any misunderstanding/clash with field "setCurrentPokemon".(ĞÿŞß
+[
+java:S1124
+"EReorder the modifiers to comply with the Java Language Specification.(Ÿªáì
+[
+java:S1124 "EReorder the modifiers to comply with the Java Language Specification.(¿­ÿ
+S	java:S1066"9Replace this use of System.out or System.err by a logger.(ç„˜çùÿÿÿÿ
+Q	java:S1259"<This block of commented-out lines of code should be removed.(¤ä…
+†
+java:S1319}"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(àÚŠ
+‹
+java:S1319"tThe type of the "pokeSlots" object should be an interface such as "List" rather than the implementation "ArrayList".(Â‡ˆ•
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Í°Ñ§

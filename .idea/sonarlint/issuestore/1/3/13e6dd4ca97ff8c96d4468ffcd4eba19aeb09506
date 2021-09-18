@@ -1,0 +1,85 @@
+
+E
+java:S1659"/Declare "btnCollapseDialog" on a separate line.(ó±¿²
+C
+java:S1659"-Declare "btnExpandDialog" on a separate line.(ó±¿²
+J
+java:S1659"/Declare "pnlPokemonInParty" on a separate line.(Àø²Øşÿÿÿÿ
+F
+java:S1659"+Declare "loweredetched" on a separate line.(‘¨«ùÿÿÿÿ
+D
+java:S1659")Declare "raisedbevel" on a separate line.(‘¨«ùÿÿÿÿ
+E
+java:S1659"*Declare "loweredbevel" on a separate line.(‘¨«ùÿÿÿÿ
+G
+java:S3599G",Use another way to initialize this instance.(å¹†ùùÿÿÿÿ
+t
+java:S1171G"YMove the contents of this initializer to a standard constructor or to field initializers.(å¹†ùùÿÿÿÿ
+A
+java:S3599S",Use another way to initialize this instance.(ÓİêA
+n
+java:S1171S"YMove the contents of this initializer to a standard constructor or to field initializers.(ÓİêA
+G
+java:S3599q",Use another way to initialize this instance.(•şŒüÿÿÿÿ
+t
+java:S1171q"YMove the contents of this initializer to a standard constructor or to field initializers.(•şŒüÿÿÿÿ
+C
+java:S3599Š",Use another way to initialize this instance.(ºÌ†¬
+u
+java:S1171‹"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
+H
+java:S3599Ü",Use another way to initialize this instance.(å¹†ùùÿÿÿÿ
+u
+java:S1171Ü"YMove the contents of this initializer to a standard constructor or to field initializers.(å¹†ùùÿÿÿÿ
+O
+java:S2387ö"3"background" is the name of a field in "Component".(É„ûûÿÿÿÿ
+H
+java:S1948ö",Make "background" transient or serializable.(É„ûûÿÿÿÿ
+n
+java:S3776Ë"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(±ü©¬ùÿÿÿÿ
+D
+java:S1172Ë"(Remove this unused method parameter "x".(±ü©¬ùÿÿÿÿ
+Q
+java:S1117ë"5Rename "c" which hides the field declared at line 21.(‚èê‰ÿÿÿÿÿ
+D
+java:S1172‰"(Remove this unused method parameter "p".(±‘™Øÿÿÿÿÿ
+Q
+java:S1161Œ":Add the "@Override" annotation above this method signature(¼š†Â
+u
+java:S2142”"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€
+P
+java:S2274“":Remove this call to "wait" or move it into a "while" loop.(ÇÜ<
+V
+java:S1161œ":Add the "@Override" annotation above this method signature(ÙÙ©Šüÿÿÿÿ
+u
+java:S2142£"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€
+P
+java:S2274¢":Remove this call to "wait" or move it into a "while" loop.(ÇÜ<
+R	java:S125­"<This block of commented-out lines of code should be removed.(×‹¶”
+R	java:S125Õ"<This block of commented-out lines of code should be removed.(¸åäÜ
+U
+java:S1128"?Remove this unused import 'utilities.LambdaWithParamAndRetVal'.(áì‘Ñ
+G
+java:S1068"1Remove this unused "healthBarList" private field.(‘†’Œ
+K
+java:S1068"5Remove this unused "updateCurrentPoke" private field.(€¡Îí
+M
+java:S1068 "2Remove this unused "setCurrentPoke" private field.(ô©ÕÎøÿÿÿÿ
+K
+java:S1144Ë"/Remove this unused private "createBtns" method.(±ü©¬ùÿÿÿÿ
+p
+java:S11926"ZDefine a constant instead of duplicating this literal "src/imagesUI/Pokeball.png" 3 times.(Ùˆùó
+_
+java:S1192®"HDefine a constant instead of duplicating this literal "control" 3 times.(ªÜü
+`
+java:S11920"JDefine a constant instead of duplicating this literal "BattleGUI" 8 times.(ÉÀğ
+Š
+java:S1319$"tThe type of the "pokeslots" object should be an interface such as "List" rather than the implementation "ArrayList".(ùß
+h	java:S101õ"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(¨ Ü¸üÿÿÿÿ
+A
+java:S5411§"*Use the primitive boolean expression here.(ö¼éä
+A
+java:S5411"*Use the primitive boolean expression here.(Ê‰ÀŒ
+=
+java:S1700""Rename field "pokemonInPartyPanel"(Àø²Øşÿÿÿÿ
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Í°Ñ§

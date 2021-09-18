@@ -1,13 +1,12 @@
 package AdventureMode;
 
-import MainMenu.GUIManager;
+import gg.Battle.Trainers.AITrainer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
-
-
+import static gg.Pokemon.ePokemon.*;
 public class AdventureModeUiPanel extends JPanel {
     private GridBagConstraints c = new GridBagConstraints();
     //need getter for jp at some point
@@ -45,9 +44,9 @@ public class AdventureModeUiPanel extends JPanel {
 
     private JPanel wallAndWarpLayer = new JPanel(new GridBagLayout());
 
-    private GUIManager gui;
-    AdventureModeUiPanel(MySprite humantrainer, GUIManager gui) {
-        this.gui = gui;
+    ;
+    AdventureModeUiPanel(MySprite humantrainer) {
+
         pewterCity = new PewterCity(1854);
         route3 = new Route3(583);
         pewterCityGym = new PewterCityGym(1136);
@@ -59,7 +58,7 @@ public class AdventureModeUiPanel extends JPanel {
         c.weighty = 1;
         currentArea = pewterCity;
         createAreaPart1();
-        userSpriteManager = new UserSpriteManager(this, humantrainer, gui);
+        userSpriteManager = new UserSpriteManager(this, humantrainer);
         createAreaPart2();
     }
 
@@ -125,10 +124,7 @@ public class AdventureModeUiPanel extends JPanel {
         //Stop movement threads when leaving an area
         //doesn't cover additional entrances
         if (currentArea != entranceToArea) {
-            if (npcs != null)
-                for (NPC npc : npcs) {
-                    npc.setMovementThreadOn(false);
-                }
+            AITrainer.canMove = true;
         }
         currentArea = entranceToArea;
         userSpriteManager.setCompWeAreIn(currentArea.moveUserToCell);
@@ -154,7 +150,7 @@ public class AdventureModeUiPanel extends JPanel {
                 } else if (CELLS_THAT_CANNOT_BE_ENTERED.contains(count)) {
                     cell = new CantEnter(count);
                 } else if (grassCellsInArea.contains(count)) {
-                    cell = new Grass(gui, currentArea.getPokemonInArea());
+                    cell = new Grass(currentArea.getPokemonInArea());
                 } else {
                     cell = new CanEnter(count);
                 }
@@ -221,11 +217,6 @@ public class AdventureModeUiPanel extends JPanel {
             i = cellNum;
             color = new Color(0, 0, 255);
         }
-
-        @Override
-        boolean isAccessible() {
-            return true;
-        }
     }
 
     static class CantEnter extends Collision {
@@ -235,8 +226,8 @@ public class AdventureModeUiPanel extends JPanel {
         }
 
         @Override
-        boolean isAccessible() {
-            return false;
+        boolean isWall() {
+            return true;
         }
     }
 
@@ -244,8 +235,8 @@ public class AdventureModeUiPanel extends JPanel {
     class PewterCityGym extends Warp {
         PewterCityGym(int moveUserToCell) {
             this.moveUserToCell = moveUserToCell;
-            setAreaToLoad("src/AdventureMode/imagesUi/PewterCityGym.png");
-            setCollisionsToLoad("CellsThatCannotBeEnteredPewterCityGym.txt");
+            setAreaToLoad("src/AdventureMode/img/PewterCityGym.png");
+            setCollisionsToLoad("CollisionCells/CellsThatCannotBeEnteredPewterCityGym.txt");
         }
 
         @Override
@@ -262,17 +253,17 @@ public class AdventureModeUiPanel extends JPanel {
      * Warps or locations control where the exits and entrances to other areas of the map are.
      * They are cells on the grid and when in <code>EDIT_COLLISION_MODE</code> the cells will be green.
      * Each location has an inner class. These essentially work as copies of the outer class so they share
-     * values but the purpose of the inner class is so that I can add multiple cells of the same 'Warp" that all
+     * values but the purpose of the inner class is so that UIs.I can add multiple cells of the same 'Warp" that all
      * share values so when the user steps on a warp it doesn't create new NPC's for that area every time he enters
      * using a different cell.
      */
     class PewterCity extends Warp {
         PewterCity(int moveUserToCell) {
-            setAreaToLoad("src/AdventureMode/imagesUi/PewterCityMap.jpg");
-            setCollisionsToLoad("CellsThatCannotBeEnteredPewterCity.txt");
-            setGrassAreasToLoad("pewterCityGrass.txt");
+            setAreaToLoad("src/AdventureMode/img/PewterCityMap.jpg");
+            setCollisionsToLoad("CollisionCells/CellsThatCannotBeEnteredPewterCity.txt");
+            setGrassAreasToLoad("WildPokemonCells/pewterCityGrass.txt");
             this.moveUserToCell = moveUserToCell;
-            setPokemonInArea(new String[]{"Articuno", "Rayquaza"});
+            setPokemonInArea(ARTICUNO, RAYQUAZA);
         }
 
         @Override
@@ -292,8 +283,8 @@ public class AdventureModeUiPanel extends JPanel {
         class PewterCityAdditionalEntrances extends Warp {
 
             PewterCityAdditionalEntrances(int moveUserToCell) {
-                setAreaToLoad("src/AdventureMode/imagesUi/PewterCityMap.jpg");
-                setCollisionsToLoad("CellsThatCannotBeEnteredPewterCity.txt");
+                setAreaToLoad("src/AdventureMode/img/PewterCityMap.jpg");
+                setCollisionsToLoad("CollisionCells/CellsThatCannotBeEnteredPewterCity.txt");
                 setGrassAreasToLoad(pewterCity.getGrassAreasToLoad());
                 setPokemonInArea(pewterCity.getPokemonInArea());
                 this.moveUserToCell = moveUserToCell;
@@ -319,11 +310,11 @@ public class AdventureModeUiPanel extends JPanel {
     //Just used for collision detection if player collides with a component of this class
     class Route3 extends Warp {
         Route3(int moveUserToCell) {
-            setAreaToLoad("src/AdventureMode/imagesUi/Route3.png");
-            setCollisionsToLoad("CellsThatCannotBeEnteredRoute3.txt");
-            setGrassAreasToLoad("route3Grass.txt");
+            setAreaToLoad("src/AdventureMode/img/Route3.png");
+            setCollisionsToLoad("CollisionCells/CellsThatCannotBeEnteredRoute3.txt");
+            setGrassAreasToLoad("WildPokemonCells/route3Grass.txt");
             i = this.moveUserToCell = moveUserToCell;
-            setPokemonInArea(new String[]{"Articuno", "Rayquaza"});
+            setPokemonInArea(ARTICUNO, RAYQUAZA);
         }
 
         @Override

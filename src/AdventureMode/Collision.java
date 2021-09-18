@@ -92,11 +92,7 @@ abstract class Collision extends JComponent implements Collisions, Comparable<Co
         }
 
 
-
-
-
-
-
-
-    abstract boolean isAccessible();
+    boolean isWall() {
+        return false;
+    }
 }

@@ -1,8 +1,10 @@
 package AdventureMode;
 
-import MainMenu.Backpack;
-import MainMenu.GUIManager;
-import MainMenu.PokemonInPartyPanel;
+import gg.Backpack.Backpack;
+import gg.Battle.BattleGUI;
+import gg.Battle.Trainers.AITrainer;
+import gg.GUIManager;
+import gg.ViewPokeSlots.PokemonInPartyPanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -18,17 +20,14 @@ public class StartMenu extends JPanel {
     private Color menu = new Color(200, 55, 55);
     private StartMenuButton pokedex, pokemon, bag, pokenav, user, save, option, mainMenu, exit;
     private MySprite sprite;
-    private GUIManager gui;
-    private Backpack backpack;
-    private PokemonInPartyPanel pokemonInPartyPanel;
+    ;
     private ArrayList<NPC> npcsInArea;
 
-    StartMenu(MySprite mySprite, GUIManager gui, ArrayList<NPC> npcsInArea) {
+    StartMenu(MySprite mySprite, ArrayList<NPC> npcsInArea) {
         sprite = mySprite;
-        this.gui = gui;
+
         this.npcsInArea = npcsInArea;
 
-        pokemonInPartyPanel = new PokemonInPartyPanel(mySprite, gui);
 
 
         setLayout(new GridBagLayout());
@@ -121,7 +120,7 @@ public class StartMenu extends JPanel {
             setWrapStyleWord(true);
             setLineWrap(true);
             setFont(f);
-            setText("Enter Command");
+            setText("sw\nco");
             setVisible(true);
             setBorder(UIManager.getBorder("Label.border"));
             addFocusListener(this);
@@ -143,11 +142,10 @@ public class StartMenu extends JPanel {
                                 StartMenu.this.getParent().removeAll();
 
                                 for(NPC npc: npcsInArea) {
-                                    if (sprite.getNpcOpponent() == npc) {
+                                    if (sprite.getOpponent() == npc) {
                                         System.out.println(npc.getClass());
                                         npc.makeNpcTurnAround();
                                         npc.caughtPlayerInBattleGlare = false;
-                                        sprite.getNpcOpponent().caughtPlayerInBattleGlare = false;
                                         sprite.setOpponent(null);
                                         npc.setMoving(true);
                                     }
@@ -190,14 +188,24 @@ public class StartMenu extends JPanel {
                     case "POKéDEX":
                         break;
                     case "POKéMON":
-                        pokemonInPartyPanel = new PokemonInPartyPanel(mySprite, gui);
-                        gui.setUi(pokemonInPartyPanel.getClass().getSimpleName());
-                        gui.setBackgroundImage(pokemonInPartyPanel.getClass().getSimpleName());
+                        new PokemonInPartyPanel()
+                          .open(
+                            mySprite.getPokeSlots(),
+                            mySprite.getCurrentPokemon(),
+                            mySprite::setCurrentPokemon)
+                          .onPartyClose(() -> {
+                              GUIManager.setUi(AdventureModeMain.class.getSimpleName());
+                              GUIManager.setBackgroundImage(AdventureModeMain.class.getSimpleName());
+                          });
                         break;
                     case "BAG":
-                        backpack = new Backpack(sprite, gui);
-                        gui.setUi(backpack.getClass().getSimpleName());
-                        new PokemonInPartyPanel(mySprite, gui);
+                        new Backpack()
+                          .open(sprite)
+                          .onBackpackClose(() -> {
+                              GUIManager.setUi(AdventureModeMain.class.getSimpleName());
+                              GUIManager.setBackgroundImage(AdventureModeMain.class.getSimpleName());
+                              mySprite.setUsedTurn(false);
+                          });
                         break;
                     case "POKéNAV":
                         break;
@@ -209,8 +217,8 @@ public class StartMenu extends JPanel {
                     case "OPTION":
                         break;
                     case "Main Menu":
-                        gui.setUi("MainMenuGUI");
-                        gui.setBackgroundImage("MainMenuGUI");
+                        GUIManager.setUi("MainMenuGUI");
+                        GUIManager.setBackgroundImage("MainMenuGUI");
                         break;
                     case "Exit":
                         getParent().getParent().remove(getParent());
@@ -228,12 +236,10 @@ public class StartMenu extends JPanel {
             Font newFont = currentFont.deriveFont(currentFont.getSize() * (float) ((getWidth() + getHeight()) / 100));
             g.setFont(newFont);
             g.setColor(Color.BLACK);
-            if(text.equals("USER")){
-                g.drawString(name, getInsets().left/4, getInsets().top + g.getFontMetrics().getHeight());
-
-            } else {
-                g.drawString(text, getInsets().left / 4, getInsets().top + g.getFontMetrics().getHeight());
-            }
+            g.drawString(
+                    text.equals("USER") ? name : text,
+                    getInsets().left/4,
+                    getInsets().top + g.getFontMetrics().getHeight());
         }
     }
 }
