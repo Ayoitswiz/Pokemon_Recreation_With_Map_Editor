@@ -9,34 +9,34 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 public class ExitFunctionException extends IllegalArgumentException {
-  private static final ExitFunctionException ex = new ExitFunctionException();
-  public ExitFunctionException(String message) {
-    super(message);
-  }
+private static final ExitFunctionException ex = new ExitFunctionException();
+public ExitFunctionException(String message) {
+	super(message);
+}
 
-  public ExitFunctionException(String message, ErrorLabel errorLabel) {
-    super(message);
-      errorLabel.setText(message);
-      errorLabel.setVisible(true);
-  }
+public ExitFunctionException(String message, ErrorLabel errorLabel) {
+	super(message);
+	errorLabel.setText(message);
+	errorLabel.setVisible(true);
+}
 
-  public ExitFunctionException(String message, String logLvl) {
-    super(message);
-  }
+public ExitFunctionException(String message, String logLvl) {
+	super(message);
+}
 
-  public ExitFunctionException(String message, ErrorLabel errorLabel, String logLvl) {
-    super(message);
-      errorLabel.setText(message);
-      errorLabel.setVisible(true);
-  }
+public ExitFunctionException(String message, ErrorLabel errorLabel, String logLvl) {
+	super(message);
+	errorLabel.setText(message);
+	errorLabel.setVisible(true);
+}
 
-  public static ExitFunctionException If(boolean bool) {
-    if (bool) throw new ExitFunctionException();
-    return ex;
-  }
+public static ExitFunctionException If(boolean bool) {
+	if (bool) throw new ExitFunctionException();
+	return ex;
+}
 
-  public static ExitFunctionException If(boolean bool, String msg) {
-    if (bool) throw new ExitFunctionException(msg);
-    return ex;
-  }
+public static ExitFunctionException If(boolean bool, String msg) {
+	if (bool) throw new ExitFunctionException(msg);
+	return ex;
+}
 }

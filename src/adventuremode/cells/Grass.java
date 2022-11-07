@@ -16,54 +16,54 @@ import java.util.Random;
 
 public class Grass extends Cell {
 
-  private List<WildPokemon> pokemonInArea;
-  private PokemonList pl = new PokemonList();
-  private final Random rand;
+private List<WildPokemon> pokemonInArea;
+private PokemonList pl = new PokemonList();
+private final Random rand;
 
 
 {
-  try {
-    rand = SecureRandom.getInstanceStrong();
-  } catch (NoSuchAlgorithmException e) {
-    throw new RuntimeException(e);
-  }
+	try {
+		rand = SecureRandom.getInstanceStrong();
+	} catch (NoSuchAlgorithmException e) {
+		throw new RuntimeException(e);
+	}
 }
 
 public Grass(ePokemon... pokemon) {
-    setPokemonInArea(pokemon);
-  }
+	setPokemonInArea(pokemon);
+}
 
-  public void determineIfPokemonIsThere(MySprite user, DialogBox dBox) {
-    if (rand.nextInt(15) == 5) {
-      encounterPokemon(user, dBox);
-    }
-  }
+public void determineIfPokemonIsThere(MySprite user, DialogBox dBox) {
+	if (rand.nextInt(15) == 5) {
+		encounterPokemon(user, dBox);
+	}
+}
 
-  private void encounterPokemon(MySprite user, DialogBox dBox) {
+private void encounterPokemon(MySprite user, DialogBox dBox) {
 
-    WildPokemon wildPokemon =
-      pl.get(
-        pokemonInArea.get(rand.nextInt(pokemonInArea.size()))
-         .getPokemon()
-				 .getEName()
-      );
-		NPC.canMove(false);
-    dBox
-      .open()
-      .setDialog(wildPokemon.getPreBattleDialog())
-      .onDialogEnd(() -> {
-        dBox.setVisible(false);
-        new BattleGUI()
-				.onClose(() -> NPC.canMove(true))
-				.open(user, wildPokemon);
-      });
-  }
+	WildPokemon wildPokemon =
+	pl.get(
+	pokemonInArea.get(rand.nextInt(pokemonInArea.size()))
+	.getPokemon()
+	.getEName()
+	);
+	NPC.canMove(false);
+	dBox
+	.open()
+	.setDialog(wildPokemon.getPreBattleDialog())
+	.onDialogEnd(() -> {
+		dBox.setVisible(false);
+		new BattleGUI()
+		.onClose(() -> NPC.canMove(true))
+		.open(user, wildPokemon);
+	});
+}
 
-  public boolean intersects(Rectangle r) {
-    return getBounds().intersects(r);
-  }
+public boolean intersects(Rectangle r) {
+	return getBounds().intersects(r);
+}
 
-  private void setPokemonInArea(ePokemon... pokemon) {
-		pokemonInArea = (pl = new PokemonList()).create(pokemon);
-  }
+private void setPokemonInArea(ePokemon... pokemon) {
+	pokemonInArea = (pl = new PokemonList()).create(pokemon);
+}
 }

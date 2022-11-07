@@ -4,5 +4,5 @@ import menus.pokemon.Pokemon;
 
 public interface ItemInterface {
 
-    boolean useItem(Pokemon p, Item item);
+boolean useItem(Pokemon p, Item item);
 }

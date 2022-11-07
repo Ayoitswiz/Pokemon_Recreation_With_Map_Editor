@@ -69,9 +69,9 @@ public PokemonInPartyPanel open(LinkedList<Pokemon> pokeslots, LambdaWithParam<P
 		add(new JButton("CLOSE") {{ addActionListener(a -> onPartyClose.foo()); }}, BorderLayout.SOUTH);
 	}
 	GridBagConstraints nc = new GridBagConstraints() {{
-	fill = 1;
-	weighty = .5;
-	weightx = 1;
+		fill = 1;
+		weighty = .5;
+		weightx = 1;
 	}};
 
 	add(new JPanel(new GridBagLayout()) {{
@@ -215,7 +215,7 @@ private class GifBtn extends JButton {
 	private void setMouseListeners(JPanel jp, Pokemon p) {
 		this.addMouseListener(new java.awt.event.MouseAdapter() {
 
-		 @Override
+			@Override
 			public synchronized void mouseEntered(MouseEvent evt) {
 				gifBtnC.ipadx = 50;
 				GifBtn.this.gbl.setConstraints(jp, gifBtnC);
@@ -233,7 +233,7 @@ private class GifBtn extends JButton {
 				pnlPokemonInParty.validate();
 			}
 
-		 @Override
+			@Override
 			public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
 				if (isSelectedPokemon != p && p != pokeslots.getFirst()) {
 					gifBtnC.ipadx = 0;

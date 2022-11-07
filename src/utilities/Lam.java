@@ -1,5 +1,5 @@
 package utilities;
 
 public interface Lam {
-  <T> void foo(T... t);
+<T> void foo(T... t);
 }

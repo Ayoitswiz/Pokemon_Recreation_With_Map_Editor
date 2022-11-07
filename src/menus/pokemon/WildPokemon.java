@@ -16,30 +16,30 @@ import java.util.Random;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class WildPokemon extends Pokemon implements Opponent {
-  private Move chosenMove;
-  private Pokemon pokemon;
-  private boolean isUsedTurn;
-  private String turnText;
-  private static final BigDecimal money = new BigDecimal(0);
-  private String preBattleDialog;
-	private boolean caughtUser = false;
+private Move chosenMove;
+private Pokemon pokemon;
+private boolean isUsedTurn;
+private String turnText;
+private static final BigDecimal money = new BigDecimal(0);
+private String preBattleDialog;
+private boolean caughtUser = false;
 
 @Override
-  public boolean isOutOfUsablePokemon() {
-    return pokemon.isFainted();
-  }
+public boolean isOutOfUsablePokemon() {
+	return pokemon.isFainted();
+}
 
 
 
-  @Override
-  public Pokemon getCurrentPokemon() {
-    return pokemon;
-  }
+@Override
+public Pokemon getCurrentPokemon() {
+	return pokemon;
+}
 
-  @Override
-  public String getCurrentPokemonFaintedText() {
-    return "Wild " + getPokemon().getName() + " fainted!";
-  }
+@Override
+public String getCurrentPokemonFaintedText() {
+	return "Wild " + getPokemon().getName() + " fainted!";
+}
 
 @Override
 public void setChosenMove(int i) {
@@ -53,19 +53,19 @@ public Move getChosenMove() {
 	return m;
 }
 @Override
-  public void makeDecision() {
-    setChosenMove(new Random().nextInt(4));
-  }
+public void makeDecision() {
+	setChosenMove(new Random().nextInt(4));
+}
 
-  @Override
-  public String getLostBattleDialog() {
-    return "You defeated a wild " + pokemon.getName();
-  }
+@Override
+public String getLostBattleDialog() {
+	return "You defeated a wild " + pokemon.getName();
+}
 
-  @Override
-  public BigDecimal getEndBattleMoney() {
-    return money;
-  }
+@Override
+public BigDecimal getEndBattleMoney() {
+	return money;
+}
 
 @Override
 public LinkedList<Pokemon> getPokeSlots() {
@@ -73,11 +73,11 @@ public LinkedList<Pokemon> getPokeSlots() {
 }
 
 public String getPreBattleDialog() {
-    return "A wild pokemon appeared!";
-  }
+	return "A wild pokemon appeared!";
+}
 
-  @Override
-  public String getDialogIfUserTrysToFleeBattle() {
-    return "Got away safely!";
-  }
+@Override
+public String getDialogIfUserTrysToFleeBattle() {
+	return "Got away safely!";
+}
 }

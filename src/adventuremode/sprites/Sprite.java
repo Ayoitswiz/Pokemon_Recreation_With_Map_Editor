@@ -10,7 +10,7 @@ import java.awt.*;
 import static adventuremode.components.AdventureModeUiPanel.COLS;
 import static adventuremode.components.AdventureModeUiPanel.ROWS;
 
- public class Sprite {
+public class Sprite {
 
 private double x;
 private double y;
@@ -59,7 +59,7 @@ public int getX() {
 }
 
 // TODO: the npcs are still calling this method once leaving the area
- //System.out.println(this.getClass().getName() + " " + myRowNum);
+//System.out.println(this.getClass().getName() + " " + myRowNum);
 public int getY() {
 
 	int ch = gui.getHeight() / ROWS;
@@ -108,16 +108,16 @@ public void setSpeedWeight(int speedWeight) {
 
 protected Rectangle getHitbox() {
 	return new Rectangle(
-	 getX() + (myCellWidth/2),
-	 getY() + (myCellHeight),
-	 myCellWidth,
-	 myCellHeight);
+	getX() + (myCellWidth/2),
+	getY() + (myCellHeight),
+	myCellWidth,
+	myCellHeight);
 }
 
 public Point getHitboxCenterPoint() {
 	return new Point(
-	 (int) getHitbox().getCenterX(),
-	 (int) getHitbox().getCenterY());
+	(int) getHitbox().getCenterX(),
+	(int) getHitbox().getCenterY());
 }
 
 protected int getHitboxMaxX() {
@@ -149,10 +149,10 @@ protected double getStepDis(){
 
 protected void step(double stepDis) {
 	switch (dir) {
-	case R -> setX(getX() + stepDis);
-	case L -> setX(getX() - stepDis);
-	case D -> setY(getY() + stepDis);
-	case U -> setY(getY() - stepDis);
+		case R -> setX(getX() + stepDis);
+		case L -> setX(getX() - stepDis);
+		case D -> setY(getY() + stepDis);
+		case U -> setY(getY() - stepDis);
 	}
 	movingIndex++;
 	movingIndex %= maxMovingIndex;

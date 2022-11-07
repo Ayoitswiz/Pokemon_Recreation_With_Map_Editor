@@ -7,9 +7,9 @@ public  ConsoleUpgrade(){
 
 		private StackTraceElement getCallSite() {
 			for (StackTraceElement e : Thread.currentThread()
-			 .getStackTrace())
+																 .getStackTrace())
 				if (!e.getMethodName().equals("getStackTrace")
-				 && !e.getClassName().equals(getClass().getName()))
+						&& !e.getClassName().equals(getClass().getName()))
 					return e;
 			return null;
 		}
@@ -23,11 +23,11 @@ public  ConsoleUpgrade(){
 		public void println(Object o) {
 			StackTraceElement e = getCallSite();
 			String callSite = e == null ? "??" :
-			 String.format("%s.%s(%s:%d)",
-				e.getClassName(),
-				e.getMethodName(),
-				e.getFileName(),
-				e.getLineNumber());
+												String.format("%s.%s(%s:%d)",
+												e.getClassName(),
+												e.getMethodName(),
+												e.getFileName(),
+												e.getLineNumber());
 			super.println(o + "\t\tat " + callSite);
 		}
 
@@ -35,11 +35,11 @@ public  ConsoleUpgrade(){
 		public void println(int x) {
 			StackTraceElement e = getCallSite();
 			String callSite = e == null ? "??" :
-			 String.format("%s.%s(%s:%d)",
-				e.getClassName(),
-				e.getMethodName(),
-				e.getFileName(),
-				e.getLineNumber());
+												String.format("%s.%s(%s:%d)",
+												e.getClassName(),
+												e.getMethodName(),
+												e.getFileName(),
+												e.getLineNumber());
 			super.println(x + "\t\tat " + callSite);
 		}
 	});
@@ -48,9 +48,9 @@ public  ConsoleUpgrade(){
 
 		private StackTraceElement getCallSite() {
 			for (StackTraceElement e : Thread.currentThread()
-			 .getStackTrace())
+																 .getStackTrace())
 				if (!e.getMethodName().equals("getStackTrace")
-				 && !e.getClassName().equals(getClass().getName()))
+						&& !e.getClassName().equals(getClass().getName()))
 					return e;
 			return null;
 		}
@@ -64,11 +64,11 @@ public  ConsoleUpgrade(){
 		public void println(Object o) {
 			StackTraceElement e = getCallSite();
 			String callSite = e == null ? "??" :
-			 String.format("%s.%s(%s:%d)",
-				e.getClassName(),
-				e.getMethodName(),
-				e.getFileName(),
-				e.getLineNumber());
+												String.format("%s.%s(%s:%d)",
+												e.getClassName(),
+												e.getMethodName(),
+												e.getFileName(),
+												e.getLineNumber());
 			super.println(o + "\t\tat " + callSite);
 		}
 
@@ -77,11 +77,11 @@ public  ConsoleUpgrade(){
 		public void println(int x) {
 			StackTraceElement e = getCallSite();
 			String callSite = e == null ? "??" :
-			 String.format("%s.%s(%s:%d)",
-				e.getClassName(),
-				e.getMethodName(),
-				e.getFileName(),
-				e.getLineNumber());
+												String.format("%s.%s(%s:%d)",
+												e.getClassName(),
+												e.getMethodName(),
+												e.getFileName(),
+												e.getLineNumber());
 			super.println(x + "\t\tat " + callSite);
 		}
 	});

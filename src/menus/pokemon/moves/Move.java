@@ -16,11 +16,11 @@ private int power;
 private eTypes type;
 
 public Object clone() throws CloneNotSupportedException {
-    return super.clone();
+	return super.clone();
 }
 
 @Override
 public String toString() {
-    return name.toString();
+	return name.toString();
 }
 }

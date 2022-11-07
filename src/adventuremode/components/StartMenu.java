@@ -109,21 +109,21 @@ class DialogBoxTextArea extends JTextArea implements FocusListener {
 
 		addFocusListener(this);
 		add(new JButton("Enter") {{
-				addActionListener(e -> {
-					String[] commandAndValue = getText().split("\\s");
-					switch (commandAndValue[0]) {
-						case "sw":
-							//Adjust users speed. Lower == faster.
-							user.setSpeedWeight(Integer.parseInt(commandAndValue[1]));
-							break;
-						case "co":
-							// TODO: need to update this based on code changes to work again.
-							StartMenu.this.setVisible(false);
-							break;
-						default: DialogBoxTextArea.this.setText("commands are either: co, sw <any number>");
-					}
-				});
-			}
+			addActionListener(e -> {
+				String[] commandAndValue = getText().split("\\s");
+				switch (commandAndValue[0]) {
+					case "sw":
+						//Adjust users speed. Lower == faster.
+						user.setSpeedWeight(Integer.parseInt(commandAndValue[1]));
+						break;
+					case "co":
+						// TODO: need to update this based on code changes to work again.
+						StartMenu.this.setVisible(false);
+						break;
+					default: DialogBoxTextArea.this.setText("commands are either: co, sw <any number>");
+				}
+			});
+		}
 		}, BorderLayout.SOUTH);
 	}
 

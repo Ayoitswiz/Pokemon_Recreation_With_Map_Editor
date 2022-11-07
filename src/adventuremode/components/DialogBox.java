@@ -177,23 +177,23 @@ public DialogBox onDialogEnd(Lambda funcToExecuteOnDialogEnd) {
 }
 
 public boolean hasNext() {
- return next.isVisible();
+	return next.isVisible();
 }
 
 public DialogBox introDialog() {
 	setDialog("Welcome to Pokemon Recreation with an additional map editor!!!");
 	cycleDialog(
-	 "The game is fully resizable so make the window whatever size feels most comfortable! It should still be usable" +
-	 " even at almost Apple watch sizes. Give it a try, see how small you can make it while still being functional XD",
-	 "You can enter & exit EDIT_MODE via: ctrl+e",
-	 "While in EDIT_MODE you can click on cells to change their type",
-	 "You can visit other locations by walking over a Warp cell! To see some of the warp cells," +
-	 " enter Edit mode by pressing: ctrl+e. Then, look for the green cells.",
-	 "You can move around using the keys: w, a, s, d",
-	 "You can change your speed by pressing: ctrl+i to decrease, ctrl+d increase",
-	 "You can open the Start menu by pressing: m",
-	 "If you want to view these messages again open the start menu by pressing: m. Then, select \"Options\"",
-	 "That's Everything!");
+	"The game is fully resizable so make the window whatever size feels most comfortable! It should still be usable" +
+	" even at almost Apple watch sizes. Give it a try, see how small you can make it while still being functional XD",
+	"You can enter & exit EDIT_MODE via: ctrl+e",
+	"While in EDIT_MODE you can click on cells to change their type",
+	"You can visit other locations by walking over a Warp cell! To see some of the warp cells," +
+	" enter Edit mode by pressing: ctrl+e. Then, look for the green cells.",
+	"You can move around using the keys: w, a, s, d",
+	"You can change your speed by pressing: ctrl+i to decrease, ctrl+d increase",
+	"You can open the Start menu by pressing: m",
+	"If you want to view these messages again open the start menu by pressing: m. Then, select \"Options\"",
+	"That's Everything!");
 	onDialogEnd(this::reset);
 	return this;
 }

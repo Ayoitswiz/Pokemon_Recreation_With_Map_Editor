@@ -16,11 +16,11 @@ import static menus.pokemon.moves.eMoves.WEAK_MOVE;
 //invoke super to force all these classes to help make sure they implement everything they need.
 public class DefaultNPC extends NPC {
 
-    public DefaultNPC() {
-        getPokeSlots().add(CreatePokemon.Articuno(11, Moves.Move(ICE_BEAM, WEAK_MOVE, STRONG_MOVE, BLIZZARD), this));
-        getPokeSlots().add(CreatePokemon.Rayquaza(10, Moves.Move(DIAMOND_STORM, STRONG_MOVE, FIRE_BLAST, ICE_BEAM), this));
-        getPokeSlots().add(CreatePokemon.MegaGengar(9, Moves.Move(ICE_BEAM, WEAK_MOVE, SHADOW_BALL, STRONG_MOVE), this));
+public DefaultNPC() {
+	getPokeSlots().add(CreatePokemon.Articuno(11, Moves.Move(ICE_BEAM, WEAK_MOVE, STRONG_MOVE, BLIZZARD), this));
+	getPokeSlots().add(CreatePokemon.Rayquaza(10, Moves.Move(DIAMOND_STORM, STRONG_MOVE, FIRE_BLAST, ICE_BEAM), this));
+	getPokeSlots().add(CreatePokemon.MegaGengar(9, Moves.Move(ICE_BEAM, WEAK_MOVE, SHADOW_BALL, STRONG_MOVE), this));
 
-        preBattleDialog = new String[]{"All the pokemon in Mt. Moon are ours!...", "Don't try to stop us..."};
-    }
+	preBattleDialog = new String[]{"All the pokemon in Mt. Moon are ours!...", "Don't try to stop us..."};
+}
 }

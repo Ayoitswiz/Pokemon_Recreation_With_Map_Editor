@@ -1,7 +1,7 @@
 package utilities;
 
 public interface LambdaWithParam<T> {
-    void foo(T t);
+void foo(T t);
 
 
 
