@@ -9,7 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.UIManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -20,31 +19,52 @@ import java.util.Queue;
 
 public class DialogBox extends JPanel {
 private final JTextArea textarea;
-private final DialogBoxButton next;
+private final JButton next;
 private final Queue<Lambda> onNext = new LinkedList<>();
 private transient Lambda onDialogEnd = () -> {};
 private transient Lambda onException = null;
+private transient LambdaWithReturnVal<Rectangle> bounds = () -> new Rectangle(
+gui.x(0.0),
+gui.y(.75),
+gui.x(1.0),
+gui.y(.252));
 
 public DialogBox() {
-	textarea = new JTextArea(5, 40) {{
+	textarea = new JTextArea() {{
 		setWrapStyleWord(true);
 		setLineWrap(true);
 		setEditable(false);
-		setFocusable(false);
-		setBackground(new Color(255, 0, 0, 1));
 		setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		setBorder(UIManager.getBorder("Label.border"));
-		setVisible(true);
 	}};
+
+	next = new JButton() {{
+			setVisible(false);
+			setText("Next");
+			setBackground(new Color(59, 89, 182));
+			setForeground(Color.WHITE);
+			setFocusPainted(false);
+			setFont(new Font("Tahoma", Font.BOLD, 14));
+
+			addActionListener(e -> {
+				if (!onNext.isEmpty()) {
+					onNext.remove().foo();
+					// added because clicking next would make the whole dialogbox invisible for very short but noticable time &
+					// the next button would be at the top of the dialogbox instead of the bottom, but this resolves that.
+					DialogBox.this.repaint();
+					DialogBox.this.validate();
+				} else {
+					setNextNotVisible();
+					onDialogEnd.foo();
+					onDialogEnd = () -> {};
+				}
+			});
+		}};
+
 	setLayout(new BorderLayout());
-	setBounds(
-	gui.x(0.0),
-	gui.y(.75),
-	gui.x(1.0),
-	gui.y(.25));
+	setBounds(bounds.foo());
 
 	add(new JScrollPane(textarea), BorderLayout.CENTER);
-	add(next = new DialogBoxButton(), BorderLayout.SOUTH);
+	add(next, BorderLayout.SOUTH);
 	setVisible(false);
 	setBackground(new Color(255, 225, 255));
 }
@@ -75,11 +95,6 @@ public int getHeight() {
 	return super.getHeight();
 }
 
-LambdaWithReturnVal<Rectangle> bounds = () -> new Rectangle(gui.x(0.0),
-gui.y(.75),
-gui.x(1.0),
-gui.y(.25));
-
 public void setbounds(int x, int y, int width, int height) {
 	bounds = null;
 	setBounds(x, y, width, height);
@@ -98,86 +113,6 @@ public Rectangle getBounds() {
 public DialogBox open() {
 	this.setVisible(true);
 	return this;
-}
-public void reset() {
-	setVisible(false);
-}
-/**
- * Used to set text without displaying the <attribute>dialogBoxButton</attribute>
- */
-public DialogBox setDialog(String dialog) {
-	textarea.setText(dialog);
-	return this;
-}
-
-public DialogBox setDialog(LambdaWithReturnVal<String> dialog) {
-	try {
-		setDialog(dialog.foo());
-	} catch (ExitFunctionException ex) {
-		if (onException != null) {
-			onException.foo();
-			onException = null;
-		}
-		else {
-			setDialog(ex::getMessage)
-			.onDialogEnd(this::setDefaultBattleDialog);
-		}
-		throw ex;
-	}
-	return this;
-}
-
-public DialogBox onException(Lambda onException) {
-	this.onException = onException;
-	return this;
-}
-
-public DialogBox setDefaultBattleDialog() {
-	textarea.setText("What will you do?");
-	return this;
-}
-
-public String getDefaultBattleDialog() {
-	return "What will you do?";
-}
-
-public DialogBox onNext(Lambda onNext) {
-	next.setVisible(true);
-	this.onNext.add(onNext);
-	return this;
-}
-
-public DialogBox setDialog(Lambda onNext) {
-	next.setVisible(true);
-	this.onNext.add(onNext);
-	return this;
-}
-
-public DialogBox setNextNotVisible() {
-	next.setVisible(false);
-	return this;
-}
-
-public DialogBox cycleDialog(Queue<String> cycleDialog) {
-	cycleDialog.forEach(dialog -> onNext.add(() -> setDialog(dialog)));
-	return this;
-}
-
-public DialogBox cycleDialog(String... cycleDialog) {
-	setVisible(true);
-	next.setVisible(true);
-	Arrays.asList(cycleDialog).forEach(dialog -> onNext.add(() -> setDialog(dialog)));
-	return this;
-}
-
-public DialogBox onDialogEnd(Lambda funcToExecuteOnDialogEnd) {
-	next.setVisible(true);
-	this.onDialogEnd = funcToExecuteOnDialogEnd;
-	return this;
-}
-
-public boolean hasNext() {
-	return next.isVisible();
 }
 
 public DialogBox introDialog() {
@@ -198,28 +133,89 @@ public DialogBox introDialog() {
 	return this;
 }
 
-private final class DialogBoxButton extends JButton {
-	DialogBoxButton() {
-		setVisible(false);
-		setText("Next");
-		setBackground(new Color(59, 89, 182));
-		setForeground(Color.WHITE);
-		setFocusPainted(false);
-		setFont(new Font("Tahoma", Font.BOLD, 14));
+/**
+ * Used to set text without displaying the <attribute>dialogBoxButton</attribute>
+ */
+public DialogBox setDialog(String dialog) {
+	textarea.setText(dialog);
+	return this;
+}
 
-		addActionListener(e -> {
-			if (!onNext.isEmpty()) {
-				onNext.remove().foo();
-				// added because clicking next would make the whole dialogbox invisible for very short but noticable time &
-				// the next button would be at the top of the dialogbox instead of the bottom, but this resolves that.
-				DialogBox.this.repaint();
-				DialogBox.this.validate();
-			} else {
-				setNextNotVisible();
-				onDialogEnd.foo();
-				onDialogEnd = () -> {};
-			}
-		});
+public DialogBox setDialog(Lambda onNext) {
+	next.setVisible(true);
+	this.onNext.add(onNext);
+	return this;
+}
+
+public DialogBox setDefaultBattleDialog() {
+	textarea.setText("What will you do?");
+	return this;
+}
+
+public String getDefaultBattleDialog() {
+	return "What will you do?";
+}
+
+public DialogBox setDialog(LambdaWithReturnVal<String> dialog) {
+	try {
+		setDialog(dialog.foo());
+	} catch (ExitFunctionException ex) {
+		if (onException != null) {
+			onException.foo();
+			onException = null;
+		}
+		else {
+			setDialog(ex::getMessage)
+			.onDialogEnd(this::setDefaultBattleDialog);
+		}
+		throw ex;
 	}
+	return this;
+}
+
+public DialogBox cycleDialog(Queue<String> cycleDialog) {
+	cycleDialog.forEach(dialog -> onNext.add(() -> setDialog(dialog)));
+	return this;
+}
+
+public DialogBox cycleDialog(String... cycleDialog) {
+	setVisible(true);
+	next.setVisible(true);
+	Arrays.asList(cycleDialog).forEach(dialog -> onNext.add(() -> setDialog(dialog)));
+	return this;
+}
+
+
+public DialogBox onNext(Lambda onNext) {
+	next.setVisible(true);
+	this.onNext.add(onNext);
+	return this;
+}
+
+public boolean hasNext() {
+	return next.isVisible();
+}
+
+
+public DialogBox setNextNotVisible() {
+	next.setVisible(false);
+	return this;
+}
+
+
+public DialogBox onException(Lambda onException) {
+	this.onException = onException;
+	return this;
+}
+
+
+public DialogBox onDialogEnd(Lambda funcToExecuteOnDialogEnd) {
+	next.setVisible(true);
+	this.onDialogEnd = funcToExecuteOnDialogEnd;
+	return this;
+}
+
+public void reset() {
+	setVisible(false);
 }
 }

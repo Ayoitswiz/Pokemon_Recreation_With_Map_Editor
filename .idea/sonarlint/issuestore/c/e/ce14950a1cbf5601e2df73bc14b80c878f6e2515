@@ -1,18 +1,0 @@
-
-D
-java:S1121?".Extract the assignment out of this expression.(Τ”ΘΑ
-J
-java:S10660"/Merge this if statement with the enclosing one.(ΗΨΡϊϋÿÿÿÿ
-q
-java:S1104'"[Make preBattleDialog a static final constant or non-public and provide accessors if needed.(™ΕΫ
-q
-java:S1104*"[Make startingCellNum a static final constant or non-public and provide accessors if needed.(νώ²φ
-F
-java:S2160"+Override the "equals" method in this class.(Ο„κϋÿÿÿÿ
-V	java:S125"<This block of commented-out lines of code should be removed.(μέ§’ωÿÿÿÿ
-1
-java:S3626<"Remove this redundant jump.(Ι©ƒ
-B
-java:S3398Τ"&Move this method into "TimerListener".(Ό¶·“ψÿÿÿÿ
-B
-java:S3398"&Move this method into "TimerListener".(§Ύ’ύÿÿÿÿ

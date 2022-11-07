@@ -1,10 +1,0 @@
-
-b
-java:S1192"GDefine a constant instead of duplicating this literal "Female" 3 times.(ÂîÉñÿÿÿÿÿ
-o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(›ß€ñ
-h	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(†¬™úÿÿÿÿ
-h	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(®…ç˜şÿÿÿÿ
-c	java:S1000"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ğí¥¥
-F
-java:S1068
-"+Remove this unused "pokemon" private field.(á·˜ÿÿÿÿÿ

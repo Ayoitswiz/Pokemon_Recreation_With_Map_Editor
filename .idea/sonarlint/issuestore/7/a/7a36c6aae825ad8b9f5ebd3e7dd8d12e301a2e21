@@ -1,0 +1,10 @@
+
+b	java:S116"MRename this field "HP" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ò°ó“
+h	java:S116"NRename this field "Exp" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(±›ş†üÿÿÿÿ
+7
+java:S1170"!Make this final field static too.(åéÿ
+H
+java:S1135"2Complete the task associated to this TODO comment.(¡ƒºì
+Q	java:S125."<This block of commented-out lines of code should be removed.(†¿¶½
+i
+java:S2975C"SRemove this "clone" implementation; use a copy constructor or copy factory instead.(¯áÑë

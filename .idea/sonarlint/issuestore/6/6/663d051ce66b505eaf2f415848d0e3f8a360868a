@@ -1,0 +1,64 @@
+
+Q
+java:S3740("/Provide the parametrized type for this generic.(“îşÚşÿÿÿÿ8ò•ŒÅ0
+L
+java:S3740*"/Provide the parametrized type for this generic.(±ç¼è8ò•ŒÅ0
+Q
+java:S3740["/Provide the parametrized type for this generic.(ÙÊ¹µıÿÿÿÿ8ò•ŒÅ0
+‡
+java:S1319."jThe type of "pokeslots" should be an interface such as "List" rather than the implementation "LinkedList".(àç¯ø8àô ŒÅ0
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(»Ò„©8£ò•ŒÅ0
+l
+java:S1659&"JDeclare "loweredetched" and all following declarations on a separate line.(‘¨«ùÿÿÿÿ8‘ó•ŒÅ0
+P
+java:S1948&".Make "raisedetched" transient or serializable.(‘¨«ùÿÿÿÿ8”ó•ŒÅ0
+Q
+java:S1948&"/Make "loweredetched" transient or serializable.(‘¨«ùÿÿÿÿ8”ó•ŒÅ0
+O
+java:S1948&"-Make "raisedbevel" transient or serializable.(‘¨«ùÿÿÿÿ8”ó•ŒÅ0
+P
+java:S1948&".Make "loweredbevel" transient or serializable.(‘¨«ùÿÿÿÿ8•ó•ŒÅ0
+N
+java:S1948'"1Make "getSelectedPoke" transient or serializable.(•æßÆ8•ó•ŒÅ0
+P
+java:S1948(".Make "onPartyClose" transient or serializable.(“îşÚşÿÿÿÿ8•ó•ŒÅ0
+I
+java:S1948*",Make "setOnClose" transient or serializable.(±ç¼è8•ó•ŒÅ0
+{
+java:S1171/"YMove the contents of this initializer to a standard constructor or to field initializers.(¾º‡ÿÿÿÿÿ8£ó•ŒÅ0
+v
+java:S11713"YMove the contents of this initializer to a standard constructor or to field initializers.(Ú•³°8§ó•ŒÅ0
+{
+java:S11714"YMove the contents of this initializer to a standard constructor or to field initializers.(º“¿¯üÿÿÿÿ8ªó•ŒÅ0
+{
+java:S1171E"YMove the contents of this initializer to a standard constructor or to field initializers.(±ê „ûÿÿÿÿ8¶ó•ŒÅ0
+v
+java:S1171G"YMove the contents of this initializer to a standard constructor or to field initializers.(ËÙø“8¹ó•ŒÅ0
+v
+java:S1171M"YMove the contents of this initializer to a standard constructor or to field initializers.(˜‚¼8»ó•ŒÅ0
+{
+java:S1171k"YMove the contents of this initializer to a standard constructor or to field initializers.(å¹†ùùÿÿÿÿ8Éó•ŒÅ0
+V
+java:S2387‰"3"background" is the name of a field in "Component".(É„ûûÿÿÿÿ8Ïó•ŒÅ0
+H
+java:S1948ˆ"+Make "pokeslots" transient or serializable.(¼â™.8Òó•ŒÅ0
+O
+java:S1948‰",Make "background" transient or serializable.(É„ûûÿÿÿÿ8Óó•ŒÅ0
+L
+java:S3010’".Remove this assignment of "isSelectedPokemon".(û™³ 8×ó•ŒÅ0
+S
+java:S2209’"5Change this instance-reference to a static reference.(û™³ 8Ûó•ŒÅ0
+S
+java:S2696Â"6Make the enclosing method "static" or remove this set.(±°¥8ğó•ŒÅ0
+|
+java:S2142ä"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€8ùó•ŒÅ0
+W
+java:S2274ã":Remove this call to "wait" or move it into a "while" loop.(ÇÜ<8úó•ŒÅ0
+|
+java:S2142ô"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€8şó•ŒÅ0
+W
+java:S2274ó":Remove this call to "wait" or move it into a "while" loop.(ÇÜ<8ÿó•ŒÅ0
+Y	java:S125‚"<This block of commented-out lines of code should be removed.(¸åäÜ8ƒô•ŒÅ0
+Y	java:S125"<This block of commented-out lines of code should be removed.(ŒÀÜ×8ˆô•ŒÅ0
+I
+java:S1068Š"&Remove this unused "id" private field.(€³Ê¤øÿÿÿÿ8ˆô•ŒÅ0

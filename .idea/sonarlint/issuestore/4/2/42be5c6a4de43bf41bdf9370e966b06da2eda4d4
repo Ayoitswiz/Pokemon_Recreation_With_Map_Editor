@@ -1,7 +1,0 @@
-
-d
-java:S1192F"NDefine a constant instead of duplicating this literal " pokedollars." 3 times.(Ô¼‚
-t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¨æ˜¾úÿÿÿÿ
-—
-java:S1186+"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ĞÌóš
-V	java:S125"<This block of commented-out lines of code should be removed.(­«ß¦üÿÿÿÿ

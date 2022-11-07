@@ -106,7 +106,7 @@ public static int getHeight() {
 public static Integer x(Object i) {
 	return switch (i) {
 		case Double s -> (int) (getWidth() * s);
-		case Integer s -> (int) (getWidth() * s);
+		case Integer s -> getWidth() * s;
 		default -> throw new IllegalStateException("Unexpected value: " + i);
 	};
 }
@@ -114,8 +114,9 @@ public static Integer x(Object i) {
 public static Integer y(Object i) {
 	return switch (i) {
 		case Double d -> (int) (getHeight() * d);
-		case Integer d -> (int) (getHeight() * d);
+		case Integer d -> getHeight() * d;
 		default -> throw new IllegalStateException("Unexpected value: " + i);
 	};
 }
+
 }
