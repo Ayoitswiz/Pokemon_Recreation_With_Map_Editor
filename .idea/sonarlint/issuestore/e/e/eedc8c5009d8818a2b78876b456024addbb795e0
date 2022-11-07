@@ -1,0 +1,28 @@
+
+a
+java:S1301x"KReplace this "switch" statement by "if" statements to increase readability.(Þè½¯
+[
+java:S2184`"@Cast one of the operands of this integer division to a "double".(ÁÛù¿þÿÿÿÿ
+\
+java:S2184Ñ"@Cast one of the operands of this integer division to a "double".(ìƒ•Üøÿÿÿÿ
+`
+java:S1659"JDeclare "loweredetched" and all following declarations on a separate line.(Œ“ÝÆ
+_
+java:S1659"DDeclare "pokemon" and all following declarations on a separate line.(¦–ò«ùÿÿÿÿ
+D
+java:S1948".Make "raisedetched" transient or serializable.(Œ“ÝÆ
+E
+java:S1948"/Make "loweredetched" transient or serializable.(Œ“ÝÆ
+C
+java:S1948"-Make "raisedbevel" transient or serializable.(Œ“ÝÆ
+D
+java:S1948".Make "loweredbevel" transient or serializable.(Œ“ÝÆ
+E
+java:S1948"*Make "compound" transient or serializable.(¶Èá±üÿÿÿÿ
+C
+java:S1948"(Make "sprite" transient or serializable.(ÑåÜºþÿÿÿÿ
+Q	java:S125!"<This block of commented-out lines of code should be removed.(ŒÀÜ×
+t
+java:S1171t"YMove the contents of this initializer to a standard constructor or to field initializers.(ÒÌâ–øÿÿÿÿ
+7	java:S131x""Add a default case to this switch.(Þè½¯
+8	java:S131¢""Add a default case to this switch.(¥üÖ

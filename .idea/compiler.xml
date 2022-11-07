@@ -4,7 +4,7 @@
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
     </annotationProcessing>
-    <bytecodeTargetLevel target="15">
+    <bytecodeTargetLevel target="18">
       <module name="Pokemon_Recreation_With_Map_Editor" target="" />
     </bytecodeTargetLevel>
   </component>

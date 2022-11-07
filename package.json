@@ -1,9 +1,0 @@
-{
-  "name": "pokemon_recreation_with_map_editor",
-  "author": "Brandon Wisniewski",
-  "version": "1.0.0",
-  "dependencies": {
-    
-  },
-  "publishConfig": { "registry":  "https://npm.pkg.github.com/" }
-}

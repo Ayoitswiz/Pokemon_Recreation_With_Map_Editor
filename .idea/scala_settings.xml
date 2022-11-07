@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaProjectSettings">
+    <option name="collectionTypeHighlightingLevel" value="All" />
+    <option name="implicitParametersSearchDepth" value="4" />
+    <option name="showArgumentsToByNameParams" value="true" />
+    <option name="showImplicitConversions" value="true" />
+  </component>
+</project>

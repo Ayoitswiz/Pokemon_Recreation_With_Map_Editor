@@ -1,5 +1,5 @@
-import ConsoleUpgrade.ConsoleUpgrade;
-import gg.MainMenu.MainMenuGUI;
+import consoleupgrade.ConsoleUpgrade;
+import menus.mainmenu.MainMenuGUI;
 
 import java.io.IOException;
 /*
@@ -34,7 +34,6 @@ public class Main {
         public static void main(String... args) throws IOException {
             new ConsoleUpgrade();
             new MainMenuGUI();
-
         }
 }
 

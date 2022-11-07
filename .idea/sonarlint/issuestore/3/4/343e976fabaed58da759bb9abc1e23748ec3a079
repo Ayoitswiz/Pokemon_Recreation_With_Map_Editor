@@ -1,0 +1,11 @@
+
+b	java:S101"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(ÝûÛ¾
+P
+java:S1118":Add a private constructor to hide the implicit public one.(ÝûÛ¾
+Q	java:S125"<This block of commented-out lines of code should be removed.(¨†ÿÑ
+C
+java:S2388w"-Prefix this call to "getWidth" with "super.".(Ð–Ôü
+D
+java:S2388w".Prefix this call to "getHeight" with "super.".(Ð–Ôü
+V	java:S125x"<This block of commented-out lines of code should be removed.(€àÑ×þÿÿÿÿ
+W	java:S125•"<This block of commented-out lines of code should be removed.(Âˆ™¯úÿÿÿÿ

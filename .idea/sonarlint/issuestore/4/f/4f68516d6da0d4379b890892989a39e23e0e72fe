@@ -1,20 +1,0 @@
-
-v	java:S116"URename this field "Weaknesses" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Â¤ãÙúÿÿÿÿ8ÚÿÉ”½/
-q	java:S116"VRename this field "Resistances" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ò¤Ì48ÛÿÉ”½/
-t	java:S116	"SRename this field "ImmuneTo" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Û˜ áÿÿÿÿÿ8ÛÿÉ”½/
-j	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(áù¦…8àÿÉ”½/
-f
-java:S1192"IDefine a constant instead of duplicating this literal "Fighting" 4 times.(›¿§Ù8øÿÉ”½/
-d
-java:S11921"GDefine a constant instead of duplicating this literal "Ground" 5 times.(°¥®Ø8ùÿÉ”½/
-j
-java:S1192&"HDefine a constant instead of duplicating this literal "Psychic" 4 times.(øëöüÿÿÿÿ8úÿÉ”½/
-i
-java:S1192&"GDefine a constant instead of duplicating this literal "Flying" 3 times.(øëöüÿÿÿÿ8ûÿÉ”½/
-i
-java:S1192X"GDefine a constant instead of duplicating this literal "Ghost" 14 times.(ÆÚ·ìıÿÿÿÿ8ıÿÉ”½/
-d
-java:S11928"GDefine a constant instead of duplicating this literal "Poison" 3 times.(áƒ×Ã8ıÿÉ”½/
-”
-java:S1319"wThe type of the "opponentType" object should be an interface such as "List" rather than the implementation "ArrayList".(áù¦…8ÿÿÉ”½/
-v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Í°Ñ§8ƒ€Ê”½/

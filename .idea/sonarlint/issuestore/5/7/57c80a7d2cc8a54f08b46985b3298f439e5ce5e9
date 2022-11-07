@@ -1,16 +1,0 @@
-
-]	java:S125"<This block of commented-out lines of code should be removed.(„ß©Õşÿÿÿÿ8º’Ê”½/
-]	java:S1256"<This block of commented-out lines of code should be removed.(æšÖêÿÿÿÿÿ8Á’Ê”½/
-X	java:S125Q"<This block of commented-out lines of code should be removed.(ûİ8Â’Ê”½/
-T
-java:S1135M"2Complete the task associated to this TODO comment.(”ı€Üùÿÿÿÿ8Ä’Ê”½/
-Y	java:S125‹"<This block of commented-out lines of code should be removed.(§«Ï‹8Ò’Ê”½/
-[	java:S106™"9Replace this use of System.out or System.err by a logger.(âß¤üÿÿÿÿÿ8×’Ê”½/
-L
-java:S1128"*Remove this unused import 'java.util.Map'.(¼è½Òşÿÿÿÿ8Ù’Ê”½/
-M
-java:S1144€"0Remove this unused private "createMoves" method.(÷Õ°?8Ù’Ê”½/
-m	java:S117€"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(÷Õ°?8Û’Ê”½/
-v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Í°Ñ§8Ü’Ê”½/
-i
-java:S3973y"GUse indentation to denote the code conditionally executed by this "if".(ÓµŒÛıÿÿÿÿ8Ş’Ê”½/

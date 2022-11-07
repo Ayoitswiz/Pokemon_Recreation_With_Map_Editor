@@ -121,4 +121,8 @@
       </item>
     </group>
   </component>
+  <component name="uidesigner-configuration">
+    <option name="DEFAULT_LAYOUT_MANAGER" value="GridBagLayout" />
+    <option name="DEFAULT_FIELD_ACCESSIBILITY" value="public" />
+  </component>
 </project>

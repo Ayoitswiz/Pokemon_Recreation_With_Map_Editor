@@ -1,0 +1,12 @@
+
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¨æ˜¾úÿÿÿÿ
+K
+java:S2209+"5Change this instance-reference to a static reference.(«‚ý§
+f	java:S128]"LEnd this switch case with an unconditional break, return or throw statement.(ÇÐêÔýÿÿÿÿ
+P
+java:S2209W"5Change this instance-reference to a static reference.(‰ÂëÆüÿÿÿÿ
+7
+java:S1116^"Remove this empty statement.(Åñ­õþÿÿÿÿ
+Q	java:S125c"<This block of commented-out lines of code should be removed.(¤ä…
+V	java:S125s"<This block of commented-out lines of code should be removed.(ñÂ¸³øÿÿÿÿ
+Q	java:S125z"<This block of commented-out lines of code should be removed.(à‰éÝ
