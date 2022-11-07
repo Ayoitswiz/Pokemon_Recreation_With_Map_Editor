@@ -7,6 +7,7 @@ import adventuremode.components.AdventureModeUiPanel.Warp;
 import adventuremode.components.DialogBox;
 import adventuremode.components.StartMenu;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import menus.battle.BattleGUI;
 import utilities.LambdaWithParam;
 
@@ -35,14 +36,12 @@ private DialogBox dialogBox;
 private final StartMenu startMenu;
 private final List<Cell> colls = new ArrayList<>(); //list of collumns to check for collisions in dir of user movement.
 private final AdventureModeUiPanel.CellArray cells;
-//private final LambdaWithReturnVal<List<NPC>> npcs;
-public Warp currentarea;
+@Setter private transient Warp currentarea;
 
 public UserSpriteManager(CellArray cells, MySprite user, Warp currentarea) {
 	user.setDir(Direction.D);
 	this.user = user;
 	this.cells = cells;
-	//this.npcs = npcs;
 	this.currentarea = currentarea;
 	setKeyBindings(VK_A, Direction.L);
 	setKeyBindings(VK_D, Direction.R);

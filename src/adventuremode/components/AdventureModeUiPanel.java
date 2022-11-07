@@ -98,7 +98,7 @@ private void createNPCs() {
 void enter(Warp entranceToArea) {
 	for (var npc: currentArea.getNpcs()) npc.stop();
 	currentArea = entranceToArea;
-	userSpriteManager.currentarea = currentArea;
+	userSpriteManager.setCurrentarea(currentArea);
 	loadArea();
 	drawUI(getGraphics());
 
