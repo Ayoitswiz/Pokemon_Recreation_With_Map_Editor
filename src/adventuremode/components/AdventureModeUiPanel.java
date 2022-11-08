@@ -76,11 +76,8 @@ public void createUI(MySprite humantrainer) {
 }
 
 private void loadArea() {
-	try {
-		uiImg = ImageIO.read(new File(currentArea.getAreaImg()));
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
+	try { uiImg = ImageIO.read(new File(currentArea.getAreaImg()));}
+	catch (IOException e) { e.printStackTrace(); }
 	readInCellFile(currentArea.getWalls(), walls);
 	readInCellFile(currentArea.getGrass(), grassCellsInArea);
 	if (EDIT_MODE && OPEN_OUTPUT_STREAMS) {
