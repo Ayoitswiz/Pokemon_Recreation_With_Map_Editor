@@ -27,14 +27,14 @@ private transient LambdaWithReturnVal<Rectangle> bounds = () -> new Rectangle(
 gui.x(0.0),
 gui.y(.75),
 gui.x(1.0),
-gui.y(.252));
+gui.y(.253));
 
 public DialogBox() {
 	textarea = new JTextArea() {{
 		setWrapStyleWord(true);
 		setLineWrap(true);
 		setEditable(false);
-		setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		setFont(new Font("Times New Roman", Font.PLAIN, 22));
 	}};
 
 	next = new JButton() {{

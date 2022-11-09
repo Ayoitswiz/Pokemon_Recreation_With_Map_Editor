@@ -1,65 +1,96 @@
 package adventuremode.components;
 
 import adventuremode.sprites.MySprite;
+import menus.ViewPokeSlots.PokemonInPartyPanel;
 import menus.backpack.Backpack;
 import menus.gui;
-import menus.ViewPokeSlots.PokemonInPartyPanel;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.ComponentOrientation;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+
+import static adventuremode.components.StartMenu.Options.*;
 
 public class StartMenu extends JPanel {
 private final MySprite user;
+final BufferedImage textImage = new BufferedImage(
+100, 100,
+BufferedImage.TYPE_INT_ARGB);
+
+public enum Options {
+	POKeDEX,
+	POKeMON,
+	BAG,
+	POKeNAV,
+	TRAINER,
+	SAVE,
+	OPTIONS,
+	MainMenu,
+	CLOSE
+
+}
 
 public StartMenu(MySprite user) {
 	this.user = user;
 
-	setLayout(new GridBagLayout());
-
-	Border raisedetched, loweredetched, raisedbevel, loweredbevel;
-	raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-	loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
-	raisedbevel = BorderFactory.createRaisedBevelBorder();
-	loweredbevel = BorderFactory.createLoweredBevelBorder();
-	Color menu = new Color(200, 55, 55);
-	Border redLine = BorderFactory.createLineBorder(menu, 5);
-	Border thick = (BorderFactory.createStrokeBorder(new BasicStroke(5.0f)));
-	Border compound = BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
-	compound = BorderFactory.createCompoundBorder(redLine, compound);
-	compound = BorderFactory.createCompoundBorder(thick, compound);
-	compound = BorderFactory.createCompoundBorder(loweredetched, compound);
-	compound = BorderFactory.createCompoundBorder(raisedetched, compound);
+	setLayout(new GridLayout(10, 1, 0 , 0));
+	Color menu 						= new Color(200, 55, 55);
+	Border redLine 				= BorderFactory.createLineBorder(menu, 5);
+	Border thick 					= BorderFactory.createStrokeBorder(new BasicStroke(5.0f));
+	Border raisedetched 	= BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+	Border loweredetched 	= BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
+	Border raisedbevel 		= BorderFactory.createRaisedBevelBorder();
+	Border loweredbevel 	= BorderFactory.createLoweredBevelBorder();
+	Border compound 			= BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
+	compound 							= BorderFactory.createCompoundBorder(redLine, 			compound);
+	compound 							= BorderFactory.createCompoundBorder(thick, 				compound);
+	compound 							= BorderFactory.createCompoundBorder(loweredetched, compound);
+	compound 							= BorderFactory.createCompoundBorder(raisedetched, 	compound);
 
 	setBorder(compound);
 
-	GridBagConstraints c = new GridBagConstraints();
-	c.fill = 1;
-	c.weightx = 1;
-	c.weighty = 1;
-	c.gridwidth = 50;
-	c.gridheight = 1;
-	c.gridx = 0;
-	c.anchor = GridBagConstraints.WEST;
-	add(new StartMenuButton("POKeDEX"), c);
-	c.gridy = 1;add(new StartMenuButton("POKeMON"), c);
-	c.gridy = 2;add(new StartMenuButton("BAG"), c);
-	c.gridy = 3;add(new StartMenuButton("POKeNAV"), c);
-	c.gridy = 4;add(new StartMenuButton(user.getName()), c);
-	c.gridy = 5;add(new StartMenuButton("SAVE"), c);
-	c.gridy = 6;add(new StartMenuButton("OPTIONS"), c);
-	c.gridy = 7;add(new StartMenuButton("Main Menu"), c);
-	c.gridy = 8;add(new StartMenuButton("Close"), c);
-	c.gridy = 9;
-	add( new DialogBoxTextArea(), c);
+	add(new StartMenuButton(POKeDEX));
+	add(new StartMenuButton(POKeMON));
+	add(new StartMenuButton(BAG));
+	add(new StartMenuButton(POKeNAV));
+	add(new StartMenuButton(TRAINER));
+	add(new StartMenuButton(SAVE));
+	add(new StartMenuButton(OPTIONS));
+	add(new StartMenuButton(MainMenu));
+	add(new StartMenuButton(CLOSE));
+	add(new DialogBoxTextArea());
+
 	setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 	setVisible(false);
 }
 
-
+public StartMenu toggle() {
+	setVisible(!isVisible());
+	return this;
+}
 
 @Override
 public int getX() {
@@ -88,9 +119,9 @@ public int getHeight() {
 @Override
 public Rectangle getBounds() {
 	setBounds(
-	gui.getWidth() - (gui.getWidth() / 4),
+	(int) (gui.getWidth() - (gui.getWidth() / 2.5)),
 	gui.getHeight() / 16,
-	gui.getWidth() / 4,
+	(int) (gui.getWidth() / 2.5),
 	gui.getHeight() - (gui.getHeight() / 8));
 	return super.getBounds();
 }
@@ -101,9 +132,8 @@ class DialogBoxTextArea extends JTextArea implements FocusListener {
 		setColumns(20);
 		setWrapStyleWord(true);
 		setLineWrap(true);
-		setFont(new Font("Times New Roman", Font.PLAIN, 24));
+		setFont(new Font("Times New Roman", Font.PLAIN, 14));
 		setText("sw\nco");
-		setVisible(true);
 		setBorder(UIManager.getBorder("Label.border"));
 		setLayout(new BorderLayout());
 
@@ -120,7 +150,8 @@ class DialogBoxTextArea extends JTextArea implements FocusListener {
 						// TODO: need to update this based on code changes to work again.
 						StartMenu.this.setVisible(false);
 						break;
-					default: DialogBoxTextArea.this.setText("commands are either: co, sw <any number>");
+					default:
+						DialogBoxTextArea.this.setText("commands are either: co, sw <any number>");
 				}
 			});
 		}
@@ -134,76 +165,106 @@ class DialogBoxTextArea extends JTextArea implements FocusListener {
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		if(getText().length()<1) {
+		if (getText().length() < 1) {
 			setText("Enter Command");
 		}
 	}
 }
 
+
+
 class StartMenuButton extends JButton {
-	String text;
-
-	StartMenuButton(String text) {
-		this.text = text;
-		setBackground(new Color(59, 89, 182));
-		setForeground(Color.WHITE);
+	StartMenuButton(Options option) {
+		super(option.toString());
 		setFocusPainted(false);
-		setVisible(true);
+		setForeground(Color.WHITE);
+		setBackground(new Color(59, 89, 182));
+		setMargin(new Insets(0, 14, 0, 14));
+		setBorder(BorderFactory.createLoweredBevelBorder());
 		setHorizontalAlignment(SwingConstants.LEFT);
-
 		addActionListener(e -> {
-			switch (text){
-				case "POKeDEX":
+			switch (option) {
+				case POKeDEX:
 					break;
-				case "POKeMON":
+				case POKeMON:
 					new PokemonInPartyPanel()
 					.open(
 					user.getPokeSlots(),
 					user.getPokeSlots()::addFirst)
 					.onPartyClose(() -> gui.setUIAndBackgroundImg(AdventureModeMain.class.getSimpleName()));
 					break;
-				case "BAG":
+				case BAG:
 					new Backpack()
 					.open(user)
 					.onBackpackClose(() -> gui.setUIAndBackgroundImg(AdventureModeMain.class.getSimpleName()));
 					break;
-				case "POKeNAV":
+				case POKeNAV:
 					break;
-				case "NAME":
+				case TRAINER:
 					System.out.println(user.getName());
 					break;
-				case "SAVE":
+				case SAVE:
 					break;
-				case "OPTIONS":
-					DialogBox dialogBox = new DialogBox();
-					dialogBox.open().introDialog();
-					getParent().getParent().add(dialogBox);
-					getParent().getParent().validate();
+				case OPTIONS:
+					new DialogBox(){{
+						open().introDialog();
+						StartMenu.this.getParent().add(this);
+					}};
+					StartMenu.this.getParent().validate();
 					StartMenu.this.setVisible(false);
 					break;
-				case "Main Menu":
+				case MainMenu:
 					gui.setUIAndBackgroundImg("MainMenuGUI");
 					break;
-				case "Close":
-					getParent().setVisible(false);
+				case CLOSE:
+					StartMenu.this.setVisible(false);
 					break;
 			}
 		});
+
+		final ComponentListener cl = new ComponentAdapter() {
+
+			@Override
+			public void componentResized(ComponentEvent e) {
+				setFont(getFont().deriveFont((float) getMaxFontSizeForControls()));
+			}};
+
+		new Timer(0, e -> addComponentListener(cl)) {{
+			setRepeats(false);
+			start();
+		}};
 	}
 
-	@Override
-	protected void paintComponent(Graphics g){
-		super.paintComponent(g);
-		g.setFont(
-							g.getFont().deriveFont(
-																			g.getFont().getSize() * ((getWidth() + getHeight()) / 100f)
-																		)
-							);
 
-		g.drawString(
-		text,
-		getInsets().left/4,
-		getInsets().top + g.getFontMetrics().getHeight());
+	public int getMaxFontSizeForControls() {
+		Graphics2D g = textImage.createGraphics();
+		int maxSize = Math.min(48, Math.max(6, getMaxFontSizeForControl(g.getFontRenderContext())));
+		g.dispose();
+		return maxSize;
+	}
+
+	public int getMaxFontSizeForControl(FontRenderContext frc) {
+		Insets i = getBorder().getBorderInsets(this);
+		Insets m = getMargin();
+
+		Rectangle viewableArea = new Rectangle(
+		getWidth()	-				(m.right + m.left + i.left + i.right),
+		getHeight()	-				(m.top + m.bottom + i.top + i.bottom)
+		);
+
+		int size = 1;
+		Rectangle2D box;
+		boolean tooBig = false;
+		while (!tooBig) {
+			box = getFont().deriveFont((float) size).createGlyphVector(frc, getText()).getVisualBounds();
+			if (box.getHeight() > viewableArea.getHeight()
+					|| box.getWidth() > viewableArea.getWidth()) {
+				tooBig = true;
+				size--;
+			}
+			size++;
+		}
+		return size;
 	}
 }
 }

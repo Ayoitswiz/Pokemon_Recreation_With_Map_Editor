@@ -97,7 +97,7 @@ private class ControlAction extends AbstractAction {
 		switch (keyCode) {
 			case VK_I -> user.setSpeedWeight(user.getSpeedWeight() + 10);
 			case VK_D -> user.setSpeedWeight(user.getSpeedWeight() - 10);
-			case VK_M -> startMenu.setVisible(!startMenu.isVisible());
+			case VK_M -> startMenu.toggle();
 			case VK_E -> EDIT_MODE = !EDIT_MODE;
 		}
 	}

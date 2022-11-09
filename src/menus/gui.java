@@ -16,7 +16,7 @@ import java.util.HashMap;
 // stored UI.
 @NoArgsConstructor
 public final class gui {
-private static final JFrame frame = new JFrame();
+public static final JFrame frame = new JFrame();
 private static final HashMap<String, Image> backgroundMap = new HashMap<>();
 private static final HashMap<String, JComponent> uiMap = new HashMap<>();
 private static Image background;
