@@ -1,5 +1,9 @@
 # Pokemon_Recreation_With_Map_Editor
 
+This project had a ton of technical debt from me coding it so poorly back in college (2020). I was only just learning Java (& programming) back then and wrote a lot of code and looking back I'm honestly impressed how much I did with how inexperienced I was with Java. I've gotten so much better at programming in the past 3 years I find its difficult to resist coming back to this project and improving the code.
+I revisit the project every once and awhile to refactor and try out new things I've learned.
+I don't think this code base is in anyway indicitive of my codeing prowess whatsoever. And perhaps that's why I feel like refactoring it so much, but it is still something I'm proud of that has taught me A LOT, including many examples of how NOT to write code!
+
 Welcome to Pokemon Recreation with an additional map editor!!!
 <br>
 <br>
