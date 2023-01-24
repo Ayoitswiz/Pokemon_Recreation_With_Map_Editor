@@ -38,27 +38,27 @@ public DialogBox() {
 	}};
 
 	next = new JButton() {{
-			setVisible(false);
-			setText("Next");
-			setBackground(new Color(59, 89, 182));
-			setForeground(Color.WHITE);
-			setFocusPainted(false);
-			setFont(new Font("Tahoma", Font.BOLD, 14));
+		setVisible(false);
+		setText("Next");
+		setBackground(new Color(59, 89, 182));
+		setForeground(Color.WHITE);
+		setFocusPainted(false);
+		setFont(new Font("Tahoma", Font.BOLD, 14));
 
-			addActionListener(e -> {
-				if (!onNext.isEmpty()) {
-					onNext.remove().foo();
-					// added because clicking next would make the whole dialogbox invisible for very short but noticable time &
-					// the next button would be at the top of the dialogbox instead of the bottom, but this resolves that.
-					DialogBox.this.repaint();
-					DialogBox.this.validate();
-				} else {
-					setNextNotVisible();
-					onDialogEnd.foo();
-					onDialogEnd = () -> {};
-				}
-			});
-		}};
+		addActionListener(e -> {
+			if (!onNext.isEmpty()) {
+				onNext.remove().foo();
+				// added because clicking next would make the whole dialogbox invisible for very short but noticable time &
+				// the next button would be at the top of the dialogbox instead of the bottom, but this resolves that.
+				DialogBox.this.repaint();
+				DialogBox.this.validate();
+			} else {
+				setNextNotVisible();
+				onDialogEnd.foo();
+				onDialogEnd = () -> {};
+			}
+		});
+	}};
 
 	setLayout(new BorderLayout());
 	setBounds(bounds.foo());

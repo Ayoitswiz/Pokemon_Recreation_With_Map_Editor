@@ -188,12 +188,12 @@ public void createSpriteMaps(String SPRITE_SHEET_PATH, int totCols, int y0, int 
 
 		for(var dir: Direction.values()) {
 			int ry = y0 +
-			switch (dir) {
-				case L -> L;
-				case R -> R;
-				case U -> U;
-				case D -> D;
-			} * rh;
+							 switch (dir) {
+								 case L -> L;
+								 case R -> R;
+								 case U -> U;
+								 case D -> D;
+							 } * rh;
 
 			// first image is standing
 			standingImgMap.put(dir, img.getSubimage(0, ry, cw, rh));
@@ -203,7 +203,7 @@ public void createSpriteMaps(String SPRITE_SHEET_PATH, int totCols, int y0, int 
 				int col = 0;
 				while(++col < totCols)
 					add(img.getSubimage(col * cw, ry, cw, rh));
-				}});
+			}});
 		}
 	} catch (IOException ex) {
 		ex.printStackTrace();
