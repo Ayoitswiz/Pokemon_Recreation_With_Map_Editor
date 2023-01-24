@@ -60,7 +60,7 @@ private void encounterPokemon(MySprite user, DialogBox dBox) {
 }
 
 public boolean intersects(Rectangle r) {
-	return getBounds().intersects(r);
+	return getHitbox().intersects(r);
 }
 
 private void setPokemonInArea(ePokemon... pokemon) {

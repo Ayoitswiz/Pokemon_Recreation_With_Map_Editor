@@ -10,36 +10,22 @@ import lombok.Getter;
 import lombok.Setter;
 import utilities.Lambda;
 
-import javax.imageio.ImageIO;
 import javax.swing.Timer;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
 
 import static adventuremode.components.AdventureModeUiPanel.COLS;
 import static adventuremode.components.AdventureModeUiPanel.ROWS;
 
 public abstract class NPC extends AITrainer implements Collisions {
-private final Map<Direction, Image> standingImgMap = new EnumMap<>(Direction.class);
-private final Map<Direction, java.util.List<BufferedImage>> movingImgMap = new EnumMap<>(Direction.class);
 private double distanceFromUser = 0;
 protected int cellCountToMoveThrough;
 @Getter @Setter private Direction startingDirection;
 @Getter @Setter public boolean caughtUser = false;
 protected int battleGlareRange = 0;
 public String[] preBattleDialog;
-protected int spriteSheetColWidth = 60;
-protected int spriteSheetRowHeight = 64;
 public int startingCellNum;
 private static boolean canMove = true;
 
@@ -71,51 +57,6 @@ public static boolean canMove() {
 }
 
 
-
-public void draw(Graphics g) {
-	Image img = !isMoving() ? standingImgMap.get(getDir()) : movingImgMap.get(getDir()).get(getMovingIndex());
-	g.drawImage(img, getX(), getY(), getWidth(), getHeight(), null);
-	g.drawRect(getX(), getY(), getWidth(), getHeight());
-	g.setColor(new Color(255, 255, 0, 100));
-	g.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-
-	hitbox = getHitbox();
-}
-
-void createSprites() {
-	BufferedImage img;
-	try {
-		img = ImageIO.read(new File("src/adventuremode/img/TeamRocketMaleGrunt.png"));
-		//get sub-images (sprites) from the sprite sheet
-		for (int row = 0; row < 4; row++) {
-			Direction dir =
-			switch (row) {
-				case 0 -> Direction.D;
-				case 1 -> Direction.L;
-				case 2 -> Direction.R;
-				case 3 -> Direction.U;
-				default -> throw new IllegalStateException("Unexpected value: " + row);
-			};
-			List<BufferedImage> imgList = new ArrayList<>();
-			movingImgMap.put(dir, imgList);
-			int rY = row * spriteSheetRowHeight;
-			for (int col = 0; col < 4; col++) {
-				int rX = col * spriteSheetColWidth;
-				BufferedImage subImg = img.getSubimage(rX, rY, spriteSheetColWidth, spriteSheetRowHeight);
-				if (col == 0) {
-					//subimages in 1st column are standing
-					standingImgMap.put(dir, subImg);
-				}
-				else {
-					//all others are moving
-					imgList.add(subImg);
-				}
-			}
-		}
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-}
 
 // TODO: Thought this should work, need to find out why not.
 //The distance an AdventureMode.sprites.NPC can see the player from
@@ -207,7 +148,7 @@ public int getDistanceCanMove() {
 	1. Draw the battleglarebounds box minus any "Wall" it stops at.
 	g.fillRect(cell.getX(), cell.getY(), cell.getWidth(), cell.getHeight());
  */
-void npcHandler(CellArray cells, Rectangle userHitbox, Graphics g, Lambda l) {
+void npcHandler(CellArray cells, Rectangle userHitbox, Graphics2D g, Lambda l) {
 	if (isOutOfUsablePokemon()) {
 		return;
 	}
@@ -230,18 +171,17 @@ void npcHandler(CellArray cells, Rectangle userHitbox, Graphics g, Lambda l) {
 		cell.getNum() + switch (dir) {
 			case R -> 1;
 			case L -> -1;
-			case D -> 53;
-			case U -> -53;
+			case D -> COLS;
+			case U -> -COLS;
 		})) instanceof Wall)) {
-			cell = temp;
-			g.fillRect(cell.getX(), cell.getY(), cell.getWidth(), cell.getHeight());
+			g.fill((cell = temp).getHitbox());
 		}
 
 		if (caughtUser = switch (dir) {
 			case R -> userHitbox.getMaxX()	< cell.getMaxX();
-			case L -> userHitbox.x		> cell.getX();
+			case L -> userHitbox.x					> cell.getX();
 			case D -> userHitbox.getMaxY()	< cell.getMaxY();
-			case U -> userHitbox.y		> cell.getY();
+			case U -> userHitbox.y					> cell.getY();
 		}) {
 			canMove = false;
 			l.foo();

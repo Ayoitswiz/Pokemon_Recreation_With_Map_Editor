@@ -55,6 +55,14 @@ public NPCs(Type type, Direction direction, int startingCell, int cellCountToMov
 	setMaxMovingIndex(3);
 	setStartingDirection(direction);
 	this.dir = direction;
-	createSprites();
+	createSpriteMaps("src/adventuremode/img/TeamRocketMaleGrunt.png",
+	4,
+	0,
+	60,
+	64,
+	1,
+	2,
+	3,
+	0);
 }
 }

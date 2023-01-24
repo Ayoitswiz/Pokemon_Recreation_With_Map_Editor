@@ -10,7 +10,6 @@ import utilities.Lambda;
 import utilities.LambdaWithParam;
 import utilities.LambdaWithReturnVal;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -18,6 +17,10 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.StrokeBorder;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -168,14 +171,13 @@ private class GifBtn extends JButton {
 				getHeight(),
 				this);
 				g.setColor(Color.RED);
-				Graphics2D g2 = (Graphics2D) g;
 				// Draw X over fainted poke
 				if (p.isFainted()) {
-					g2.setStroke(new BasicStroke(4));
-					g2.drawLine(0, 0, getWidth(), getHeight());
-					g2.drawLine(getWidth(), 0, 0, getHeight());
-					g2.setColor(new Color(0, 0, 0, 130));
-					g2.fillRect(0, 0, getWidth(), getHeight());
+					((Graphics2D) g).setStroke(new BasicStroke(4));
+					g.drawLine(0, 0, getWidth(), getHeight());
+					g.drawLine(getWidth(), 0, 0, getHeight());
+					g.setColor(new Color(0, 0, 0, 130));
+					g.fillRect(0, 0, getWidth(), getHeight());
 				}
 				if (isSelectedPokemon == p) {
 					GifBtn.this.setBackground(new Color(255, 0, 0));
@@ -255,21 +257,17 @@ private class GifBtn extends JButton {
 		setOpaque(false);
 		setBorderPainted(true);
 		setContentAreaFilled(false);
-		//setRolloverEnabled(true);
-		raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-		loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
-		raisedbevel = BorderFactory.createRaisedBevelBorder();
-		loweredbevel = BorderFactory.createLoweredBevelBorder();
-		Border blueborder = BorderFactory.createLineBorder(new Color(0, 0, 255), 15);
-		Border compound;
-		Border thick = (BorderFactory.createStrokeBorder(new BasicStroke(10.0f)));
-		compound = BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
-		compound = BorderFactory.createCompoundBorder(blueborder, compound);
-		compound = BorderFactory.createCompoundBorder(thick, compound);
-		compound = BorderFactory.createCompoundBorder(loweredetched, compound);
-		compound = BorderFactory.createCompoundBorder(raisedetched, compound);
-		//empty = BorderFactory.createEmptyBorder();
-		setBorder(compound);
+
+		setBorder(new EtchedBorder(EtchedBorder.RAISED));
+		addBorder(new EtchedBorder(EtchedBorder.LOWERED));
+		addBorder(new StrokeBorder(new BasicStroke(5.0f)));
+		addBorder(new LineBorder(new Color(0, 0, 255), 15));
+		addBorder(new BevelBorder(BevelBorder.RAISED));
+		addBorder(new BevelBorder(BevelBorder.LOWERED));
+	}
+
+	private void addBorder(Border b) {
+		setBorder(new CompoundBorder(getBorder(), b));
 	}
 }
 }

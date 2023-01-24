@@ -34,7 +34,7 @@ protected Color color;
 
 @Override
 public boolean intersects(Rectangle r) {
-	return getBounds().intersects(r);
+	return getHitbox().intersects(r);
 }
 
 public void draw(Graphics2D g) {
@@ -69,7 +69,7 @@ public void setBounds(int x, int y, int width, int height) {
 	this.height =height;
 }
 
-public Rectangle getBounds() {
+public Rectangle getHitbox() {
 	return new Rectangle(x, y, width, height);
 }
 

@@ -5,7 +5,19 @@ import menus.gui;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.awt.*;
+import javax.imageio.ImageIO;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 import static adventuremode.components.AdventureModeUiPanel.COLS;
 import static adventuremode.components.AdventureModeUiPanel.ROWS;
@@ -26,12 +38,14 @@ private int myCellHeight;
 @Getter @Setter public Direction dir; //Direction the user's sprite is facing
 @Getter private int speedWeight = 150;
 public Rectangle hitbox = new Rectangle();
+@Getter private final Map<Direction, 							Image>	standingImgMap = new EnumMap<>(Direction.class);
+@Getter private final Map<Direction, List<BufferedImage>> mooovingImgMap = new EnumMap<>(Direction.class);
 
 public void setToCellPos(int cellNum) {
 	setX((myCellWidth  = gui.getWidth()/COLS)			*			(myColNum = cellNum % COLS)								+		getWRemainder());
 	setY((myCellHeight = gui.getHeight()/ROWS)		*			(myRowNum = (cellNum - myColNum) /COLS)		+		getHRemainder());
-	if (cw == 0) cw = myCellWidth;
-	if (ch == 0) ch = myCellHeight;
+	cw = myCellWidth;
+	ch = myCellHeight;
 	myCellWidth  += gui.getWidth()  % COLS <= myColNum ? 0 : 1;
 	myCellHeight += gui.getHeight() % ROWS <= myRowNum ? 0 : 1;
 }
@@ -106,7 +120,7 @@ public void setSpeedWeight(int speedWeight) {
 	System.out.println("SpeedWeight:" + speedWeight);
 }
 
-protected Rectangle getHitbox() {
+public Rectangle getHitbox() {
 	return new Rectangle(
 	getX() + (myCellWidth/2),
 	getY() + (myCellHeight),
@@ -156,5 +170,58 @@ protected void step(double stepDis) {
 	}
 	movingIndex++;
 	movingIndex %= maxMovingIndex;
+}
+
+public Rectangle getBounds() {
+	return new Rectangle(
+	getX(),
+	getY(),
+	getWidth(),
+	getHeight()
+	);
+}
+
+public void createSpriteMaps(String SPRITE_SHEET_PATH, int totCols, int y0, int cw, int rh, int L, int R, int U, int D) {
+	// get sub-images (sprites) from the sprite sheet
+	try {
+		BufferedImage img = ImageIO.read(new File(SPRITE_SHEET_PATH));
+
+		for(var dir: Direction.values()) {
+			int ry = y0 +
+			switch (dir) {
+				case L -> L;
+				case R -> R;
+				case U -> U;
+				case D -> D;
+			} * rh;
+
+			// first image is standing
+			standingImgMap.put(dir, img.getSubimage(0, ry, cw, rh));
+
+			// all others are moving
+			mooovingImgMap.put(dir, new ArrayList<>() {{
+				int col = 0;
+				while(++col < totCols)
+					add(img.getSubimage(col * cw, ry, cw, rh));
+				}});
+		}
+	} catch (IOException ex) {
+		ex.printStackTrace();
+	}
+}
+
+
+public void draw(Graphics2D g) {
+	Image img = !isMoving()
+							? standingImgMap.get(dir)
+							: mooovingImgMap.get(dir).get(movingIndex);
+
+	g.drawImage(img, getX(), getY(), getWidth(), getHeight(), null);
+
+	g.setColor(Color.white); 										g.draw(getBounds());
+	g.setColor(new Color(255, 255, 0, 100));		g.fill(hitbox);
+	g.setColor(Color.BLACK); 										g.draw(hitbox);
+
+	hitbox = getHitbox();
 }
 }

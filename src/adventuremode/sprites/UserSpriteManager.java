@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -176,19 +177,19 @@ private class TimerListener implements ActionListener {
 @Override
 protected void paintComponent(Graphics g) {
 	super.paintComponent(g);
-	draw(g);
-	NpcHandler(g);
+	draw((Graphics2D) g);
+	NpcHandler((Graphics2D) g);
 }
 
 Color redTrans = new Color(255, 0, 0, 100);
 
-public void draw(Graphics g) {
+public void draw(Graphics2D g) {
 	g.setColor(redTrans);
-	colls.forEach(c -> g.fillRect(c.getX(), c.getY(), c.getWidth(), c.getHeight()));
+	colls.forEach(c -> g.fill(c.getHitbox()));
 	user.draw(g);
 }
 
-private void NpcHandler(Graphics g) {
+private void NpcHandler(Graphics2D g) {
 	for (var npc: currentarea.getNpcs()) {
 		g.setColor(Color.RED);
 

@@ -65,7 +65,7 @@ public void createUI(MySprite humantrainer) {
 			super.mousePressed(e);
 			if (EDIT_MODE && OPEN_OUTPUT_STREAMS) {
 				for (var c : cells) {
-					if (c.getBounds().contains(e.getPoint())) {
+					if (c.getHitbox().contains(e.getPoint())) {
 						c.changeCellType(walls, currentArea.getWalls());
 						loadArea();
 					}
@@ -202,7 +202,7 @@ public class CellArray {
 	@NotNull
 	Cell getCell(int x, int y) {
 		for (var c: cells) {
-			if (c.getBounds().contains(x,y))
+			if (c.getHitbox().contains(x,y))
 				return c;
 		}
 		return cells[0];

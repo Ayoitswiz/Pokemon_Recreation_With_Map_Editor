@@ -10,35 +10,31 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import javax.swing.Timer;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.StrokeBorder;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
 import static adventuremode.components.StartMenu.Options.*;
 
 public class StartMenu extends JPanel {
 private final MySprite user;
-final BufferedImage textImage = new BufferedImage(
-100, 100,
-BufferedImage.TYPE_INT_ARGB);
 
 public enum Options {
 	POKeDEX,
@@ -57,20 +53,12 @@ public StartMenu(MySprite user) {
 	this.user = user;
 
 	setLayout(new GridLayout(10, 1, 0 , 0));
-	Color menu 						= new Color(200, 55, 55);
-	Border redLine 				= BorderFactory.createLineBorder(menu, 5);
-	Border thick 					= BorderFactory.createStrokeBorder(new BasicStroke(5.0f));
-	Border raisedetched 	= BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-	Border loweredetched 	= BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
-	Border raisedbevel 		= BorderFactory.createRaisedBevelBorder();
-	Border loweredbevel 	= BorderFactory.createLoweredBevelBorder();
-	Border compound 			= BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
-	compound 							= BorderFactory.createCompoundBorder(redLine, 			compound);
-	compound 							= BorderFactory.createCompoundBorder(thick, 				compound);
-	compound 							= BorderFactory.createCompoundBorder(loweredetched, compound);
-	compound 							= BorderFactory.createCompoundBorder(raisedetched, 	compound);
-
-	setBorder(compound);
+	setBorder(new EtchedBorder(EtchedBorder.RAISED));
+	setBorder(new CompoundBorder(getBorder(), new EtchedBorder(EtchedBorder.LOWERED)));
+	setBorder(new CompoundBorder(getBorder(), new StrokeBorder(new BasicStroke(5.0f))));
+	setBorder(new CompoundBorder(getBorder(), new LineBorder(new Color(200, 55, 55), 5)));
+	setBorder(new CompoundBorder(getBorder(), new BevelBorder(BevelBorder.RAISED)));
+	setBorder(new CompoundBorder(getBorder(), new BevelBorder(BevelBorder.LOWERED)));
 
 	add(new StartMenuButton(POKeDEX));
 	add(new StartMenuButton(POKeMON));
@@ -119,39 +107,31 @@ public int getHeight() {
 @Override
 public Rectangle getBounds() {
 	setBounds(
-	(int) (gui.getWidth() - (gui.getWidth() / 2.5)),
-	gui.getHeight() / 16,
-	(int) (gui.getWidth() / 2.5),
-	gui.getHeight() - (gui.getHeight() / 8));
+	(int) (gui.getWidth() * .6),
+	(int) (gui.getHeight() * .0625),
+	(int) (gui.getWidth() * .4),
+	(int) (gui.getHeight() * .875));
 	return super.getBounds();
 }
 
 class DialogBoxTextArea extends JTextArea implements FocusListener {
 	DialogBoxTextArea() {
-		setRows(2);
-		setColumns(20);
+		super("Enter \"help\" for command list.");
 		setWrapStyleWord(true);
 		setLineWrap(true);
 		setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		setText("sw\nco");
 		setBorder(UIManager.getBorder("Label.border"));
 		setLayout(new BorderLayout());
 
 		addFocusListener(this);
 		add(new JButton("Enter") {{
+			// TODO: This stuff is broke
 			addActionListener(e -> {
-				String[] commandAndValue = getText().split("\\s");
+				String[] commandAndValue = DialogBoxTextArea.this.getText().split("\\s");
 				switch (commandAndValue[0]) {
-					case "sw":
-						//Adjust users speed. Lower == faster.
-						user.setSpeedWeight(Integer.parseInt(commandAndValue[1]));
-						break;
-					case "co":
-						// TODO: need to update this based on code changes to work again.
-						StartMenu.this.setVisible(false);
-						break;
-					default:
-						DialogBoxTextArea.this.setText("commands are either: co, sw <any number>");
+					case "sw" -> user.setSpeedWeight(Integer.parseInt(commandAndValue[1]));
+					case "co" -> StartMenu.this.setVisible(false);
+					case "help", default -> DialogBoxTextArea.this.setText("sw, co");
 				}
 			});
 		}
@@ -165,8 +145,8 @@ class DialogBoxTextArea extends JTextArea implements FocusListener {
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		if (getText().length() < 1) {
-			setText("Enter Command");
+		if (getText().isBlank()) {
+			setText("Enter \"help\" for command list.");
 		}
 	}
 }
@@ -222,49 +202,32 @@ class StartMenuButton extends JButton {
 			}
 		});
 
-		final ComponentListener cl = new ComponentAdapter() {
+		addComponentListener(new ComponentAdapter() {
 
 			@Override
 			public void componentResized(ComponentEvent e) {
-				setFont(getFont().deriveFont((float) getMaxFontSizeForControls()));
-			}};
+				FontRenderContext frc = getGraphics().getFontMetrics().getFontRenderContext();
 
-		new Timer(0, e -> addComponentListener(cl)) {{
-			setRepeats(false);
-			start();
-		}};
-	}
+				Insets i = getBorder().getBorderInsets(StartMenuButton.this);
+				Insets m = getMargin();
 
+				Rectangle viewableArea = new Rectangle(
+				getWidth()	-		(m.right + m.left   + i.left + i.right),
+				getHeight()	-		(m.top   + m.bottom + i.top  + i.bottom)
+				);
 
-	public int getMaxFontSizeForControls() {
-		Graphics2D g = textImage.createGraphics();
-		int maxSize = Math.min(48, Math.max(6, getMaxFontSizeForControl(g.getFontRenderContext())));
-		g.dispose();
-		return maxSize;
-	}
+				int size = 1;
+				Rectangle2D box;
+				do {
+					box = getFont()
+								.deriveFont(size++ + 0f)
+								.createGlyphVector(frc, getText())
+								.getVisualBounds();
 
-	public int getMaxFontSizeForControl(FontRenderContext frc) {
-		Insets i = getBorder().getBorderInsets(this);
-		Insets m = getMargin();
-
-		Rectangle viewableArea = new Rectangle(
-		getWidth()	-				(m.right + m.left + i.left + i.right),
-		getHeight()	-				(m.top + m.bottom + i.top + i.bottom)
-		);
-
-		int size = 1;
-		Rectangle2D box;
-		boolean tooBig = false;
-		while (!tooBig) {
-			box = getFont().deriveFont((float) size).createGlyphVector(frc, getText()).getVisualBounds();
-			if (box.getHeight() > viewableArea.getHeight()
-					|| box.getWidth() > viewableArea.getWidth()) {
-				tooBig = true;
-				size--;
-			}
-			size++;
-		}
-		return size;
+				} while (!(box.getHeight()	> viewableArea.getHeight()
+							||	 box.getWidth()		> viewableArea.getWidth()));
+				setFont(getFont().deriveFont((float) Math.min(48, Math.max(6, --size))));
+			}});
 	}
 }
 }

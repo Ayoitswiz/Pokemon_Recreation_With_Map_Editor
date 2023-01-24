@@ -1,7 +1,5 @@
 import consoleupgrade.ConsoleUpgrade;
 import menus.mainmenu.MainMenuGUI;
-
-import java.io.IOException;
 /*
  * Brandon Wisniewski
  * Pokemon Battle Simulator
@@ -28,10 +26,7 @@ import java.io.IOException;
  */
 public class Main {
 
-Main(){
-
-}
-public static void main(String... args) throws IOException {
+public static void main(String... args) {
 	new ConsoleUpgrade();
 	new MainMenuGUI();
 }
